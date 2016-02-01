@@ -51,68 +51,34 @@ import org.apache.isis.applib.annotation.Where;
 				+ "WHERE tipoAceite.indexOf(:tipoAceite) >= 0 && activo == true")
 })
 
-@DomainObject(objectType = "ACEITE",bounded=true)
+@DomainObject(objectType = "PEDIDO",bounded=true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
 public class Pedido {
 	private String descripcion;
-	private String marca;
-	private String codigo;
-	private String descripcion;
-	private int duracion;
-	private Timestamp fechaAlta;
-	private boolean activo;
+	private String lugar;
+	private String vendedor;
+	private String urgencia;
+	private String sucursal;
 
-	public Pedido(String nombre, String marca, String codigo,
-			String descripcion, TipoAceite tipoAceite, int duracion, Timestamp fechaAlta, boolean activo) {
+	
+
+	public Pedido(String descripcion, String lugar, String vendedor,
+			String urgencia, String sucursal) {
 		super();
-		this.nombre = nombre;
-		this.marca = marca;
-		this.codigo = codigo;
 		this.descripcion = descripcion;
-		this.tipoAceite = tipoAceite;
-		this.duracion = duracion;
-		this.fechaAlta= fechaAlta;
-		this.activo=activo;
+		this.lugar = lugar;
+		this.vendedor = vendedor;
+		this.urgencia = urgencia;
+		this.sucursal = sucursal;
 	}
 
-	public Aceite() {
+	public Pedido() {
 		super();
 	}
 
-	@MemberOrder(sequence="20")
+	@MemberOrder(sequence="1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing=Editing.DISABLED)
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	@MemberOrder(sequence="10")
-	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing=Editing.DISABLED)
-	public String getMarca() {
-		return marca;
-	}
-
-	public void setMarca(String marca) {
-		this.marca = marca;
-	}
-
-	@MemberOrder(sequence="30")
-	@javax.jdo.annotations.Column(allowsNull = "true")
-	public String getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
-	}
-
-	@MemberOrder(sequence="40")
-	@javax.jdo.annotations.Column(allowsNull = "true")
 	public String getDescripcion() {
 		return descripcion;
 	}
@@ -121,66 +87,49 @@ public class Pedido {
 		this.descripcion = descripcion;
 	}
 
-	@MemberOrder(sequence="50")
+	@MemberOrder(sequence="2")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing=Editing.DISABLED)
-	public TipoAceite getTipoAceite() {
-		return tipoAceite;
+	public String getLugar() {
+		return lugar;
 	}
 
-	public void setTipoAceite(TipoAceite tipoAceite) {
-		this.tipoAceite = tipoAceite;
+	public void setLugar(String lugar) {
+		this.lugar = lugar;
 	}
 
-	@MemberOrder(sequence="60")
-	@javax.jdo.annotations.Column(allowsNull = "false")
-	public int getDuracion() {
-		return duracion;
+	@MemberOrder(sequence="3")
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	public String getVendedor() {
+		return vendedor;
 	}
 
-	public void setDuracion(int duracion) {
-		this.duracion = duracion;
+	public void setVendedor(String vendedor) {
+		this.vendedor = vendedor;
 	}
 
-	@MemberOrder(sequence="70")
-	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing=Editing.DISABLED)
-	public Timestamp getFechaAlta() {
-		return fechaAlta;
+	@MemberOrder(sequence="4")
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	public String getUrgencia() {
+		return urgencia;
 	}
 
-	public void setFechaAlta(Timestamp fechaAlta) {
-		this.fechaAlta = fechaAlta;
+	public void setUrgencia(String urgencia) {
+		this.urgencia = urgencia;
 	}
 
-	@Property(hidden=Where.EVERYWHERE)
-	public boolean isActivo() {
-		return activo;
+
+	@MemberOrder(sequence="4")
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	public String getSucursal() {
+		return urgencia;
 	}
 
-	public void setActivo(boolean activo) {
-		this.activo = activo;
+	public void setSucursal(String urgencia) {
+		this.urgencia = urgencia;
 	}
 
-	@Override
-	public String toString() {
-		return marca + " "+ nombre;
-	}
 
-	@ActionLayout(named="Eliminar")
-	public Aceite delete(){
-		this.container.warnUser("El Aceite, ha sido desactivado con exito.");
-		this.setActivo(false);
-		return this;
-	}
-
-	@Programmatic
-	public boolean hideDelete() {
-		if (!isActivo())
-			return true;
-		else
-			return false;
-	}
 	@javax.inject.Inject
     DomainObjectContainer container;
 }
