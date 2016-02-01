@@ -1,6 +1,6 @@
 
-package domainapp.dom.modules.servicios;
-
+package domainapp.dom.app.servicios;
+/*
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
@@ -32,4 +32,4 @@ public class EnvioCorreo extends AbstractFactoryAndRepository {
 		}
 			
 	}
-}
+}*/

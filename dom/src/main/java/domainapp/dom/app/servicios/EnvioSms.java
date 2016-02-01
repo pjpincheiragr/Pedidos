@@ -1,5 +1,5 @@
 
-package domainapp.dom.modules.servicios;
+package domainapp.dom.app.servicios;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.AbstractFactoryAndRepository;

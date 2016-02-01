@@ -1,5 +1,5 @@
 
-package domainapp.dom.modules.servicios;
+package domainapp.dom.app.servicios;
 import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;

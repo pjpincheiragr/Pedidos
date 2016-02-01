@@ -1,5 +1,5 @@
 
-package domainapp.dom.modules.servicios;
+package domainapp.dom.app.servicios;
 
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.PersistenceCapable;
