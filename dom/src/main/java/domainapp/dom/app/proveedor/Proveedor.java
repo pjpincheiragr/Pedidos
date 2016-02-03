@@ -19,7 +19,7 @@ import org.apache.isis.applib.annotation.Where;
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(
         strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
-         column="Aceite_ID")
+         column="Proveedor_ID")
 @javax.jdo.annotations.Version(
         strategy=VersionStrategy.VERSION_NUMBER,
         column="version")

@@ -1,5 +1,6 @@
 package domainapp.dom.app.pedido;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 
 import javax.jdo.annotations.IdentityType;
@@ -15,6 +16,11 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
+
+import domainapp.dom.app.proveedor.Proveedor;
+import domainapp.dom.app.servicios.E_estado;
+import domainapp.dom.app.sucursal.Sucursal;
+import domainapp.dom.app.vendedor.Vendedor;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(
@@ -55,21 +61,24 @@ import org.apache.isis.applib.annotation.Where;
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
 public class Pedido {
 	private String descripcion;
-	private String lugar;
-	private String vendedor;
-	private String urgencia;
-	private String sucursal;
+	private Proveedor proveedor;
+	private Time tiempo;
+	private Vendedor vendedor;
+	private float valor;
+	private E_estado estado;
+	private Sucursal sucursal;
 
 	
 
-	public Pedido(String descripcion, String lugar, String vendedor,
-			String urgencia, String sucursal) {
+	public Pedido(String descripcion, Proveedor proveedor, Time tiempo,Vendedor vendedor,
+			float valor, E_estado estado, Sucursal sucursal) {
 		super();
 		this.descripcion = descripcion;
-		this.lugar = lugar;
+		this.proveedor = proveedor;
 		this.vendedor = vendedor;
-		this.urgencia = urgencia;
+		this.estado = estado;
 		this.sucursal = sucursal;
+	
 	}
 
 	public Pedido() {
@@ -90,43 +99,43 @@ public class Pedido {
 	@MemberOrder(sequence="2")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing=Editing.DISABLED)
-	public String getLugar() {
-		return lugar;
+	public Proveedor getProveedor() {
+		return proveedor;
 	}
 
-	public void setLugar(String lugar) {
-		this.lugar = lugar;
+	public void setProveedor(Proveedor proveedor) {
+		this.proveedor = proveedor;
 	}
 
 	@MemberOrder(sequence="3")
 	@javax.jdo.annotations.Column(allowsNull = "true")
-	public String getVendedor() {
+	public Vendedor getVendedor() {
 		return vendedor;
 	}
 
-	public void setVendedor(String vendedor) {
+	public void setVendedor(Vendedor vendedor) {
 		this.vendedor = vendedor;
 	}
 
 	@MemberOrder(sequence="4")
 	@javax.jdo.annotations.Column(allowsNull = "true")
-	public String getUrgencia() {
-		return urgencia;
+	public E_estado getEstado() {
+		return estado;
 	}
 
-	public void setUrgencia(String urgencia) {
-		this.urgencia = urgencia;
+	public void setEstado(E_estado estado) {
+		this.estado = estado;
 	}
 
 
 	@MemberOrder(sequence="4")
 	@javax.jdo.annotations.Column(allowsNull = "true")
-	public String getSucursal() {
-		return urgencia;
+	public Sucursal getSucursal() {
+		return sucursal;
 	}
 
-	public void setSucursal(String urgencia) {
-		this.urgencia = urgencia;
+	public void setSucursal(Sucursal sucursal) {
+		this.sucursal = sucursal;
 	}
 
 

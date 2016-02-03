@@ -45,6 +45,10 @@ public class Sucursal {
 	private Direccion direccion;
 	private boolean activo;
 
+	
+	public String title() {		
+		return "Sucursal:" + " " + getNombre()   ;
+	}
 	public Sucursal(String codigoSucursal, String nombre, Direccion direccion, boolean activo) {
 		super();
 		this.codigoSucursal=codigoSucursal;

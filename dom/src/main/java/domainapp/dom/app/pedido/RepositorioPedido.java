@@ -12,6 +12,12 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 
+import domainapp.dom.app.proveedor.Proveedor;
+import domainapp.dom.app.servicios.E_estado;
+import domainapp.dom.app.sucursal.Sucursal;
+import domainapp.dom.app.vendedor.Vendedor;
+
+
 
 
 @DomainService(repositoryFor = Pedido.class)
@@ -20,17 +26,17 @@ public class RepositorioPedido {
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named="Crear nuevo Pedido")
 	public Pedido createPedido(
-			@ParameterLayout(named="descripcion")@Parameter(optionality=Optionality.OPTIONAL)String descripcion,
-			@ParameterLayout(named="lugar")@Parameter(optionality=Optionality.OPTIONAL)String lugar,
-			@ParameterLayout(named="vendedor")@Parameter(optionality=Optionality.OPTIONAL)String vendedor,
-			@ParameterLayout(named="urgencia")@Parameter(optionality=Optionality.OPTIONAL)String urgencia,
-			@ParameterLayout(named="sucursal")String sucursal
+			@ParameterLayout(named="Descripcion")@Parameter(optionality=Optionality.OPTIONAL)String descripcion,
+			@ParameterLayout(named="Lugar")@Parameter(optionality=Optionality.OPTIONAL)Proveedor proveedor,
+			@ParameterLayout(named="Vendedor")@Parameter(optionality=Optionality.OPTIONAL)Vendedor vendedor,
+			@ParameterLayout(named="Estado")E_estado estado,
+			@ParameterLayout(named="Sucursal")Sucursal sucursal
 			){
 		final Pedido Pedido = container.newTransientInstance(Pedido.class);
 		Pedido.setDescripcion(descripcion);
-		Pedido.setLugar(lugar);
+		Pedido.setProveedor(proveedor);
 		Pedido.setVendedor(vendedor);		
-		Pedido.setUrgencia(urgencia);
+		Pedido.setEstado(estado);
 		Pedido.setSucursal(sucursal);
 		container.persistIfNotAlready(Pedido);
 		return Pedido;
