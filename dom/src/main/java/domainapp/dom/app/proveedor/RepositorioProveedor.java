@@ -16,7 +16,13 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.query.QueryDefault;
 
 
+
+
+
 import domainapp.dom.app.proveedor.Proveedor;
+import domainapp.dom.app.servicios.Direccion;
+import domainapp.dom.app.servicios.Localidad;
+import domainapp.dom.app.servicios.Localidad.E_localidades;
 
 
 
@@ -28,12 +34,24 @@ public class RepositorioProveedor {
 	public Proveedor createProveedor(
 			@ParameterLayout(named="nombre")@Parameter(optionality=Optionality.OPTIONAL)String nombre,
 			@ParameterLayout(named="codigo")@Parameter(optionality=Optionality.OPTIONAL)String codigo,
-			@ParameterLayout(named="direccion")@Parameter(optionality=Optionality.OPTIONAL)String direccion
+			final @ParameterLayout(named="Localidad") @Parameter(optionality=Optionality.OPTIONAL) E_localidades localidad,
+			final @ParameterLayout(named="Calle") @Parameter(optionality=Optionality.OPTIONAL) String calle,
+			final @ParameterLayout(named="Numero") @Parameter(optionality=Optionality.OPTIONAL)  java.lang.Integer numero,
+			final @ParameterLayout(named="Piso") @Parameter(optionality=Optionality.OPTIONAL) String piso,
+			final @ParameterLayout(named="Departamento") @Parameter(optionality=Optionality.OPTIONAL) String departamento
 			){
 		final Proveedor proveedor = container.newTransientInstance(Proveedor.class);
+		final Direccion dire = new Direccion();
+	    final Localidad loca = new Localidad();
+	    loca.setNombre(localidad);
+	    if (calle != null && !calle.isEmpty()) { dire.setCalle(calle.toUpperCase());}
+	    dire.setNumero(numero);
+	    if (piso != null && !piso.isEmpty()) { dire.setPiso(piso);}
+	    if (departamento != null && !departamento.isEmpty()) { dire.setDepartamento(departamento);}
+	    if (loca != null) { dire.setLocalidad(loca);}
 		proveedor.setNombre(nombre);
 		proveedor.setCodigo(codigo);
-		proveedor.setDireccion(direccion);
+		proveedor.setDireccion(dire);
 		container.persistIfNotAlready(proveedor);
 		return proveedor;
 	}
