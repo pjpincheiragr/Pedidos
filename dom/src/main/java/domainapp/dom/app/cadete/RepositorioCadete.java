@@ -1,8 +1,5 @@
 package domainapp.dom.app.cadete;
 
-
-
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,18 +15,17 @@ import org.apache.isis.applib.query.QueryDefault;
 
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.cadete.Cadete;
-
-
+import domainapp.dom.app.sucursal.Sucursal;
 
 @DomainService(repositoryFor = Cadete.class)
-@DomainServiceLayout(menuOrder = "60", named="Cadetes")
+@DomainServiceLayout(menuOrder = "60", named = "Cadetes")
 public class RepositorioCadete {
+
 	@MemberOrder(sequence = "1")
-	@ActionLayout(named="Crear nuevo cadete")
+	@ActionLayout(named = "Crear nuevo cadete")
 	public Cadete createcadete(
-			@ParameterLayout(named="nombre")@Parameter(optionality=Optionality.OPTIONAL)String nombre,
-			@ParameterLayout(named="codigo")@Parameter(optionality=Optionality.OPTIONAL)String codigo
-			){
+			@ParameterLayout(named = "nombre") @Parameter() String nombre,
+			@ParameterLayout(named = "codigo") @Parameter() String codigo) {
 		final Cadete cadete = container.newTransientInstance(Cadete.class);
 		cadete.setNombre(nombre);
 		cadete.setCodigo(codigo);
@@ -37,49 +33,61 @@ public class RepositorioCadete {
 		return cadete;
 	}
 
-	@MemberOrder(sequence ="2")
-	@ActionLayout(named="Listar Todos")
-	public List<Cadete> listAll(){
-		return container.allMatches(new QueryDefault<Cadete>(Cadete.class, "ListarTodos"));
-	}
-	
-	@ActionLayout(named="Buscar por Nombre")
-	@MemberOrder(sequence="4")
-	public List<Cadete> findByNombre(
-			@ParameterLayout(named="Nombre") @Parameter(regexPattern=domainapp.dom.regex.validador.Validador.ValidacionAlfanumerico.ADMITIDOS) String nombre){
-		final List<Cadete> listaCadete = listAll();
-		final List<Cadete> lista = new ArrayList<Cadete>();
-		for (Cadete a : listaCadete) {
-			if (a.getNombre().toUpperCase().equals(nombre.toUpperCase())) {
-				lista.add(a);
-			}
+	@MemberOrder(sequence = "2")
+	@ActionLayout(named = "Listar Todos")
+	public List<Cadete> listAll() {
+		final List<Cadete> listaCadetes = this.container
+				.allMatches(new QueryDefault<Cadete>(Cadete.class,
+						"ListarTodos"));
+		if (listaCadetes.isEmpty()) {
+			this.container.warnUser("No hay cadetes cargados en el sistema");
 		}
-
-		if (lista.isEmpty()) {
-			this.container.warnUser("No existe el Nombre buscado");
-		}
-		return lista;
+		return listaCadetes;
 	}
 
-	@ActionLayout(named="Buscar por Codigo")
-	@MemberOrder(sequence="5")
-	public List<Cadete> findByCodigo(
-			@ParameterLayout(named="Codigo") @Parameter
-			(regexPattern = domainapp.dom.regex.validador.Validador.ValidacionAlfanumerico.ADMITIDOS) String codigo){
-		final List<Cadete> listaCadete = listAll();
-		final List<Cadete> lista = new ArrayList<Cadete>();
-		for (Cadete a : listaCadete) {
-			if (a.getCodigo().toUpperCase().equals(codigo.toUpperCase())) {
-				lista.add(a);
-			}
-		}
+	/*
+	 * public List<Sucursal> listAll() { final List<Sucursal> listaSucursal =
+	 * this.container .allMatches(new QueryDefault<Sucursal>(Sucursal.class,
+	 * "ListarTodos")); if (listaSucursal.isEmpty()) {
+	 * this.container.warnUser("No hay areas cargadas en el sistema"); } return
+	 * listaSucursal;
+	 * 
+	 * 
+	 * @MemberOrder(sequence = "3")
+	 * 
+	 * @ActionLayout(named = "Buscar por nombre") public List<Sucursal>
+	 * buscarPorApellidoNombre(
+	 * 
+	 * @ParameterLayout(named="Nombre")
+	 * 
+	 * @Parameter(optionality=Optionality.OPTIONAL) String nombre ) {
+	 * 
+	 * return container.allMatches( new QueryDefault<>( Sucursal.class,
+	 * "findByName", "nombre", (nombre==null)?"":nombre)); } }
+	 */
 
-		if (lista.isEmpty()) {
-			this.container.warnUser("No existe el codigo buscado");
-		}
-		return lista;
+	@ActionLayout(named = "Buscar por Nombre")
+	@MemberOrder(sequence = "4")
+	public List<Cadete> findByName(
+			@ParameterLayout(named = "Nombre") @Parameter(optionality = Optionality.OPTIONAL) String nombre) {
+		return container.allMatches(
+				new QueryDefault<>(
+						Cadete.class,
+						"findByName",
+						"nombre", (nombre == null) ? "" : nombre));
 	}
-	
+
+	@ActionLayout(named = "Buscar por Codigo")
+	@MemberOrder(sequence = "5")
+	public List<Cadete> findByCode(
+			@ParameterLayout(named = "Codigo") @Parameter(optionality = Optionality.OPTIONAL) String codigo) {
+		return container.allMatches(
+				new QueryDefault<>(
+						Cadete.class,
+						"findByName",
+						"nombre", (codigo == null) ? "" : codigo));
+	}
+
 	@javax.inject.Inject
-    DomainObjectContainer container;
+	DomainObjectContainer container;
 }

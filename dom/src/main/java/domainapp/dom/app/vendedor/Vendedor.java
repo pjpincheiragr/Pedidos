@@ -19,51 +19,35 @@ import org.apache.isis.applib.annotation.Where;
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(
         strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
-         column="Aceite_ID")
+         column="Vendedor_ID")
 @javax.jdo.annotations.Version(
         strategy=VersionStrategy.VERSION_NUMBER,
         column="version")
 @javax.jdo.annotations.Queries({
-		@javax.jdo.annotations.Query(
-				name = "ListarTodos", language = "JDOQL",
-				value = "SELECT "
-				+ "FROM domainapp.dom.app.aceite.Aceite "
-				+ "WHERE activo == true"),
-		@javax.jdo.annotations.Query(
-				name = "Buscar_Nombre", language = "JDOQL",
-				value = "SELECT "
-				+ "FROM domainapp.dom.app.Aceite "
-				+ "WHERE nombre.indexOf(:nombre) >= 0 && activo == true"),
-		@javax.jdo.annotations.Query(
-				name = "Buscar_Marca", language = "JDOQL",
-				value = "SELECT "
-				+ "FROM domainapp.dom.app.Aceite "
-				+ "WHERE marca.indexOf(:marca) >= 0 && activo == true"),
-		@javax.jdo.annotations.Query(
-				name = "Buscar_Codigo", language = "JDOQL",
-				value = "SELECT "
-				+ "FROM domainapp.dom.app.Aceite "
-				+ "WHERE codigo.indexOf(:codigo) >= 0 && activo == true"),
-		@javax.jdo.annotations.Query(
-				name = "Buscar_Tipo", language = "JDOQL",
-				value = "SELECT "
-				+ "FROM domainapp.dom.app.Aceite "
-				+ "WHERE tipoAceite.indexOf(:tipoAceite) >= 0 && activo == true")
-})
+	@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
+			+ "FROM domainapp.dom.app.vendedor.Vendedor "),
+	@javax.jdo.annotations.Query(name = "findByName", language = "JDOQL", value = "SELECT "
+			+ "FROM domainapp.dom.app.vendedor.Vendedor "
+			+ "WHERE ((:nombre=='') || (nombre.toLowerCase().indexOf(:nombre) >= 0))"
+			+ " order by nombre "),
+	@javax.jdo.annotations.Query(name = "findByCode", language = "JDOQL", value = "SELECT "
+			+ "FROM domainapp.dom.app.vendedor.Vendedor "
+			+ "WHERE ((:codigo=='') || (codigo.toLowerCase().indexOf(:codigo) >= 0))"
+			+ " order by codigo ") })
 
 @DomainObject(objectType = "VENDEDOR",bounded=true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
 public class Vendedor {
 	private String nombre;
 	private String codigo;
-	private String sucursal;
+	
 	
 
-	public Vendedor(String nombre, String codigo/*, Sucursal sucursal*/) {
+	public Vendedor(String nombre, String codigo) {
 		super();
 		this.nombre = nombre;
 		this.codigo = codigo;
-		this.sucursal = sucursal;
+		
 
 	}
 
@@ -92,17 +76,7 @@ public class Vendedor {
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
-/*
-	@MemberOrder(sequence="3")
-	@javax.jdo.annotations.Column(allowsNull = "true")
-	public String getSucursal() {
-		return sucursal;
-	}
 
-	public void setSucursal(String sucursal) {
-		this.sucursal = sucursal;
-	}
-*/
-		@javax.inject.Inject
+	@javax.inject.Inject
     DomainObjectContainer container;
 }
