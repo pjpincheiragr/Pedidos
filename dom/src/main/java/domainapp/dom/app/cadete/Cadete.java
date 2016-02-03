@@ -16,37 +16,26 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
 
-@javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
-@javax.jdo.annotations.DatastoreIdentity(
-        strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
-         column="Cadete_ID")
-@javax.jdo.annotations.Version(
-        strategy=VersionStrategy.VERSION_NUMBER,
-        column="version")
+@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
+@javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "Cadete_ID")
+@javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
 @javax.jdo.annotations.Queries({
-		@javax.jdo.annotations.Query(
-				name = "ListarTodos", language = "JDOQL",
-				value = "SELECT "
+		@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.cadete.Cadete "),
+		@javax.jdo.annotations.Query(name = "findByName", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.cadete.Cadete "
-				),
-		@javax.jdo.annotations.Query(
-				name = "Buscar_Nombre", language = "JDOQL",
-				value = "SELECT "
-				+ "FROM domainapp.dom.app.Cadete "
-				+ "WHERE nombre.indexOf(:nombre) >= 0 && activo == true"),
-		@javax.jdo.annotations.Query(
-				name = "Buscar_Codigo", language = "JDOQL",
-				value = "SELECT "
-				+ "FROM domainapp.dom.app.Cadete "
-				+ "WHERE codigo.indexOf(:codigo) >= 0 ")
-})
+				+ "WHERE ((:nombre=='') || (nombre.toLowerCase().indexOf(:nombre) >= 0))"
+				+ " order by nombre "),
+		@javax.jdo.annotations.Query(name = "findByCode", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.cadete.Cadete "
+				+ "WHERE ((:codigo=='') || (codigo.toLowerCase().indexOf(:codigo) >= 0))"
+				+ " order by codigo ") })
 
-@DomainObject(objectType = "cadete",bounded=true)
+@DomainObject(objectType = "cadete", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
 public class Cadete {
 	private String nombre;
 	private String codigo;
-	
 
 	public Cadete(String nombre, String codigo) {
 		super();
@@ -59,9 +48,9 @@ public class Cadete {
 		super();
 	}
 
-	@MemberOrder(sequence="1")
+	@MemberOrder(sequence = "1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing=Editing.DISABLED)
+	@Property(editing = Editing.DISABLED)
 	public String getNombre() {
 		return nombre;
 	}
@@ -70,9 +59,9 @@ public class Cadete {
 		this.nombre = nombre;
 	}
 
-	@MemberOrder(sequence="2")
+	@MemberOrder(sequence = "2")
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing=Editing.DISABLED)
+	@Property(editing = Editing.DISABLED)
 	public String getCodigo() {
 		return codigo;
 	}
@@ -81,6 +70,6 @@ public class Cadete {
 		this.codigo = codigo;
 	}
 
-		@javax.inject.Inject
-    DomainObjectContainer container;
+	@javax.inject.Inject
+	DomainObjectContainer container;
 }
