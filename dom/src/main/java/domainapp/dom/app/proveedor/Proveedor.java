@@ -16,6 +16,8 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
 
+import domainapp.dom.app.servicios.Direccion;
+
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(
         strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
@@ -40,10 +42,10 @@ import org.apache.isis.applib.annotation.Where;
 public class Proveedor {
 	private String nombre;
 	private String codigo;
-	private String direccion;
+	private Direccion direccion;
 	
 
-	public Proveedor(String nombre, String codigo, String direccion) {
+	public Proveedor(String nombre, String codigo, Direccion direccion) {
 		super();
 		this.nombre = nombre;
 		this.codigo = codigo;
@@ -79,11 +81,11 @@ public class Proveedor {
 
 	@MemberOrder(sequence="3")
 	@javax.jdo.annotations.Column(allowsNull = "true")
-	public String getDireccion() {
+	public Direccion getDireccion() {
 		return direccion;
 	}
 
-	public void setDireccion(String direccion) {
+	public void setDireccion(Direccion direccion) {
 		this.direccion = direccion;
 	}
 
