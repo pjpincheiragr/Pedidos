@@ -23,7 +23,7 @@ public class Direccion {
 	@Persistent
 	@MemberOrder(sequence = "1")	
 	public String getCalle() {
-		return calle;
+		return calle;}
 	
 
 	public void setCalle(final String calle) {
