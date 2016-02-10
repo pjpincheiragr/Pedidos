@@ -31,7 +31,7 @@ import net.sf.jasperreports.view.JasperViewer;
 
 
 @DomainService(repositoryFor = Aceite.class)
-@DomainServiceLayout(menuOrder = "60", named="Aceites")
+@DomainServiceLayout(menuOrder = "60", named="OLD")
 public class RepositorioAceite {
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named="Crear nuevo Aceite")

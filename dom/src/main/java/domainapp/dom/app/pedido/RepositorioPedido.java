@@ -3,6 +3,8 @@ package domainapp.dom.app.pedido;
 
 
 
+import java.sql.Time;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -29,13 +31,17 @@ public class RepositorioPedido {
 			@ParameterLayout(named="Descripcion")@Parameter(optionality=Optionality.OPTIONAL)String descripcion,
 			@ParameterLayout(named="Lugar")@Parameter(optionality=Optionality.OPTIONAL)Proveedor proveedor,
 			@ParameterLayout(named="Vendedor")@Parameter(optionality=Optionality.OPTIONAL)Vendedor vendedor,
+			@ParameterLayout(named="Tiempo")@Parameter(optionality=Optionality.OPTIONAL)Time tiempo,
+			@ParameterLayout(named="Valor")@Parameter(optionality=Optionality.OPTIONAL)float valor,
 			@ParameterLayout(named="Estado")E_estado estado,
 			@ParameterLayout(named="Sucursal")Sucursal sucursal
 			){
 		final Pedido Pedido = container.newTransientInstance(Pedido.class);
 		Pedido.setDescripcion(descripcion);
 		Pedido.setProveedor(proveedor);
-		Pedido.setVendedor(vendedor);		
+		Pedido.setVendedor(vendedor);	
+		Pedido.setTiempo(tiempo);
+		Pedido.setValor(valor);
 		Pedido.setEstado(estado);
 		Pedido.setSucursal(sucursal);
 		container.persistIfNotAlready(Pedido);

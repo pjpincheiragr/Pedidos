@@ -41,8 +41,9 @@ public class Vendedor {
 	private String nombre;
 	private String codigo;
 	
-	
-
+	public String title() {		
+		return  getNombre()   ;
+	}
 	public Vendedor(String nombre, String codigo) {
 		super();
 		this.nombre = nombre;

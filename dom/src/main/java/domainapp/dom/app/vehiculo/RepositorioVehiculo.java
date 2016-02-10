@@ -43,7 +43,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 @DomainService(repositoryFor = Vehiculo.class)
-@DomainServiceLayout(menuOrder = "80", named = "Vehiculo")
+@DomainServiceLayout(menuOrder = "80", named = "OLD")
 public class RepositorioVehiculo {
 
 	@MemberOrder(sequence = "1")
@@ -241,7 +241,7 @@ public class RepositorioVehiculo {
 		return noAsignados;
 	}
 
-	@MemberOrder(sequence = "5", name = "Elementos Inactivos")
+	//@MemberOrder(sequence = "5", name = "Elementos Inactivos")
 	@ActionLayout(named = "Vehiculo")
 	public List<Vehiculo> listInactivos() {
 		List<Vehiculo> lista = container.allInstances(Vehiculo.class);
@@ -254,7 +254,7 @@ public class RepositorioVehiculo {
 		return inactivos;
 	}
 
-	@MemberOrder(sequence = "3", name = "Elementos Desestimados")
+	//@MemberOrder(sequence = "3", name = "Elementos Desestimados")
 	@ActionLayout(named = "Vehiculo")
 	public List<Vehiculo> listBaja() {
 		List<Vehiculo> lista = container.allInstances(Vehiculo.class);

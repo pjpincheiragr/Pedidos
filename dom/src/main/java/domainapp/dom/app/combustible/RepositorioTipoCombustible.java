@@ -14,7 +14,7 @@ import org.apache.isis.applib.query.QueryDefault;
 import domainapp.dom.app.combustible.TipoCombustible;
 
 @DomainService(repositoryFor = TipoCombustible.class)
-@DomainServiceLayout(menuOrder = "40", named = "Combustible")
+@DomainServiceLayout(menuOrder = "40", named = "OLD")
 public class RepositorioTipoCombustible {
 
 	@MemberOrder(sequence = "1")

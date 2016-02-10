@@ -19,14 +19,10 @@ package domainapp.dom.app.sucursal;
 	import org.apache.isis.applib.annotation.Parameter;
 	import org.apache.isis.applib.annotation.ParameterLayout;
 	import org.apache.isis.applib.query.QueryDefault;
-
-	import domainapp.dom.app.area.Area;
-	import domainapp.dom.app.reporte.AreaDataSource;
-	import domainapp.dom.app.reporte.ReporteArea;
-import domainapp.dom.app.servicios.Direccion;
-import domainapp.dom.app.servicios.Localidad;
-import domainapp.dom.app.servicios.Localidad.E_localidades;
-import net.sf.jasperreports.engine.JRException;
+	import domainapp.dom.app.servicios.Direccion;
+	import domainapp.dom.app.servicios.Localidad;
+	import domainapp.dom.app.servicios.Localidad.E_localidades;
+	import net.sf.jasperreports.engine.JRException;
 	import net.sf.jasperreports.engine.JasperCompileManager;
 	import net.sf.jasperreports.engine.JasperFillManager;
 	import net.sf.jasperreports.engine.JasperPrint;
@@ -35,8 +31,8 @@ import net.sf.jasperreports.engine.JRException;
 	import net.sf.jasperreports.engine.xml.JRXmlLoader;
 	import net.sf.jasperreports.view.JasperViewer;
 
-	@DomainService(repositoryFor = Area.class)
-	@DomainServiceLayout(menuOrder = "30", named = "Area")
+	@DomainService(repositoryFor = Sucursal.class)
+	@DomainServiceLayout(menuOrder = "30", named = "Sucursal")
 	public class RepositorioSucursal  {
 
 		@MemberOrder(sequence = "1")
@@ -98,7 +94,7 @@ import net.sf.jasperreports.engine.JRException;
 			return listaSucursal;
 		}
 
-		@MemberOrder(sequence = "6", name = "Elementos Inactivos")
+		//@MemberOrder(sequence = "6", name = "Elementos Inactivos")
 		@ActionLayout(named = "Sucursal")
 		public List<Sucursal> listAllInactivos() {
 			final List<Sucursal> listaInactivos = this.container
@@ -108,7 +104,7 @@ import net.sf.jasperreports.engine.JRException;
 
 		@MemberOrder(sequence = "3")
 		@ActionLayout(named = "Buscar por nombre")
-	    public List<Sucursal> buscarPorApellidoNombre(
+	    public List<Sucursal> buscarPorNombre(
 	            @ParameterLayout(named="Nombre") @Parameter(optionality=Optionality.OPTIONAL)   String nombre
 	    ) {
 

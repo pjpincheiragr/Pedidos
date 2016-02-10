@@ -45,7 +45,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 @DomainService(repositoryFor = AlertaMatafuego.class)
-@DomainServiceLayout(menuOrder = "120", named = "Alerta")
+@DomainServiceLayout(menuOrder = "120", named = "OLD")
 
 public class RepositorioAlertaMatafuego {
 	@MemberOrder(sequence = "1")

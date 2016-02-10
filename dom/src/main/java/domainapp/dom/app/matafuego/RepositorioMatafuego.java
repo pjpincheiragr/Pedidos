@@ -36,7 +36,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 @DomainService(repositoryFor = Matafuego.class)
-@DomainServiceLayout(menuOrder = "80", named = "Matafuego")
+@DomainServiceLayout(menuOrder = "80", named = "OLD")
 public class RepositorioMatafuego {
 
 	@MemberOrder(sequence = "1")
@@ -104,7 +104,7 @@ public class RepositorioMatafuego {
 		return lista;
 	}
 
-	@MemberOrder(sequence = "4", name="Elementos Inactivos")
+	//@MemberOrder(sequence = "4", name="Elementos Inactivos")
 	@ActionLayout(named = "Matafuego")
 	public List<Matafuego> listInactivos(){
 		List<Matafuego> lista=container.allInstances(Matafuego.class);
@@ -118,7 +118,7 @@ public class RepositorioMatafuego {
 		return inactivos;
 	}
 
-	@MemberOrder(sequence = "2", name="Elementos Desestimados")
+	//@MemberOrder(sequence = "2", name="Elementos Desestimados")
 	@ActionLayout(named = "Matafuego")
 	public List<Matafuego> listBaja(){
 		List<Matafuego> lista = container.allInstances(Matafuego.class);

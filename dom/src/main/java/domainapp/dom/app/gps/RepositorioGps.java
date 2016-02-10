@@ -37,7 +37,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 @DomainService(repositoryFor = Gps.class)
-@DomainServiceLayout(menuOrder = "50", named = "Gps")
+@DomainServiceLayout(menuOrder = "50", named = "OLD")
 public class RepositorioGps {
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Crear nuevo Gps")
@@ -129,7 +129,7 @@ public class RepositorioGps {
 		return lista;
 	}
 
-	@MemberOrder(sequence = "3", name="Elementos Inactivos")
+	//@MemberOrder(sequence = "3", name="Elementos Inactivos")
 	@ActionLayout(named = "Gps")
 	public List<Gps> listGpsInactivos(){
 		List<Gps> lista=container.allInstances(Gps.class);
@@ -173,7 +173,7 @@ public class RepositorioGps {
 		return aa;
 	}
 
-	@MemberOrder(sequence = "1", name="Elementos Desestimados")
+	//@MemberOrder(sequence = "1", name="Elementos Desestimados")
 	@ActionLayout(named = "Gps")
 	public List<Gps> listBaja(){
 		List<Gps> lista = container.allInstances(Gps.class);

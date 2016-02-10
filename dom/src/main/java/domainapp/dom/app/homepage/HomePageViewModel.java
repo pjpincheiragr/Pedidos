@@ -18,6 +18,7 @@
  */
 package domainapp.dom.app.homepage;
 
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -36,15 +37,67 @@ import domainapp.dom.app.alerta.RepositorioAlertaMatafuego;
 import domainapp.dom.app.alerta.RepositorioAlertaVehiculo;
 import net.sf.jasperreports.engine.JRException;
 
+import domainapp.dom.app.proveedor.Proveedor;
+import domainapp.dom.app.proveedor.RepositorioProveedor;
+import domainapp.dom.app.sucursal.RepositorioSucursal;
+import domainapp.dom.app.sucursal.Sucursal;
+
+
 @ViewModel
 public class HomePageViewModel {
 
 	// region > title
 	public String title() {
-		return (getAlertasMatafuego().size() + getAlertasVehiculo().size()) + " Alertas";
+		return (getlistAllSucursal().size() ) + " Alertas";
 	}
 	// endregion
 
+	// region > object (collection)
+	@HomePage
+	public List<Sucursal> getlistAllSucursal() {
+		return repositorioSucursal.listAll();
+	}
+	
+	@HomePage
+	public List<Proveedor> getAlertasVehiculo() {
+		return repositorioProovedor.listAll();	}
+
+
+/*
+
+	@Action(semantics = SemanticsOf.SAFE)
+	@ActionLayout(describedAs = "El documento se almacenara en ReporteAlertas/AlertasMatafuego")
+	public String downloadByPeriodMatafuego(@ParameterLayout(named = "Desde") Date desde, @ParameterLayout(named = "Hasta") Date hasta)
+					throws JRException, IOException {
+			return repositorioAlertaMatafuego.exportarPorPeriodo(desde, hasta);
+	}
+
+	@Action(semantics = SemanticsOf.SAFE)
+	public String downloadAllVehiculo() throws JRException, IOException{
+		return repositorioAlertaVehiculo.downloadAll();
+	}
+
+	@Action(semantics = SemanticsOf.SAFE)
+	@ActionLayout(describedAs = "El documento se almacenara en ReporteAlertas/AlertasVehiculo")
+	public String downloadByPeriodVehiculo(@ParameterLayout(named = "Desde") Date desde, @ParameterLayout(named = "Hasta") Date hasta)
+					throws JRException, IOException {
+		return repositorioAlertaVehiculo.exportarPorPeriodo(desde, hasta);
+	}
+*/
+	@javax.inject.Inject
+	DomainObjectContainer container;
+	@javax.inject.Inject
+	RepositorioSucursal repositorioSucursal;
+	@javax.inject.Inject
+	RepositorioProveedor repositorioProovedor;
+
+	// endregion
+	/*
+	// region > title
+	public String title() {
+		return (getAlertasMatafuego().size() + getAlertasVehiculo().size()) + " Alertas";
+	}
+	// endregion
 	// region > object (collection)
 	@HomePage
 	public List<AlertaMatafuego> getAlertasMatafuego() {
@@ -89,4 +142,7 @@ public class HomePageViewModel {
 	RepositorioAlertaVehiculo repositorioAlertaVehiculo;
 
 	// endregion
+	 * 
+	 * */
+
 }

@@ -25,7 +25,7 @@ import domainapp.dom.app.vendedor.Vendedor;
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(
         strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
-         column="Aceite_ID")
+         column="Pedido_ID")
 @javax.jdo.annotations.Version(
         strategy=VersionStrategy.VERSION_NUMBER,
         column="version")
@@ -68,14 +68,18 @@ public class Pedido {
 	private E_estado estado;
 	private Sucursal sucursal;
 
-	
+	public String title() {		
+		return  getDescripcion()   ;
+	}
 
 	public Pedido(String descripcion, Proveedor proveedor, Time tiempo,Vendedor vendedor,
 			float valor, E_estado estado, Sucursal sucursal) {
 		super();
 		this.descripcion = descripcion;
 		this.proveedor = proveedor;
+		this.tiempo=tiempo;
 		this.vendedor = vendedor;
+		this.valor=valor;
 		this.estado = estado;
 		this.sucursal = sucursal;
 	
@@ -108,6 +112,19 @@ public class Pedido {
 	}
 
 	@MemberOrder(sequence="3")
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	@Property(editing=Editing.DISABLED)
+	public Time getTiempo() {
+		return tiempo;
+	}
+
+	public void setTiempo(Time tiempo) {
+		this.tiempo=tiempo;
+	}
+
+	
+	
+	@MemberOrder(sequence="4")
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	public Vendedor getVendedor() {
 		return vendedor;
@@ -117,7 +134,19 @@ public class Pedido {
 		this.vendedor = vendedor;
 	}
 
-	@MemberOrder(sequence="4")
+	
+	@MemberOrder(sequence="5")
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	public float getValor() {
+		return valor;
+	}
+
+	public void setValor(float valor) {
+		this.valor=valor;
+	}
+	
+	
+	@MemberOrder(sequence="6")
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	public E_estado getEstado() {
 		return estado;
@@ -128,7 +157,7 @@ public class Pedido {
 	}
 
 
-	@MemberOrder(sequence="4")
+	@MemberOrder(sequence="7")
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	public Sucursal getSucursal() {
 		return sucursal;

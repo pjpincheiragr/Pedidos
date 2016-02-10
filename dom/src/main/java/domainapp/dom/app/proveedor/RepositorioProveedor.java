@@ -15,10 +15,6 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.query.QueryDefault;
 
-
-
-
-
 import domainapp.dom.app.proveedor.Proveedor;
 import domainapp.dom.app.servicios.Direccion;
 import domainapp.dom.app.servicios.Localidad;

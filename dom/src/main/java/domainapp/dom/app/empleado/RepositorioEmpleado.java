@@ -39,7 +39,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 @DomainService(repositoryFor = Empleado.class)
-@DomainServiceLayout(menuOrder = "20", named = "Empleado")
+@DomainServiceLayout(menuOrder = "20", named = "OLD")
 public class RepositorioEmpleado {
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Crear nuevo Empleado")
@@ -194,7 +194,7 @@ public class RepositorioEmpleado {
 		return Ciudad.listarPor(provincia);
 	}
 
-	@MemberOrder(sequence = "1", name = "Elementos Inactivos")
+//	@MemberOrder(sequence = "1", name = "Elementos Inactivos")
 	@ActionLayout(named="Empleados")
 	public List<Empleado> listAllEmpleados() {
 		List<Empleado> lista = container.allInstances(Empleado.class);

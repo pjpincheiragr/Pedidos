@@ -32,7 +32,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 @DomainService(repositoryFor = Area.class)
-@DomainServiceLayout(menuOrder = "30", named = "Area")
+@DomainServiceLayout(menuOrder = "30", named = "OLD")
 public class RepositorioArea {
 
 	@MemberOrder(sequence = "1")
@@ -83,7 +83,7 @@ public class RepositorioArea {
 		return listaArea;
 	}
 
-	@MemberOrder(sequence = "6", name = "Elementos Inactivos")
+	//@MemberOrder(sequence = "6", name = "Elementos Inactivos")
 	@ActionLayout(named = "Areas")
 	public List<Area> listAllInactivos() {
 		final List<Area> listaInactivos = this.container

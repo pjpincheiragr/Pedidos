@@ -24,7 +24,7 @@ import java.util.List;
 import java.math.BigDecimal;
 
 @DomainService(repositoryFor = Mantenimiento.class)
-@DomainServiceLayout(menuOrder = "120", named = "Mantenimiento")
+@DomainServiceLayout(menuOrder = "120", named = "OLD")
 public class RepositorioMantenimiento {
 
 	@MemberOrder(sequence = "1")
@@ -96,7 +96,7 @@ public class RepositorioMantenimiento {
 		return listaMantenimiento;
 	}
 
-	@MemberOrder(sequence = "7", name="Elementos Inactivos")
+//	@MemberOrder(sequence = "7", name="Elementos Inactivos")
 	@ActionLayout(named = "Mantenimiento")
 	public List<Mantenimiento> listInactivos(){
 		List<Mantenimiento> lista=container.allInstances(Mantenimiento.class);
@@ -109,7 +109,7 @@ public class RepositorioMantenimiento {
 		return inactivos;
 	}
 
-	@MemberOrder(sequence = "5", name="Elementos Desestimados")
+	//@MemberOrder(sequence = "5", name="Elementos Desestimados")
 	@ActionLayout(named = "Mantenimiento")
 	public List<Mantenimiento> listBaja(){
 		List<Mantenimiento> lista = container.allInstances(Mantenimiento.class);

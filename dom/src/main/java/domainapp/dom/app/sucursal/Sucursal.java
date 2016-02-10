@@ -17,9 +17,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.query.QueryDefault;
 
-import domainapp.dom.app.empleado.Empleado;
 import domainapp.dom.app.servicios.Direccion;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)

@@ -32,7 +32,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 @DomainService(repositoryFor = Combustible.class)
-@DomainServiceLayout(menuOrder = "40.1", named = "Combustible", menuBar = MenuBar.PRIMARY)
+@DomainServiceLayout(menuOrder = "40.1", named = "OLD", menuBar = MenuBar.PRIMARY)
 public class RepositorioCombustible {
 
 	@MemberOrder(sequence = "1")
@@ -159,7 +159,7 @@ public class RepositorioCombustible {
 		return lista;
 	}
 
-	@MemberOrder(sequence = "2", name = "Elementos Inactivos")
+	//@MemberOrder(sequence = "2", name = "Elementos Inactivos")
 	@ActionLayout(named = "Combustibles")
 	public List<Combustible> listAllCombustibles() {
 		List<Combustible> lista = this.container
