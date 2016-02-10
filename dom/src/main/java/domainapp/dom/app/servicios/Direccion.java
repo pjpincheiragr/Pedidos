@@ -24,7 +24,7 @@ public class Direccion {
 	@MemberOrder(sequence = "1")	
 	public String getCalle() {
 		return calle;
-	}
+	
 
 	public void setCalle(final String calle) {
 		this.calle = calle;
