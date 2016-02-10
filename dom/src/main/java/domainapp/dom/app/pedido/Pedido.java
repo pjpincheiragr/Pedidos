@@ -16,6 +16,8 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.value.DateTime;
+import org.apache.isis.applib.value.TimeStamp;
 
 import domainapp.dom.app.proveedor.Proveedor;
 import domainapp.dom.app.servicios.E_estado;
@@ -30,31 +32,25 @@ import domainapp.dom.app.vendedor.Vendedor;
         strategy=VersionStrategy.VERSION_NUMBER,
         column="version")
 @javax.jdo.annotations.Queries({
-		@javax.jdo.annotations.Query(
-				name = "ListarTodos", language = "JDOQL",
-				value = "SELECT "
-				+ "FROM domainapp.dom.app.aceite.Aceite "
-				+ "WHERE activo == true"),
-		@javax.jdo.annotations.Query(
-				name = "Buscar_Nombre", language = "JDOQL",
-				value = "SELECT "
-				+ "FROM domainapp.dom.app.Aceite "
-				+ "WHERE nombre.indexOf(:nombre) >= 0 && activo == true"),
-		@javax.jdo.annotations.Query(
-				name = "Buscar_Marca", language = "JDOQL",
-				value = "SELECT "
-				+ "FROM domainapp.dom.app.Aceite "
-				+ "WHERE marca.indexOf(:marca) >= 0 && activo == true"),
-		@javax.jdo.annotations.Query(
-				name = "Buscar_Codigo", language = "JDOQL",
-				value = "SELECT "
-				+ "FROM domainapp.dom.app.Aceite "
-				+ "WHERE codigo.indexOf(:codigo) >= 0 && activo == true"),
-		@javax.jdo.annotations.Query(
-				name = "Buscar_Tipo", language = "JDOQL",
-				value = "SELECT "
-				+ "FROM domainapp.dom.app.Aceite "
-				+ "WHERE tipoAceite.indexOf(:tipoAceite) >= 0 && activo == true")
+	@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
+			+ "FROM domainapp.dom.app.pedido.Pedido "
+			+ " order by fecha "),
+	@javax.jdo.annotations.Query(name = "ListarPendientes", language = "JDOQL", value = "SELECT "
+					+ "FROM domainapp.dom.app.pedido.Pedido "
+					+ "Where (estado==ASIGNADO) || (estado=EN_PROCESO)"
+					+ " order by fecha "),
+	@javax.jdo.annotations.Query(name = "findByDescription", language = "JDOQL", value = "SELECT "
+			+ "FROM domainapp.dom.app.pedido.Pedido "
+			+ "WHERE ((:descripcion=='') || (descripcion.toLowerCase().indexOf(:descripcion) >= 0))"
+			+ " order by fecha "),
+	@javax.jdo.annotations.Query(name = "findByState", language = "JDOQL", value = "SELECT "
+			+ "FROM domainapp.dom.app.pedido.Pedido "
+			+ "WHERE (estado==:estado)"
+			+ " order by fecha "),
+	@javax.jdo.annotations.Query(name = "findBySeller", language = "JDOQL", value = "SELECT "
+					+ "FROM domainapp.dom.app.pedido.Pedido "
+					+ "WHERE (vendedor==:vendedor)"
+					+ " order by fecha ")
 })
 
 @DomainObject(objectType = "PEDIDO",bounded=true)
@@ -62,7 +58,8 @@ import domainapp.dom.app.vendedor.Vendedor;
 public class Pedido {
 	private String descripcion;
 	private Proveedor proveedor;
-	private Time tiempo;
+	private Timestamp fecha;
+	private int tiempo;
 	private Vendedor vendedor;
 	private float valor;
 	private E_estado estado;
@@ -72,7 +69,7 @@ public class Pedido {
 		return  getDescripcion()   ;
 	}
 
-	public Pedido(String descripcion, Proveedor proveedor, Time tiempo,Vendedor vendedor,
+	public Pedido(String descripcion, Proveedor proveedor, Timestamp fecha, int tiempo,Vendedor vendedor,
 			float valor, E_estado estado, Sucursal sucursal) {
 		super();
 		this.descripcion = descripcion;
@@ -82,6 +79,7 @@ public class Pedido {
 		this.valor=valor;
 		this.estado = estado;
 		this.sucursal = sucursal;
+		this.fecha= fecha;
 	
 	}
 
@@ -111,15 +109,16 @@ public class Pedido {
 		this.proveedor = proveedor;
 	}
 
+	
 	@MemberOrder(sequence="3")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing=Editing.DISABLED)
-	public Time getTiempo() {
+	public int getTiempo() {
 		return tiempo;
 	}
 
-	public void setTiempo(Time tiempo) {
-		this.tiempo=tiempo;
+	public void setTiempo(int tiempo2) {
+		this.tiempo=tiempo2;
 	}
 
 	
@@ -166,8 +165,17 @@ public class Pedido {
 	public void setSucursal(Sucursal sucursal) {
 		this.sucursal = sucursal;
 	}
+	
+	@MemberOrder(sequence="8")
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	public Timestamp getFecha() {
+		return fecha;
+	}
 
-
+	public void setFecha(Timestamp fecha) {
+		this.fecha = fecha;
+	}
+	
 	@javax.inject.Inject
     DomainObjectContainer container;
 }

@@ -48,6 +48,7 @@ public class Cadete {
 		super();
 	}
 
+	
 	@MemberOrder(sequence = "1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
