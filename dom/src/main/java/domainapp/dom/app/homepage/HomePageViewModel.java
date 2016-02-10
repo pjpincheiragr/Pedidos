@@ -41,7 +41,10 @@ import domainapp.dom.app.proveedor.Proveedor;
 import domainapp.dom.app.proveedor.RepositorioProveedor;
 import domainapp.dom.app.sucursal.RepositorioSucursal;
 import domainapp.dom.app.sucursal.Sucursal;
-
+import domainapp.dom.app.pedido.Pedido;
+import domainapp.dom.app.pedido.RepositorioPedido;
+import domainapp.dom.app.vendedor.Vendedor;
+import domainapp.dom.app.vendedor.RepositorioVendedor;
 
 @ViewModel
 public class HomePageViewModel {
@@ -56,6 +59,15 @@ public class HomePageViewModel {
 	@HomePage
 	public List<Sucursal> getlistAllSucursal() {
 		return repositorioSucursal.listAll();
+	}
+
+	
+	
+	@HomePage
+	public List<Pedido> getlistPedidosVendedor1() {
+		Vendedor ObjetoVendedor1= new Vendedor();
+		ObjetoVendedor1	=repositorioVendedor.findByNameAuxiliar("a").get(1);
+		return repositorioPedido.findBySeller(ObjetoVendedor1);
 	}
 	
 	@HomePage
@@ -90,6 +102,10 @@ public class HomePageViewModel {
 	RepositorioSucursal repositorioSucursal;
 	@javax.inject.Inject
 	RepositorioProveedor repositorioProovedor;
+	@javax.inject.Inject
+	RepositorioPedido repositorioPedido;
+	@javax.inject.Inject
+	RepositorioVendedor repositorioVendedor;
 
 	// endregion
 	/*

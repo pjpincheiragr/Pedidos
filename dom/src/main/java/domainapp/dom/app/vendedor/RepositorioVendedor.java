@@ -60,6 +60,7 @@ public class RepositorioVendedor {
 						"nombre", (nombre == null) ? "" : nombre));
 	}
 
+	
 	@ActionLayout(named = "Buscar por Codigo")
 	@MemberOrder(sequence = "5")
 	public List<Vendedor> findByCode(
@@ -69,6 +70,15 @@ public class RepositorioVendedor {
 						Vendedor.class,
 						"findByName",
 						"nombre", (codigo == null) ? "" : codigo));
+	}
+	
+	public List<Vendedor> findByNameAuxiliar(
+			 String nombre) {
+		return container.allMatches(
+				new QueryDefault<>(
+						Vendedor.class,
+						"findByNameAuxiliar",
+						"nombre", nombre));
 	}
 	@javax.inject.Inject
     DomainObjectContainer container;

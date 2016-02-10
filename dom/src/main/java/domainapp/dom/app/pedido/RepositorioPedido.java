@@ -17,6 +17,7 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.query.QueryDefault;
 
+import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.proveedor.Proveedor;
 import domainapp.dom.app.servicios.E_estado;
@@ -38,7 +39,8 @@ public class RepositorioPedido {
 			@ParameterLayout(named="Tiempo")@Parameter(optionality=Optionality.OPTIONAL)int tiempo,
 			@ParameterLayout(named="Valor")@Parameter(optionality=Optionality.OPTIONAL)float valor,
 			@ParameterLayout(named="Estado")E_estado estado,
-			@ParameterLayout(named="Sucursal")Sucursal sucursal
+			@ParameterLayout(named="Sucursal")Sucursal sucursal,
+			@ParameterLayout(named="Cadete")Cadete cadete
 			
 			){
 		final Pedido Pedido = container.newTransientInstance(Pedido.class);
@@ -50,6 +52,7 @@ public class RepositorioPedido {
 		Pedido.setEstado(estado);
 		Pedido.setSucursal(sucursal);
 		Pedido.setFecha(new Timestamp(System.currentTimeMillis()));
+		Pedido.setCadete(cadete);
 		container.persistIfNotAlready(Pedido);
 		return Pedido;
 	}
@@ -109,6 +112,17 @@ public class RepositorioPedido {
 						Pedido.class,
 						"findBySeller",
 						"vendedor", vendedor));
+	}
+	
+	@ActionLayout(named = "Buscar por Cadete")
+	@MemberOrder(sequence = "6")
+	public List<Pedido> findByCadete(
+			@ParameterLayout(named = "Nombre") Cadete cadete) {
+		return container.allMatches(
+				new QueryDefault<>(
+						Pedido.class,
+						"findByCadete",
+						"cadete", cadete));
 	}
 	
 	@javax.inject.Inject

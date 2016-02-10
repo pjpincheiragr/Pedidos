@@ -30,6 +30,9 @@ import org.apache.isis.applib.annotation.Where;
 			+ "FROM domainapp.dom.app.vendedor.Vendedor "
 			+ "WHERE ((:nombre=='') || (nombre.toLowerCase().indexOf(:nombre) >= 0))"
 			+ " order by nombre "),
+	@javax.jdo.annotations.Query(name = "findByNameAuxiliar", language = "JDOQL", value = "SELECT "
+					+ "FROM domainapp.dom.app.vendedor.Vendedor "
+					+ "WHERE (nombre==nombre))"),
 	@javax.jdo.annotations.Query(name = "findByCode", language = "JDOQL", value = "SELECT "
 			+ "FROM domainapp.dom.app.vendedor.Vendedor "
 			+ "WHERE ((:codigo=='') || (codigo.toLowerCase().indexOf(:codigo) >= 0))"

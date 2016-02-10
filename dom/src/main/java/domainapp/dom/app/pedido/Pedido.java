@@ -19,6 +19,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.value.DateTime;
 import org.apache.isis.applib.value.TimeStamp;
 
+import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.proveedor.Proveedor;
 import domainapp.dom.app.servicios.E_estado;
 import domainapp.dom.app.sucursal.Sucursal;
@@ -64,13 +65,14 @@ public class Pedido {
 	private float valor;
 	private E_estado estado;
 	private Sucursal sucursal;
+	private Cadete cadete;
 
 	public String title() {		
 		return  getDescripcion()   ;
 	}
 
 	public Pedido(String descripcion, Proveedor proveedor, Timestamp fecha, int tiempo,Vendedor vendedor,
-			float valor, E_estado estado, Sucursal sucursal) {
+			float valor, E_estado estado, Sucursal sucursal, Cadete cadete) {
 		super();
 		this.descripcion = descripcion;
 		this.proveedor = proveedor;
@@ -79,7 +81,8 @@ public class Pedido {
 		this.valor=valor;
 		this.estado = estado;
 		this.sucursal = sucursal;
-		this.fecha= fecha;
+		this.fecha = fecha;
+		this.cadete = cadete;
 	
 	}
 
@@ -176,6 +179,15 @@ public class Pedido {
 		this.fecha = fecha;
 	}
 	
+	@MemberOrder(sequence="9")
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	public Cadete getCadete() {
+		return cadete;
+	}
+
+	public void setCadete(Cadete cadete) {
+		this.cadete = cadete;}
+		
 	@javax.inject.Inject
     DomainObjectContainer container;
 }
