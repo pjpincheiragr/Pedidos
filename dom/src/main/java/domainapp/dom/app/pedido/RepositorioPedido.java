@@ -1,9 +1,5 @@
 package domainapp.dom.app.pedido;
 
-
-
-
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -24,29 +20,29 @@ import domainapp.dom.app.servicios.E_estado;
 import domainapp.dom.app.sucursal.Sucursal;
 import domainapp.dom.app.vendedor.Vendedor;
 
-
-
-
 @DomainService(repositoryFor = Pedido.class)
-@DomainServiceLayout(menuOrder = "60", named="Pedidos")
+@DomainServiceLayout(menuOrder = "60", named = "Pedidos")
 public class RepositorioPedido {
 	@MemberOrder(sequence = "1")
-	@ActionLayout(named="Crear nuevo Pedido")
+	@ActionLayout(named = "Crear nuevo Pedido")
 	public Pedido createPedido(
-			@ParameterLayout(named="Descripcion")@Parameter(optionality=Optionality.OPTIONAL)String descripcion,
-			@ParameterLayout(named="Lugar")@Parameter(optionality=Optionality.OPTIONAL)Proveedor proveedor,
-			@ParameterLayout(named="Vendedor")@Parameter(optionality=Optionality.OPTIONAL)Vendedor vendedor,
-			@ParameterLayout(named="Tiempo")@Parameter(optionality=Optionality.OPTIONAL)int tiempo,
-			@ParameterLayout(named="Valor")@Parameter(optionality=Optionality.OPTIONAL)float valor,
-			@ParameterLayout(named="Estado")E_estado estado,
-			@ParameterLayout(named="Sucursal")Sucursal sucursal,
-			@ParameterLayout(named="Cadete")Cadete cadete
-			
-			){
+			@ParameterLayout(named = "Descripcion") @Parameter(optionality = Optionality.OPTIONAL) String descripcion,
+			@ParameterLayout(named = "Proveedor") @Parameter(optionality = Optionality.OPTIONAL) Proveedor proveedor,
+			@ParameterLayout(named = "Cantidad") @Parameter(optionality = Optionality.OPTIONAL) int cantidad,
+			@ParameterLayout(named = "Código") @Parameter(optionality = Optionality.OPTIONAL) String codigo,
+			@ParameterLayout(named = "Marca") @Parameter(optionality = Optionality.OPTIONAL) String marca,
+			@ParameterLayout(named = "Vendedor") @Parameter(optionality = Optionality.OPTIONAL) Vendedor vendedor,
+			@ParameterLayout(named = "Tiempo") @Parameter(optionality = Optionality.OPTIONAL) int tiempo,
+			@ParameterLayout(named = "Valor") @Parameter(optionality = Optionality.OPTIONAL) float valor,
+			@ParameterLayout(named = "Estado") E_estado estado,
+			@ParameterLayout(named = "Sucursal") Sucursal sucursal,
+			@ParameterLayout(named = "Cadete") Cadete cadete
+
+	) {
 		final Pedido Pedido = container.newTransientInstance(Pedido.class);
 		Pedido.setDescripcion(descripcion);
 		Pedido.setProveedor(proveedor);
-		Pedido.setVendedor(vendedor);	
+		Pedido.setVendedor(vendedor);
 		Pedido.setTiempo(tiempo);
 		Pedido.setValor(valor);
 		Pedido.setEstado(estado);
@@ -68,7 +64,7 @@ public class RepositorioPedido {
 		}
 		return listaPedidos;
 	}
-	
+
 	@MemberOrder(sequence = "2")
 	@ActionLayout(named = "Listar Pendientes")
 	public List<Pedido> listPending() {
@@ -81,50 +77,52 @@ public class RepositorioPedido {
 		return listaPedidos;
 	}
 	
-	@ActionLayout(named = "Buscar por Descripcion")
 	@MemberOrder(sequence = "3")
+	@ActionLayout(named = "Listar Nuevos")
+	public List<Pedido> listNew() {
+		final List<Pedido> listaPedidos = this.container
+				.allMatches(new QueryDefault<Pedido>(Pedido.class,
+						"ListarNuevos"));
+		if (listaPedidos.isEmpty()) {
+			this.container.warnUser("No hay pedidos cargados en el sistema");
+		}
+		return listaPedidos;
+	}
+
+
+	@ActionLayout(named = "Buscar por Descripcion")
+	@MemberOrder(sequence = "4")
 	public List<Pedido> findByName(
 			@ParameterLayout(named = "Descripcion") @Parameter(optionality = Optionality.OPTIONAL) String descripcion) {
-		return container.allMatches(
-				new QueryDefault<>(
-						Pedido.class,
-						"findByDescription",
-						"descripcion", (descripcion == null) ? "" : descripcion));
+		return container.allMatches(new QueryDefault<>(Pedido.class,
+				"findByDescription", "descripcion", (descripcion == null) ? ""
+						: descripcion));
 	}
-	
+
 	@ActionLayout(named = "Buscar por Estado")
-	@MemberOrder(sequence = "4")
+	@MemberOrder(sequence = "5")
 	public List<Pedido> findByState(
 			@ParameterLayout(named = "Estado") E_estado estado) {
-		return container.allMatches(
-				new QueryDefault<>(
-						Pedido.class,
-						"findByState",
-						"estado", estado));
+		return container.allMatches(new QueryDefault<>(Pedido.class,
+				"findByState", "estado", estado));
 	}
-	
+
 	@ActionLayout(named = "Buscar por Vendedor")
-	@MemberOrder(sequence = "5")
+	@MemberOrder(sequence = "6")
 	public List<Pedido> findBySeller(
 			@ParameterLayout(named = "Nombre") Vendedor vendedor) {
-		return container.allMatches(
-				new QueryDefault<>(
-						Pedido.class,
-						"findBySeller",
-						"vendedor", vendedor));
+		return container.allMatches(new QueryDefault<>(Pedido.class,
+				"findBySeller", "vendedor", vendedor));
 	}
-	
+
 	@ActionLayout(named = "Buscar por Cadete")
-	@MemberOrder(sequence = "6")
+	@MemberOrder(sequence = "7")
 	public List<Pedido> findByCadete(
 			@ParameterLayout(named = "Nombre") Cadete cadete) {
-		return container.allMatches(
-				new QueryDefault<>(
-						Pedido.class,
-						"findByCadete",
-						"cadete", cadete));
+		return container.allMatches(new QueryDefault<>(Pedido.class,
+				"findByCadete", "cadete", cadete));
 	}
-	
+
 	@javax.inject.Inject
-    DomainObjectContainer container;
+	DomainObjectContainer container;
 }
