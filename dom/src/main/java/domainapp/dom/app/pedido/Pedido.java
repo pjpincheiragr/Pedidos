@@ -1,23 +1,17 @@
 package domainapp.dom.app.pedido;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.value.DateTime;
-import org.apache.isis.applib.value.TimeStamp;
 
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.proveedor.Proveedor;

@@ -66,13 +66,13 @@ public class HomePageViewModel {
 	@HomePage
 	public List<Pedido> getlistPedidosVendedor1() {
 		Vendedor ObjetoVendedor1= new Vendedor();
-		ObjetoVendedor1	=repositorioVendedor.findByNameAuxiliar("a").get(1);
+		ObjetoVendedor1	=(repositorioVendedor.findByNameAuxiliar("Pedrito")).get(0);
 		return repositorioPedido.findBySeller(ObjetoVendedor1);
 	}
 	
 	@HomePage
 	public List<Proveedor> getAlertasVehiculo() {
-		return repositorioProovedor.listAll();	}
+		return repositorioProveedor.listAll();	}
 
 
 /*
@@ -101,7 +101,7 @@ public class HomePageViewModel {
 	@javax.inject.Inject
 	RepositorioSucursal repositorioSucursal;
 	@javax.inject.Inject
-	RepositorioProveedor repositorioProovedor;
+	RepositorioProveedor repositorioProveedor;
 	@javax.inject.Inject
 	RepositorioPedido repositorioPedido;
 	@javax.inject.Inject

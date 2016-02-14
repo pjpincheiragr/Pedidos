@@ -36,6 +36,10 @@ import org.apache.isis.applib.annotation.Where;
 public class Cadete {
 	private String nombre;
 	private String codigo;
+	
+	public String title() {		
+		return  getNombre()   ;
+	}
 
 	public Cadete(String nombre, String codigo) {
 		super();
