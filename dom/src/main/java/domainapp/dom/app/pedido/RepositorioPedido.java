@@ -1,10 +1,7 @@
 package domainapp.dom.app.pedido;
 
-
-
-
-import org.apache.isis.applib.value.Blob;
 import org.joda.time.LocalDate;
+
 import java.util.List;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -15,7 +12,6 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.query.QueryDefault;
-
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.proveedor.Proveedor;
@@ -24,14 +20,11 @@ import domainapp.dom.app.sucursal.Sucursal;
 import domainapp.dom.app.tipo.Tipo;
 import domainapp.dom.app.vendedor.Vendedor;
 
-
-
-
 @DomainService(repositoryFor = Pedido.class)
-@DomainServiceLayout(menuOrder = "60", named="Pedidos")
+@DomainServiceLayout(menuOrder = "60", named = "Pedidos")
 public class RepositorioPedido {
 	@MemberOrder(sequence = "1")
-	@ActionLayout(named="Crear nuevo Pedido")
+	@ActionLayout(named = "Crear nuevo Pedido")
 	public Pedido createPedido(
 			@ParameterLayout(named="Tipo")@Parameter(optionality=Optionality.OPTIONAL)Tipo tipo,
 			@ParameterLayout(named="Lugar")@Parameter(optionality=Optionality.OPTIONAL)Proveedor proveedor,
@@ -41,13 +34,14 @@ public class RepositorioPedido {
 			@ParameterLayout(named="Estado")E_estado estado,
 			@ParameterLayout(named="Sucursal")Sucursal sucursal,
 			@ParameterLayout(named="Cadete")Cadete cadete,
-			@ParameterLayout(named="Observaciones", multiLine=15) String observacion,
-			final @ParameterLayout(named="Imagen") @Parameter(optionality=Optionality.OPTIONAL) Blob attachment
+			@ParameterLayout(named="Observaciones", multiLine=15) String observacion
+			
 			){
+
 		final Pedido Pedido = container.newTransientInstance(Pedido.class);
 		Pedido.setTipo(tipo);
 		Pedido.setProveedor(proveedor);
-		Pedido.setVendedor(vendedor);	
+		Pedido.setVendedor(vendedor);
 		Pedido.setTiempo(tiempo);
 		Pedido.setValor(valor);
 		Pedido.setEstado(estado);
@@ -69,7 +63,7 @@ public class RepositorioPedido {
 		}
 		return listaPedidos;
 	}
-	
+
 	@MemberOrder(sequence = "2")
 	@ActionLayout(named = "Listar Pendientes")
 	public List<Pedido> listPending() {
@@ -82,50 +76,52 @@ public class RepositorioPedido {
 		return listaPedidos;
 	}
 	
-	@ActionLayout(named = "Buscar por Descripcion")
 	@MemberOrder(sequence = "3")
+	@ActionLayout(named = "Listar Nuevos")
+	public List<Pedido> listNew() {
+		final List<Pedido> listaPedidos = this.container
+				.allMatches(new QueryDefault<Pedido>(Pedido.class,
+						"ListarNuevos"));
+		if (listaPedidos.isEmpty()) {
+			this.container.warnUser("No hay pedidos cargados en el sistema");
+		}
+		return listaPedidos;
+	}
+
+
+	@ActionLayout(named = "Buscar por Descripcion")
+	@MemberOrder(sequence = "4")
 	public List<Pedido> findByName(
 			@ParameterLayout(named = "Descripcion") @Parameter(optionality = Optionality.OPTIONAL) String descripcion) {
-		return container.allMatches(
-				new QueryDefault<>(
-						Pedido.class,
-						"findByDescription",
-						"descripcion", (descripcion == null) ? "" : descripcion));
+		return container.allMatches(new QueryDefault<>(Pedido.class,
+				"findByDescription", "descripcion", (descripcion == null) ? ""
+						: descripcion));
 	}
-	
+
 	@ActionLayout(named = "Buscar por Estado")
-	@MemberOrder(sequence = "4")
+	@MemberOrder(sequence = "5")
 	public List<Pedido> findByState(
 			@ParameterLayout(named = "Estado") E_estado estado) {
-		return container.allMatches(
-				new QueryDefault<>(
-						Pedido.class,
-						"findByState",
-						"estado", estado));
+		return container.allMatches(new QueryDefault<>(Pedido.class,
+				"findByState", "estado", estado));
 	}
-	
+
 	@ActionLayout(named = "Buscar por Vendedor")
-	@MemberOrder(sequence = "5")
+	@MemberOrder(sequence = "6")
 	public List<Pedido> findBySeller(
 			@ParameterLayout(named = "Nombre") Vendedor vendedor) {
-		return container.allMatches(
-				new QueryDefault<>(
-						Pedido.class,
-						"findBySeller",
-						"vendedor", vendedor));
+		return container.allMatches(new QueryDefault<>(Pedido.class,
+				"findBySeller", "vendedor", vendedor));
 	}
-	
+
 	@ActionLayout(named = "Buscar por Cadete")
-	@MemberOrder(sequence = "6")
+	@MemberOrder(sequence = "7")
 	public List<Pedido> findByCadete(
 			@ParameterLayout(named = "Nombre") Cadete cadete) {
-		return container.allMatches(
-				new QueryDefault<>(
-						Pedido.class,
-						"findByCadete",
-						"cadete", cadete));
+		return container.allMatches(new QueryDefault<>(Pedido.class,
+				"findByCadete", "cadete", cadete));
 	}
-	
+
 	@javax.inject.Inject
-    DomainObjectContainer container;
+	DomainObjectContainer container;
 }

@@ -78,7 +78,7 @@ public class RepositorioArea {
 		final List<Area> listaArea = this.container
 				.allMatches(new QueryDefault<Area>(Area.class, "ListarTodos"));
 		if (listaArea.isEmpty()) {
-			this.container.warnUser("No hay areas cargadas en el sistema");
+			//this.container.warnUser("No hay areas cargadas en el sistema");
 		}
 		return listaArea;
 	}

@@ -89,7 +89,7 @@ package domainapp.dom.app.sucursal;
 			final List<Sucursal> listaSucursal = this.container
 					.allMatches(new QueryDefault<Sucursal>(Sucursal.class, "ListarTodos"));
 			if (listaSucursal.isEmpty()) {
-				this.container.warnUser("No hay areas cargadas en el sistema");
+				//this.container.warnUser("No hay areas cargadas en el sistema");
 			}
 			return listaSucursal;
 		}
