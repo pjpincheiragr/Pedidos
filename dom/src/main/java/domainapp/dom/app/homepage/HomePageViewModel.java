@@ -18,23 +18,29 @@
  */
 package domainapp.dom.app.homepage;
 
-
+import java.util.List;
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
+
+
+
+
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.HomePage;
-import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.ViewModel;
 
+
+
+/*
 import domainapp.dom.app.alerta.AlertaMatafuego;
 import domainapp.dom.app.alerta.AlertaVehiculo;
 import domainapp.dom.app.alerta.RepositorioAlertaMatafuego;
 import domainapp.dom.app.alerta.RepositorioAlertaVehiculo;
+
+*/
 import net.sf.jasperreports.engine.JRException;
 import domainapp.dom.app.proveedor.Proveedor;
 import domainapp.dom.app.proveedor.RepositorioProveedor;
@@ -46,6 +52,8 @@ import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.pedido.RepositorioPedido;
 import domainapp.dom.app.vendedor.Vendedor;
 import domainapp.dom.app.vendedor.RepositorioVendedor;
+import domainapp.dom.app.cadete.Cadete;
+import domainapp.dom.app.cadete.RepositorioCadete;
 
 @ViewModel
 public class HomePageViewModel {
@@ -69,7 +77,7 @@ public class HomePageViewModel {
 	@HomePage
 	
 	public List<Ruta> getlistRutas() {
-		return repositorioRuta.listAll();
+		return RepositorioRuta.listAll();
 		}
 
 	/*@HomePage
@@ -78,6 +86,14 @@ public class HomePageViewModel {
 		ObjetoVendedor1	=(repositorioVendedor.findByNameAuxiliar(""")).get(0);
 		return repositorioPedido.findBySeller(ObjetoVendedor1);
 	}
+<<<<<<< HEAD
+=======
+	
+	@HomePage
+
+	public List<Cadete> getCadetes() {
+		return repositorioCadete.listAll();	}
+>>>>>>> e6078a5134d902acf586ae155ae6657cf6a23f4d
 
 
 	@Action(semantics = SemanticsOf.SAFE)
@@ -109,8 +125,10 @@ public class HomePageViewModel {
 	RepositorioPedido repositorioPedido;
 	@javax.inject.Inject
 	RepositorioVendedor repositorioVendedor;
-	@javax.inject.Inject
-	RepositorioRuta repositorioRuta;
+	@javax.inject.Inject RepositorioRuta RepositorioRuta;
+	
+
+
 
 	// endregion
 	/*
