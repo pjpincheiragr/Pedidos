@@ -18,25 +18,30 @@
  */
 package domainapp.dom.app.homepage;
 
+import java.util.List;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 
-import org.apache.isis.applib.DomainObjectContainer;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.HomePage;
-import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.ViewModel;
-
+/*
 import domainapp.dom.app.alerta.AlertaMatafuego;
 import domainapp.dom.app.alerta.AlertaVehiculo;
 import domainapp.dom.app.alerta.RepositorioAlertaMatafuego;
 import domainapp.dom.app.alerta.RepositorioAlertaVehiculo;
+
+*/
 import net.sf.jasperreports.engine.JRException;
 
+import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.ViewModel;
+
+
+import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.HomePage;
 import domainapp.dom.app.proveedor.Proveedor;
 import domainapp.dom.app.proveedor.RepositorioProveedor;
 import domainapp.dom.app.sucursal.RepositorioSucursal;
@@ -45,6 +50,8 @@ import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.pedido.RepositorioPedido;
 import domainapp.dom.app.vendedor.Vendedor;
 import domainapp.dom.app.vendedor.RepositorioVendedor;
+import domainapp.dom.app.cadete.Cadete;
+import domainapp.dom.app.cadete.RepositorioCadete;
 
 @ViewModel
 public class HomePageViewModel {
@@ -71,8 +78,8 @@ public class HomePageViewModel {
 	}
 	
 	@HomePage
-	public List<Proveedor> getAlertasVehiculo() {
-		return repositorioProovedor.listAll();	}
+	public List<Cadete> getCadetes() {
+		return repositorioCadete.listAll();	}
 
 
 /*
@@ -106,6 +113,9 @@ public class HomePageViewModel {
 	RepositorioPedido repositorioPedido;
 	@javax.inject.Inject
 	RepositorioVendedor repositorioVendedor;
+	@javax.inject.Inject
+	RepositorioCadete repositorioCadete;
+
 
 	// endregion
 	/*
