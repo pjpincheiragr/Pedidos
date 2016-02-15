@@ -3,10 +3,9 @@ package domainapp.dom.app.pedido;
 
 
 
-import java.sql.Time;
-import java.sql.Timestamp;
+import org.apache.isis.applib.value.Blob;
+import org.joda.time.LocalDate;
 import java.util.List;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -22,6 +21,7 @@ import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.proveedor.Proveedor;
 import domainapp.dom.app.servicios.E_estado;
 import domainapp.dom.app.sucursal.Sucursal;
+import domainapp.dom.app.tipo.Tipo;
 import domainapp.dom.app.vendedor.Vendedor;
 
 
@@ -33,26 +33,27 @@ public class RepositorioPedido {
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named="Crear nuevo Pedido")
 	public Pedido createPedido(
-			@ParameterLayout(named="Descripcion")@Parameter(optionality=Optionality.OPTIONAL)String descripcion,
+			@ParameterLayout(named="Tipo")@Parameter(optionality=Optionality.OPTIONAL)Tipo tipo,
 			@ParameterLayout(named="Lugar")@Parameter(optionality=Optionality.OPTIONAL)Proveedor proveedor,
 			@ParameterLayout(named="Vendedor")@Parameter(optionality=Optionality.OPTIONAL)Vendedor vendedor,
 			@ParameterLayout(named="Tiempo")@Parameter(optionality=Optionality.OPTIONAL)int tiempo,
 			@ParameterLayout(named="Valor")@Parameter(optionality=Optionality.OPTIONAL)float valor,
 			@ParameterLayout(named="Estado")E_estado estado,
 			@ParameterLayout(named="Sucursal")Sucursal sucursal,
-			@ParameterLayout(named="Cadete")Cadete cadete
-			
+			@ParameterLayout(named="Cadete")Cadete cadete,
+			@ParameterLayout(named="Observaciones", multiLine=15) String observacion,
+			final @ParameterLayout(named="Imagen") @Parameter(optionality=Optionality.OPTIONAL) Blob attachment
 			){
 		final Pedido Pedido = container.newTransientInstance(Pedido.class);
-		Pedido.setDescripcion(descripcion);
+		Pedido.setTipo(tipo);
 		Pedido.setProveedor(proveedor);
 		Pedido.setVendedor(vendedor);	
 		Pedido.setTiempo(tiempo);
 		Pedido.setValor(valor);
 		Pedido.setEstado(estado);
 		Pedido.setSucursal(sucursal);
-		Pedido.setFecha(new Timestamp(System.currentTimeMillis()));
-		Pedido.setCadete(cadete);
+		Pedido.setFechaHora(LocalDate.now());
+		Pedido.setObservacion(observacion);
 		container.persistIfNotAlready(Pedido);
 		return Pedido;
 	}
