@@ -36,9 +36,10 @@ import domainapp.dom.app.alerta.AlertaVehiculo;
 import domainapp.dom.app.alerta.RepositorioAlertaMatafuego;
 import domainapp.dom.app.alerta.RepositorioAlertaVehiculo;
 import net.sf.jasperreports.engine.JRException;
-
 import domainapp.dom.app.proveedor.Proveedor;
 import domainapp.dom.app.proveedor.RepositorioProveedor;
+import domainapp.dom.app.ruta.RepositorioRuta;
+import domainapp.dom.app.ruta.Ruta;
 import domainapp.dom.app.sucursal.RepositorioSucursal;
 import domainapp.dom.app.sucursal.Sucursal;
 import domainapp.dom.app.pedido.Pedido;
@@ -50,32 +51,34 @@ import domainapp.dom.app.vendedor.RepositorioVendedor;
 public class HomePageViewModel {
 
 	// region > title
-	public String title() {
-		return (getlistAllSucursal().size() ) + " Alertas";
-	}
+//	public String title() {
+//		return (getlistAllSucursal().size() ) + " Alertas";
+//	}
 	// endregion
 
 	// region > object (collection)
-	@HomePage
+	/*@HomePage
 	public List<Sucursal> getlistAllSucursal() {
 		return repositorioSucursal.listAll();
 	}
 
+	*/
 	
+
 	
 	@HomePage
-	public List<Pedido> getlistPedidosVendedor1() {
+	
+	public List<Ruta> getlistRutas() {
+		return repositorioRuta.listAll();
+		}
+
+	/*@HomePage
+	public List<Pedido> getlistPedidosVendedor1() {                                  //Ver este método
 		Vendedor ObjetoVendedor1= new Vendedor();
-		ObjetoVendedor1	=(repositorioVendedor.findByNameAuxiliar("Pedrito")).get(0);
+		ObjetoVendedor1	=(repositorioVendedor.findByNameAuxiliar(""")).get(0);
 		return repositorioPedido.findBySeller(ObjetoVendedor1);
 	}
-	
-	@HomePage
-	public List<Proveedor> getAlertasVehiculo() {
-		return repositorioProveedor.listAll();	}
 
-
-/*
 
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(describedAs = "El documento se almacenara en ReporteAlertas/AlertasMatafuego")
@@ -106,6 +109,8 @@ public class HomePageViewModel {
 	RepositorioPedido repositorioPedido;
 	@javax.inject.Inject
 	RepositorioVendedor repositorioVendedor;
+	@javax.inject.Inject
+	RepositorioRuta repositorioRuta;
 
 	// endregion
 	/*

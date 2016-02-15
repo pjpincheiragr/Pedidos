@@ -3,7 +3,10 @@ package domainapp.dom.app.ruta;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.VersionStrategy;
 
 import org.apache.isis.applib.DomainObjectContainer;
@@ -17,10 +20,13 @@ import org.apache.isis.applib.annotation.Property;
 
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
-import domainapp.dom.app.sucursal.Sucursal;
 
-@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
-@javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "Ruta_ID")
+
+
+
+@javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "id")
+@javax.jdo.annotations.Uniques({ @javax.jdo.annotations.Unique(name = "OrdenServicio_numero_must_be_unique", members = { "numero" }) })
+@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.APPLICATION)
 @javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
 @javax.jdo.annotations.Queries({
 		@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
@@ -29,10 +35,17 @@ import domainapp.dom.app.sucursal.Sucursal;
 @DomainObject(objectType = "ruta", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
 
+
+
 public class Ruta {
 	private Cadete cadete;
-	private int numero;
 	private List<Pedido> listaPedidos=new ArrayList<Pedido>();
+	@PrimaryKey
+	private long numero;
+	
+	public String title() {		
+		return "Ruta: " + getNumero()   ;
+	}
 
 	public Ruta(Cadete cadete) {
 		super();
@@ -44,14 +57,15 @@ public class Ruta {
 		super();
 	}
 
-	@MemberOrder(sequence = "1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing = Editing.DISABLED)
-	public int getNumero() {
+	@javax.jdo.annotations.PrimaryKey(column = "numero")
+	@Persistent(valueStrategy = IdGeneratorStrategy.INCREMENT, sequence = "numero")
+	@MemberOrder(name="Orden de Servicio",sequence = "1")
+	public long getNumero() {
 		return numero;
 	}
 
-	public void setNumero(int numero) {
+	public void setNumero(final long numero) {
 		this.numero = numero;
 	}
 
