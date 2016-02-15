@@ -43,15 +43,16 @@ import org.apache.isis.applib.annotation.Where;
 public class Vendedor {
 	private String nombre;
 	private String codigo;
+	private String userCode;
 	
 	public String title() {		
 		return  getNombre()   ;
 	}
-	public Vendedor(String nombre, String codigo) {
+	public Vendedor(String nombre, String codigo, String userCode) {
 		super();
 		this.nombre = nombre;
 		this.codigo = codigo;
-		
+		this.userCode = userCode;
 
 	}
 
@@ -79,6 +80,17 @@ public class Vendedor {
 
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
+	}
+	
+	@MemberOrder(sequence="3")
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	@Property(editing=Editing.DISABLED)
+	public String getUserCode() {
+		return this.userCode;
+	}
+
+	public void setUserCode(String codigo) {
+		this.userCode = codigo;
 	}
 
 	@javax.inject.Inject

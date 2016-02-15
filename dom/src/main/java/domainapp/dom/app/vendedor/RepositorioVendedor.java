@@ -26,12 +26,14 @@ public class RepositorioVendedor {
 	@ActionLayout(named="Crear nuevo Vendedor")
 	public Vendedor createProveedor(
 			@ParameterLayout(named="nombre")@Parameter(optionality=Optionality.OPTIONAL)String nombre,
-			@ParameterLayout(named="codigo")@Parameter(optionality=Optionality.OPTIONAL)String codigo
+			@ParameterLayout(named="codigo")@Parameter(optionality=Optionality.OPTIONAL)String codigo,
+			@ParameterLayout(named="userCode")@Parameter(optionality=Optionality.OPTIONAL)String userCode
 			//@ParameterLayout(named="sucursal")@Parameter(optionality=Optionality.OPTIONAL)String sucursal
 			){
 		final Vendedor vendedor = container.newTransientInstance(Vendedor.class);
 		vendedor.setNombre(nombre);
 		vendedor.setCodigo(codigo);
+		vendedor.setUserCode(userCode);
 		//vendedor.setSucursal(sucursal);
 		container.persistIfNotAlready(vendedor);
 		return vendedor;
