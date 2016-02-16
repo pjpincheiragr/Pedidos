@@ -38,7 +38,7 @@ public class Cadete {
 	private String codigo;
 	
 	public String title() {		
-		return  getNombre()   ;
+		return  getNombre();
 	}
 
 	public Cadete(String nombre, String codigo) {

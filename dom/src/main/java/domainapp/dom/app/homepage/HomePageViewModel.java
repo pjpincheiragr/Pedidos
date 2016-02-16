@@ -58,10 +58,10 @@ import domainapp.dom.app.cadete.RepositorioCadete;
 @ViewModel
 public class HomePageViewModel {
 
-	// region > title
-//	public String title() {
-//		return (getlistAllSucursal().size() ) + " Alertas";
-//	}
+	//region > title
+	public String title() {
+		return ("Pedidos y Rutas pendientes");
+	}
 	// endregion
 
 	// region > object (collection)
@@ -75,7 +75,6 @@ public class HomePageViewModel {
 
 	
 	@HomePage
-	
 	public List<Ruta> getlistRutas() {
 		return RepositorioRuta.listAll();
 		}
