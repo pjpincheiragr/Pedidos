@@ -38,14 +38,13 @@ public class Cadete {
 	private String codigo;
 	
 	public String title() {		
-		return  getNombre()   ;
+		return  getNombre();
 	}
 
 	public Cadete(String nombre, String codigo) {
 		super();
 		this.nombre = nombre;
 		this.codigo = codigo;
-
 	}
 
 	public Cadete() {
