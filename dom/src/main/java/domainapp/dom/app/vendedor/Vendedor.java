@@ -1,20 +1,16 @@
 package domainapp.dom.app.vendedor;
 
-import java.sql.Timestamp;
+
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
-
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Where;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(
@@ -46,7 +42,7 @@ public class Vendedor {
 	private String userCode;
 	
 	public String title() {		
-		return  getNombre()   ;
+		return  getNombre().toString();
 	}
 	public Vendedor(String nombre, String codigo, String userCode) {
 		super();

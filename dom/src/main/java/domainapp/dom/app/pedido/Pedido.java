@@ -2,6 +2,7 @@ package domainapp.dom.app.pedido;
 
 
 
+import org.apache.isis.applib.value.Blob;
 import java.util.ArrayList;
 import java.util.List;
 import javax.jdo.annotations.IdentityType;
@@ -24,12 +25,8 @@ import domainapp.dom.app.servicios.E_estado_item;
 import domainapp.dom.app.sucursal.Sucursal;
 import domainapp.dom.app.tipo.Tipo;
 import domainapp.dom.app.vendedor.Vendedor;
-
 import javax.jdo.annotations.Column;
-import javax.jdo.annotations.Element;
 import javax.jdo.annotations.Join;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
 import org.joda.time.LocalDate;
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(
@@ -41,23 +38,25 @@ import org.joda.time.LocalDate;
 @javax.jdo.annotations.Queries({
 	@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
 			+ "FROM domainapp.dom.app.pedido.Pedido "
-			+ " order by fecha "),
+			+ " WHERE this.ListaPedidos != null "
+			+ " order by fechaHora "),
 	@javax.jdo.annotations.Query(name = "ListarPendientes", language = "JDOQL", value = "SELECT "
 					+ "FROM domainapp.dom.app.pedido.Pedido "
-					+ "Where (estado==ASIGNADO) || (estado=EN_PROCESO)"
-					+ " order by fecha "),
+					+ "Where (estado==ASIGNADO) || (estado=EN_PROCESO) && this.ListaPedidos != null "
+					+ " order by fechaHora "),
 	@javax.jdo.annotations.Query(name = "findByDescription", language = "JDOQL", value = "SELECT "
 			+ "FROM domainapp.dom.app.pedido.Pedido "
-			+ "WHERE ((:descripcion=='') || (descripcion.toLowerCase().indexOf(:descripcion) >= 0))"
-			+ " order by fecha "),
+			+ "WHERE ((:descripcion=='') || (descripcion.toLowerCase().indexOf(:descripcion) >= 0)) && this.ListaPedidos != null "
+			+ " order by fechaHora "),
 	@javax.jdo.annotations.Query(name = "findByState", language = "JDOQL", value = "SELECT "
 			+ "FROM domainapp.dom.app.pedido.Pedido "
-			+ "WHERE (estado==:estado)"
-			+ " order by fecha "),
+			+ "WHERE (estado==:estado) && this.ListaPedidos != null "
+			+ " order by fechaHora "),
 	@javax.jdo.annotations.Query(name = "findBySeller", language = "JDOQL", value = "SELECT "
 					+ "FROM domainapp.dom.app.pedido.Pedido "
 					+ "WHERE (vendedor==:vendedor)"
-					+ " order by fecha ")
+					+ " && this.ListaPedidos != null "
+					+ " order by fechaHora ")
 })
 
 @DomainObject(objectType = "PEDIDO",bounded=true)
@@ -65,7 +64,7 @@ import org.joda.time.LocalDate;
 public class Pedido {
 	private Tipo tipo;
 	private Proveedor proveedor;
-	private LocalDate fecha;
+	private LocalDate fechaHora;
 	private int tiempo;
 	private Vendedor vendedor;
 	private float valor;
@@ -74,7 +73,7 @@ public class Pedido {
 	private String observacion;
 	
 	public String title() {		
-		return  getFechaHora().toString()+" - "+getVendedor()+" - "+ getSucursal()   ;
+		return  getFechaHora().toString()+" - "+getVendedor().getNombre()+" - "+ getSucursal()   ;
 	}
 
 	public Pedido(Tipo tipo, Proveedor proveedor, LocalDate fecha, int tiempo,Vendedor vendedor,
@@ -87,7 +86,7 @@ public class Pedido {
 		this.valor=valor;
 		this.estado = estado;
 		this.sucursal = sucursal;
-		this.fecha = fecha;
+		this.fechaHora = fecha;
 		this.observacion=observacion;
 	}
 
@@ -173,10 +172,7 @@ public class Pedido {
 	public void setSucursal(Sucursal sucursal) {
 		this.sucursal = sucursal;
 	}
-	
-	// FechaHora
- 	private LocalDate fechaHora; 	
- 	 	 	
+		 	
  	@MemberOrder( sequence = "4")
  	@Column(allowsNull = "true")
  	public LocalDate getFechaHora() {
@@ -216,19 +212,22 @@ public class Pedido {
 		}
 		
 		@ActionLayout(named = "Agregar Item")
-		public void addPedidoItem(
+		public  Pedido addPedidoItem(
 			@ParameterLayout(named="Codigo")@Parameter(optionality=Optionality.OPTIONAL)String codigo,
 			@ParameterLayout(named="Marca")@Parameter(optionality=Optionality.OPTIONAL)Marca marca,
 			@ParameterLayout(named="Cantidad")@Parameter(optionality=Optionality.OPTIONAL)int cantidad,
-			@ParameterLayout(named="Estado")@Parameter(optionality=Optionality.OPTIONAL)E_estado_item estado)
+			@ParameterLayout(named="Estado")@Parameter(optionality=Optionality.OPTIONAL)E_estado_item estado,
+			final @ParameterLayout(named="Imagen") @Parameter(optionality=Optionality.OPTIONAL) Blob attachment)
 			{
 		final PedidoItem PedidoItem = container.newTransientInstance(PedidoItem.class);
 		PedidoItem.setCodigo(codigo);
 		PedidoItem.setMarca(marca);
 		PedidoItem.setCantidad(cantidad);
 		PedidoItem.setEstado(estado);
+		PedidoItem.setAttachment(attachment);
 		container.persistIfNotAlready(PedidoItem);	
 			getPedidoItem().add(PedidoItem);
+			return this;
 		}
 
 	  //fin

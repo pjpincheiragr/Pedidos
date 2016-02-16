@@ -1,19 +1,17 @@
 package domainapp.dom.app.pedido;
 
 
+import java.sql.Blob;
 import java.util.List;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.query.QueryDefault;
 
 import domainapp.dom.app.marca.Marca;
@@ -31,6 +29,7 @@ public class RepositorioPedidoItem {
 			@ParameterLayout(named="Codigo")@Parameter(optionality=Optionality.OPTIONAL)String codigo,
 			@ParameterLayout(named="Marca")@Parameter(optionality=Optionality.OPTIONAL)Marca marca,
 			@ParameterLayout(named="Cantidad")@Parameter(optionality=Optionality.OPTIONAL)int cantidad,
+			final @ParameterLayout(named="Imagen") @Parameter(optionality=Optionality.OPTIONAL) Blob attachment,
 			@ParameterLayout(named="Estado")@Parameter(optionality=Optionality.OPTIONAL)E_estado_item estado
 			){
 		final PedidoItem PedidoItem = container.newTransientInstance(PedidoItem.class);

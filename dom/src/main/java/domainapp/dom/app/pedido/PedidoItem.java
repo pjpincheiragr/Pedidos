@@ -54,7 +54,7 @@ public class PedidoItem {
 	private  E_estado_item estado;
 	private Blob attachment;
 	public String title() {		
-		return  getCodigo() + " - "+ getMarca()   ;
+		return  getCodigo() + " - "+ getMarca().getDescripcion() ;
 	}
 
 	public PedidoItem(String codigo, Marca marca, int cantidad, E_estado_item estado) {
