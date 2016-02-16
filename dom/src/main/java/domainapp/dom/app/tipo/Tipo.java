@@ -49,7 +49,7 @@ public class Tipo {
 	//
 		  
 	public String title() {
-		return getAbreviatura() +"-"+ getDescripcion();
+		return getDescripcion();
 	}
 	
 

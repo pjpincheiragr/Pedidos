@@ -33,7 +33,6 @@ public class RepositorioPedido {
 			@ParameterLayout(named="Valor")@Parameter(optionality=Optionality.OPTIONAL)float valor,
 			@ParameterLayout(named="Estado")E_estado estado,
 			@ParameterLayout(named="Sucursal")Sucursal sucursal,
-			@ParameterLayout(named="Cadete")Cadete cadete,
 			@ParameterLayout(named="Observaciones", multiLine=15) String observacion
 			
 			){

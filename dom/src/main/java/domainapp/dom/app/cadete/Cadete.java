@@ -45,7 +45,6 @@ public class Cadete {
 		super();
 		this.nombre = nombre;
 		this.codigo = codigo;
-
 	}
 
 	public Cadete() {
