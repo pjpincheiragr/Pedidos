@@ -21,7 +21,7 @@ import domainapp.dom.app.pedido.PedidoItem;
 @DomainService(repositoryFor = PedidoItem.class)
 @DomainServiceLayout(menuOrder = "60", named="PedidosItem")
 public class RepositorioPedidoItem {
-	
+	/*
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named="Crear nuevo Pedido Item")
 
@@ -41,7 +41,10 @@ public class RepositorioPedidoItem {
 		return PedidoItem;
 	}
 
-	@MemberOrder(sequence = "1")
+
+	 * Método comentado ya que PedidoItem no debe aparecer en el menú.
+	 * 
+	 * @MemberOrder(sequence = "1")
 	@ActionLayout(named = "Listar Todos")
 	public List<PedidoItem> listAll() {
 		final List<PedidoItem> listaPedidos = this.container
@@ -52,7 +55,7 @@ public class RepositorioPedidoItem {
 		}
 		return listaPedidos;
 	}
-	
+	*/
 	@javax.inject.Inject
     DomainObjectContainer container;
 

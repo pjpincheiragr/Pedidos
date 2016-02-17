@@ -15,6 +15,7 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
 
+
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.proveedor.Proveedor;
@@ -22,6 +23,8 @@ import domainapp.dom.app.servicios.E_estado;
 import domainapp.dom.app.sucursal.Sucursal;
 import domainapp.dom.app.tipo.Tipo;
 import domainapp.dom.app.vendedor.Vendedor;
+import domainapp.dom.modules.security.Services;
+
 
 @DomainService(repositoryFor = Pedido.class)
 @DomainServiceLayout(menuOrder = "60", named = "Pedidos")
@@ -44,6 +47,11 @@ public class RepositorioPedido {
 		final Pedido Pedido = container.newTransientInstance(Pedido.class);
 		Pedido.setTipo(tipo);
 		Pedido.setProveedor(proveedor);
+		if (new Services().isVendedor(container.getUser()))
+		{
+			
+			
+		}
 		Pedido.setVendedor(vendedor);
 		Pedido.setTiempo(tiempo);
 		Pedido.setValor(valor);
@@ -131,4 +139,6 @@ public class RepositorioPedido {
 
 	@javax.inject.Inject
 	DomainObjectContainer container;
+
+	
 }
