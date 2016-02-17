@@ -14,6 +14,9 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.security.RoleMemento;
+import org.apache.isis.applib.security.UserMemento;
+import org.isisaddons.module.security.dom.role.ApplicationRole;
 
 import domainapp.dom.app.vendedor.Vendedor;
 
