@@ -25,14 +25,12 @@ import domainapp.dom.app.servicios.Direccion;
 @javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
 @javax.jdo.annotations.Queries({
 		@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.dom.app.sucursal.Sucursal " 
-				+ "WHERE activo == true"),
+				+ "FROM domainapp.dom.app.sucursal.Sucursal "),
 		@javax.jdo.annotations.Query(name = "ListarInactivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.dom.app.area.Area "
-				+ "WHERE activo == false"),
+				+ "FROM domainapp.dom.app.area.Area " + "WHERE activo == false"),
 		@javax.jdo.annotations.Query(name = "findByName", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.sucursal.Sucursal "
-                + "WHERE ((:nombre=='') || (nombre.toLowerCase().indexOf(:nombre) >= 0))"
+				+ "WHERE ((:nombre=='') || (nombre.toLowerCase().indexOf(:nombre) >= 0))"
 				+ " order by nombre ") })
 @DomainObject(objectType = "SUCURSAL", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
@@ -41,18 +39,19 @@ public class Sucursal {
 	private String codigoSucursal;
 	private String nombre;
 	private Direccion direccion;
-	private boolean activo;
+	//private boolean activo;
 
-	
-	public String title() {		
-		return "Sucursal:" + " " + getNombre()   ;
+	public String title() {
+		return "Sucursal:" + " " + getNombre();
 	}
-	public Sucursal(String codigoSucursal, String nombre, Direccion direccion, boolean activo) {
+
+	public Sucursal(String codigoSucursal, String nombre, Direccion direccion
+			) {
 		super();
-		this.codigoSucursal=codigoSucursal;
+		this.codigoSucursal = codigoSucursal;
 		this.nombre = nombre;
-		this.direccion=direccion;
-		this.activo = activo;
+		this.direccion = direccion;
+		//this.activo = activo;
 	}
 
 	public Sucursal() {
@@ -91,50 +90,31 @@ public class Sucursal {
 	}
 
 	public void setDireccion(Direccion direccion) {
-		this.direccion =direccion;
+		this.direccion = direccion;
 	}
 
-
-	@Property(hidden = Where.EVERYWHERE)
-	@MemberOrder(sequence = "4")
-	public boolean isActivo() {
-		return activo;
-	}
-
-	public void setActivo(boolean activo) {
-		this.activo = activo;
-	}
-
-	@ActionLayout(named = "Eliminar area")
-	public Sucursal deleteSucursal() {
-/*
-		boolean band = true;
-		List<Empleado> lista = this.container
-				.allMatches(new QueryDefault<Empleado>(Empleado.class,
-						"ListarTodos"));
-		for (Empleado e : lista) {
-			if (e.getArea().equals(this)) {
-				band = false;
-			}
-		}
-		if (band == true) {
-			this.setActivo(false);
-			this.container
-					.informUser("El area ha sido eliminado de manera exitosa");
-		} else {
-			this.container
-					.warnUser("No se pudo realizar esta acción. El objeto que intenta eliminar esta asignado");
-		}*/
-		return this;
-	}
-	@Programmatic
-	public boolean hideDeleteSucursal() {
-		if (!isActivo())
-			return true;
-		else
-			return false;
-	}
-
+	/*
+	 * @Property(hidden = Where.EVERYWHERE)
+	 * 
+	 * @MemberOrder(sequence = "4") public boolean isActivo() { return activo; }
+	 * 
+	 * public void setActivo(boolean activo) { this.activo = activo; }
+	 * 
+	 * @ActionLayout(named = "Eliminar area") public Sucursal deleteSucursal() {
+	 * /* boolean band = true; List<Empleado> lista = this.container
+	 * .allMatches(new QueryDefault<Empleado>(Empleado.class, "ListarTodos"));
+	 * for (Empleado e : lista) { if (e.getArea().equals(this)) { band = false;
+	 * } } if (band == true) { this.setActivo(false); this.container
+	 * .informUser("El area ha sido eliminado de manera exitosa"); } else {
+	 * this.container .warnUser(
+	 * "No se pudo realizar esta acción. El objeto que intenta eliminar esta asignado"
+	 * ); }
+	 * 
+	 * this.setActivo(false); return this; }
+	 * 
+	 * @Programmatic public boolean hideDeleteSucursal() { if (!isActivo())
+	 * return true; else return false; }
+	 */
 	@javax.inject.Inject
 	DomainObjectContainer container;
 

@@ -36,8 +36,8 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 @DomainService(repositoryFor = Matafuego.class)
-@DomainServiceLayout(menuOrder = "80", named = "OLD")
-public class RepositorioMatafuego {
+@DomainServiceLayout(menuOrder = "80", named = "")
+public class RepositorioMatafuego {/*
 
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Crear matafuego")
@@ -61,7 +61,7 @@ public class RepositorioMatafuego {
 	 * Validar campos al cargar un nuevo Matafuego.
 	 *
 	 * @return mensaje de error.
-	 */
+	 
 	public String validateCreateMatafuego(String marca, String codigo, String Descripcion,
 										int capacidad, Timestamp fechaRecarga, Timestamp fechaCaducidad){
 
@@ -134,7 +134,7 @@ public class RepositorioMatafuego {
 	 * Filtrar lista de Matafuegos, por estado Activo.
 	 * @param lista
 	 * @return lista de Matafuegos Activos.
-	 */
+	 
 	private List<Matafuego> activos(List<Matafuego> lista){
 		List<Matafuego> activos = new ArrayList<Matafuego>();
 		for (Matafuego m : lista){
@@ -149,7 +149,7 @@ public class RepositorioMatafuego {
 	 * Filtrar lista de Matafuegos, por No asignados.
 	 * @param lista
 	 * @return lista de Matafuegos No Asignados.
-	 */
+	 
 	@Programmatic
 	public List<Matafuego> noAsignados(List<Matafuego> lista){
 		List<Matafuego> noAsignados = new ArrayList<Matafuego>();
@@ -190,5 +190,5 @@ public class RepositorioMatafuego {
 		return "Reporte Generado";
 	}
 	@javax.inject.Inject
-	DomainObjectContainer container;
+	DomainObjectContainer container;*/
 }

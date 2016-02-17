@@ -32,7 +32,7 @@ package domainapp.dom.app.sucursal;
 	import net.sf.jasperreports.view.JasperViewer;
 
 	@DomainService(repositoryFor = Sucursal.class)
-	@DomainServiceLayout(menuOrder = "30", named = "Sucursal")
+	@DomainServiceLayout(menuOrder = "30", named = "Administración")
 	public class RepositorioSucursal  {
 
 		@MemberOrder(sequence = "1")
@@ -62,7 +62,7 @@ package domainapp.dom.app.sucursal;
 			sucursal.setCodigoSucursal(codigoSucursal);
 			sucursal.setNombre(nombre);
 			sucursal.setDireccion(dire);
-			sucursal.setActivo(true);
+			//sucursal.setActivo(true);
 			container.persistIfNotAlready(sucursal);
 			return sucursal;
 

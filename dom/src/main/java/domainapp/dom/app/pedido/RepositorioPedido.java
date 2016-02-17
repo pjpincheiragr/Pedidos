@@ -3,6 +3,7 @@ package domainapp.dom.app.pedido;
 import org.joda.time.LocalDate;
 
 import java.util.List;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -11,7 +12,9 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
+
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.proveedor.Proveedor;
@@ -23,6 +26,7 @@ import domainapp.dom.app.vendedor.Vendedor;
 @DomainService(repositoryFor = Pedido.class)
 @DomainServiceLayout(menuOrder = "60", named = "Pedidos")
 public class RepositorioPedido {
+	
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Crear nuevo Pedido")
 	public Pedido createPedido(
@@ -47,6 +51,7 @@ public class RepositorioPedido {
 		Pedido.setSucursal(sucursal);
 		Pedido.setFechaHora(LocalDate.now());
 		Pedido.setObservacion(observacion);
+		Pedido.setActivo(true);
 		container.persistIfNotAlready(Pedido);
 		return Pedido;
 	}
@@ -120,6 +125,9 @@ public class RepositorioPedido {
 		return container.allMatches(new QueryDefault<>(Pedido.class,
 				"findByCadete", "cadete", cadete));
 	}
+	
+
+	
 
 	@javax.inject.Inject
 	DomainObjectContainer container;

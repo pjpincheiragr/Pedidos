@@ -43,9 +43,9 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 @DomainService(repositoryFor = Vehiculo.class)
-@DomainServiceLayout(menuOrder = "80", named = "OLD")
+@DomainServiceLayout(menuOrder = "80", named = "")
 public class RepositorioVehiculo {
-
+/*
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Crear nuevo Vehiculo")
 	public Vehiculo createVehiculo(
@@ -83,7 +83,7 @@ public class RepositorioVehiculo {
 	 * Validar el ingreso de los campos unicos, al dar de alta un Vehiculo.
 	 *
 	 * @return Mensaje de error.
-	 */
+	
 	public String validateCreateVehiculo(String marca, String nombre, Integer modelo, Timestamp fechaCompra,
 			String patente, String nroChasis, Integer poliza, Gps gps, TipoCombustible tipoCombustible, Integer tanque,
 			TipoAceite tipoAceite, String consumoRuta, String consumoCiudad, Matafuego matafuego, Integer kilometro) {
@@ -106,7 +106,7 @@ public class RepositorioVehiculo {
 	 * Mostrar solo Gps Activos.
 	 *
 	 * @return List<Gps> activos
-	 */
+	 
 	public List<Gps> choices7CreateVehiculo(String marca, String nombre, Integer modelo, Timestamp fechaCompra,
 			String patente, String nroChasis, Integer poliza, Gps gps, TipoCombustible tipoCombustible, Integer tanque,
 			TipoAceite tipoAceite, String consumoRuta, String consumoCiudad, Matafuego matafuego, Integer kilometro) {
@@ -118,7 +118,7 @@ public class RepositorioVehiculo {
 	 * Mostrar solo Matafuegos Activos
 	 *
 	 * @return List<Matafuego> activos.
-	 */
+	 
 	public List<Matafuego> choices13CreateVehiculo(String marca, String nombre, Integer modelo, Timestamp fechaCompra,
 			String patente, String nroChasis, Integer poliza, Gps gps, TipoCombustible tipoCombustible, Integer tanque,
 			TipoAceite tipoAceite, String consumoRuta, String consumoCiudad, Matafuego matafuego, Integer kilometro) {
@@ -215,7 +215,7 @@ public class RepositorioVehiculo {
 	 *
 	 * @param lista
 	 * @return lista de Vehiculo Activos.
-	 */
+	 
 	private List<Vehiculo> activos(List<Vehiculo> lista) {
 		List<Vehiculo> activos = new ArrayList<Vehiculo>();
 		for (Vehiculo v : lista) {
@@ -223,14 +223,14 @@ public class RepositorioVehiculo {
 				activos.add(v);
 		}
 		return activos;
-	}
+	}*/
 
 	/**
 	 * Filtrar lista de Vehiculo, por no Asignados.
 	 *
 	 * @param lista
 	 * @return lista de Vehiculo no Asignados.
-	 */
+	 *//*
 	@Programmatic
 	public List<Vehiculo> noAsignados(List<Vehiculo> lista) {
 		List<Vehiculo> noAsignados = new ArrayList<Vehiculo>();
@@ -313,4 +313,5 @@ public class RepositorioVehiculo {
 	RepositorioGps repoGps;
 	@javax.inject.Inject
 	RepositorioMatafuego repoMatafuego;
+	*/
 }

@@ -18,7 +18,7 @@ import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.sucursal.Sucursal;
 
 @DomainService(repositoryFor = Cadete.class)
-@DomainServiceLayout(menuOrder = "60", named = "Cadetes")
+@DomainServiceLayout(menuOrder = "60", named = "Administración")
 public class RepositorioCadete {
 
 	@MemberOrder(sequence = "1")

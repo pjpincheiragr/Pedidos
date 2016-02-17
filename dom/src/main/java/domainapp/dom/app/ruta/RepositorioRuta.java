@@ -9,22 +9,23 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.query.QueryDefault;
-
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.ruta.Ruta;
 
 
 @DomainService(repositoryFor = Ruta.class)
 @DomainServiceLayout(menuOrder = "60", named = "Rutas")
+
 public class RepositorioRuta {
+	
 	@MemberOrder(sequence = "1")
-	@ActionLayout(named = "Crear nuevo Ruta")
+	@ActionLayout(named = "Crear nueva Ruta")
+	
 	public Ruta createRuta(
 			@ParameterLayout(named = "Cadete") Cadete cadete
-	) {
+			) {
 		final Ruta Ruta = container.newTransientInstance(Ruta.class);
 		Ruta.setCadete(cadete);
-	
 		container.persistIfNotAlready(Ruta);
 		return Ruta;
 	}

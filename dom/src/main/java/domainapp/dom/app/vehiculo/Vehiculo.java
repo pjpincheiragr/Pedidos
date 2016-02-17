@@ -371,16 +371,16 @@ public class Vehiculo extends ObjetoMantenible {
 	/**
 	 * Mostrar lista de Gps
 	 * @return Lista de Gps disponibles.
-	 */
+	
 	public List<Gps> choices0UpdateGps(){
 		return repoGps.gpsNoAsignados(container.allInstances(Gps.class));
 	}
 
-	/**
+	
 	 * Cambiar el Matafuego del Vehiculo seleccionado.
 	 * @param gps
 	 * @return Vehiculo seleccionado.
-	 */
+	 
 	@MemberOrder(sequence = "1", name = "Matafuego")
 	@ActionLayout(named = "Cambiar Matafuego", position = Position.BELOW)
 	public Vehiculo updateMatafuego(@ParameterLayout(named = "Matafuego") Matafuego matafuego){
@@ -392,14 +392,14 @@ public class Vehiculo extends ObjetoMantenible {
 		return this;
 	}
 
-	/**
+
 	 * Mostrar lista de Matafuegos
 	 * @return Lista de Matafuegos disponibles.
-	 */
+	
 	public List<Matafuego> choices0UpdateMatafuego(){
 		return repoMatafuego.noAsignados(container.allInstances(Matafuego.class));
 	}
-
+ */
 	@javax.inject.Inject
 	DomainObjectContainer container;
 	@javax.inject.Inject

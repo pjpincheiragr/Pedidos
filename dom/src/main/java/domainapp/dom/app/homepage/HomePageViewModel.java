@@ -26,11 +26,14 @@ import java.util.Date;
 
 
 
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.ViewModel;
+
 
 
 
@@ -71,9 +74,6 @@ public class HomePageViewModel {
 	}
 
 	*/
-	
-
-	
 	@HomePage
 	public List<Ruta> getlistRutas() {
 		return RepositorioRuta.listAll();

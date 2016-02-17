@@ -86,7 +86,7 @@ public class AlertaVehiculo extends Alerta {
 	@ActionLayout(named = "Cambiar Kilometro Alarma", position = Position.BELOW)
 	public AlertaVehiculo updateKilometrosAlarma(@ParameterLayout(named = "Kilometros Alerta")Integer kilometrosAlerta){
 		this.setKilometrosAlarma(kilometrosAlerta);
-		this.setEstadoAlerta(repo.asignarAlertaEstado(kilometrosAlerta));
+		//this.setEstadoAlerta(repo.asignarAlertaEstado(kilometrosAlerta));
 		container.persistIfNotAlready(this);
 		return this;
 	}

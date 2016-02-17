@@ -37,8 +37,8 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 @DomainService(repositoryFor = Gps.class)
-@DomainServiceLayout(menuOrder = "50", named = "OLD")
-public class RepositorioGps {
+@DomainServiceLayout(menuOrder = "50", named = "")
+public class RepositorioGps {/*
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Crear nuevo Gps")
 	public Gps createGps(
@@ -146,8 +146,8 @@ public class RepositorioGps {
 	/**
 	 * Filtrar lista de Gps, por activos.
 	 * @param lista
-	 * @return lista de Gps en estado Activo.
-	 */
+	 * return lista de Gps en estado Activo.
+	 
 	@Programmatic
 	public List<Gps> gpsNoAsignados(final List<Gps> lista){
 		List<Gps> noAsignados= new ArrayList<Gps>();
@@ -162,7 +162,7 @@ public class RepositorioGps {
 	 * Filtrar lista de Gps, por activos y asignados.
 	 * @param lista
 	 * @return lista de Gps en estado Activo y asignados.
-	 */
+	 
 	private List<Gps> gpsActivos(final List<Gps> lista){
 		List<Gps> aa= new ArrayList<Gps>();
 		for (Gps gps : lista){
@@ -215,5 +215,5 @@ public class RepositorioGps {
 		return "Reporte Generado";
 	}
 	@javax.inject.Inject
-	DomainObjectContainer container;
+	DomainObjectContainer container;*/
 }

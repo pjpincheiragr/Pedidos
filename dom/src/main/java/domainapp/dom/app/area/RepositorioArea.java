@@ -32,8 +32,8 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 @DomainService(repositoryFor = Area.class)
-@DomainServiceLayout(menuOrder = "30", named = "OLD")
-public class RepositorioArea {
+@DomainServiceLayout(menuOrder = "30", named = "")
+public class RepositorioArea {/*
 
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Crear area")
@@ -156,5 +156,5 @@ public class RepositorioArea {
 	}
 
 	@javax.inject.Inject
-	DomainObjectContainer container;
+	DomainObjectContainer container;*/
 }

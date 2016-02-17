@@ -44,8 +44,8 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 @DomainService(repositoryFor = AlertaVehiculo.class)
-@DomainServiceLayout(menuOrder = "120", named = "OLD")
-public class RepositorioAlertaVehiculo {
+@DomainServiceLayout(menuOrder = "120", named = "")
+public class RepositorioAlertaVehiculo {/*
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Crear Nueva Alerta Vehiculo")
 	public AlertaVehiculo createAlertaVehiculo(
@@ -254,5 +254,5 @@ public class RepositorioAlertaVehiculo {
 	}
 
 	@javax.inject.Inject
-	DomainObjectContainer container;
+	DomainObjectContainer container;*/
 }
