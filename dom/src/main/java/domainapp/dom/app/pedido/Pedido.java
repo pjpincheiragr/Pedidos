@@ -1,12 +1,13 @@
 package domainapp.dom.app.pedido;
 
-
-
 import org.apache.isis.applib.value.Blob;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -18,8 +19,10 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.RenderType;
+import org.apache.isis.applib.annotation.Where;
 
 import domainapp.dom.app.marca.Marca;
 import domainapp.dom.app.proveedor.Proveedor;
@@ -28,43 +31,42 @@ import domainapp.dom.app.servicios.E_estado_item;
 import domainapp.dom.app.sucursal.Sucursal;
 import domainapp.dom.app.tipo.Tipo;
 import domainapp.dom.app.vendedor.Vendedor;
-import javax.jdo.annotations.Column;
-import javax.jdo.annotations.Join;
-import org.joda.time.LocalDate;
-@javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
-@javax.jdo.annotations.DatastoreIdentity(
-        strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
-         column="Pedido_ID")
-@javax.jdo.annotations.Version(
-        strategy=VersionStrategy.VERSION_NUMBER,
-        column="version")
-@javax.jdo.annotations.Queries({
-	@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
-			+ "FROM domainapp.dom.app.pedido.Pedido "
-			+ " WHERE this.ListaPedidos != null "
-			+ " order by fechaHora "),
-	@javax.jdo.annotations.Query(name = "ListarPendientes", language = "JDOQL", value = "SELECT "
-					+ "FROM domainapp.dom.app.pedido.Pedido "
-					+ "Where (estado==ASIGNADO) || (estado=EN_PROCESO) && this.ListaPedidos != null "
-					+ " order by fechaHora "),
-	@javax.jdo.annotations.Query(name = "findByDescription", language = "JDOQL", value = "SELECT "
-			+ "FROM domainapp.dom.app.pedido.Pedido "
-			+ "WHERE ((:descripcion=='') || (descripcion.toLowerCase().indexOf(:descripcion) >= 0)) && this.ListaPedidos != null "
-			+ " order by fechaHora "),
-	@javax.jdo.annotations.Query(name = "findByState", language = "JDOQL", value = "SELECT "
-			+ "FROM domainapp.dom.app.pedido.Pedido "
-			+ "WHERE (estado==:estado) && this.ListaPedidos != null "
-			+ " order by fechaHora "),
-	@javax.jdo.annotations.Query(name = "findBySeller", language = "JDOQL", value = "SELECT "
-					+ "FROM domainapp.dom.app.pedido.Pedido "
-					+ "WHERE (vendedor==:vendedor)"
-					+ " && this.ListaPedidos != null "
-					+ " order by fechaHora ")
-})
 
-@DomainObject(objectType = "PEDIDO",bounded=true)
+import javax.jdo.annotations.Join;
+
+import org.joda.time.LocalDate;
+
+@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
+@javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "Pedido_ID")
+@javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
+@javax.jdo.annotations.Queries({
+		@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.pedido.Pedido "
+				+ "WHERE activo == true" + " order by orden "),
+		@javax.jdo.annotations.Query(name = "ListarPendientes", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.pedido.Pedido "
+				+ "Where (estado==ASIGNADO) || (estado=EN_PROCESO) && activo == true && this.ListaPedidos != null "
+				+ " order by orden "),
+		@javax.jdo.annotations.Query(name = "ListarNuevos", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.pedido.Pedido "
+				+ "Where (estado==NUEVO) && activo == true && this.ListaPedidos != null "
+				+ " order by orden "),
+		@javax.jdo.annotations.Query(name = "findByDescription", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.pedido.Pedido "
+				+ "WHERE ((:descripcion=='') || (descripcion.toLowerCase().indexOf(:descripcion) >= 0)) && activo == true && this.ListaPedidos != null "
+				+ " order by orden "),
+		@javax.jdo.annotations.Query(name = "findByState", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.pedido.Pedido "
+				+ "WHERE (estado==:estado) && activo == true && this.ListaPedidos != null "
+				+ " order by orden "),
+		@javax.jdo.annotations.Query(name = "findBySeller", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.pedido.Pedido "
+				+ "WHERE (vendedor==:vendedor) && activo == true"
+				+ " && this.ListaPedidos != null " + " order by orden ") })
+@DomainObject(objectType = "PEDIDO", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
 public class Pedido {
+	private int orden;
 	private Tipo tipo;
 	private Proveedor proveedor;
 	private LocalDate fechaHora;
@@ -74,43 +76,60 @@ public class Pedido {
 	private E_estado estado;
 	private Sucursal sucursal;
 	private String observacion;
-	
-	public String title() {		
-		return  getFechaHora().toString()+" - "+getVendedor().getNombre()+" - "+ getSucursal()   ;
+	private boolean activo;
+
+	public String title() {
+		return getFechaHora().toString() + " - " + getVendedor().getNombre()
+				+ " - " + getSucursal();
 	}
 
-	public Pedido(Tipo tipo, Proveedor proveedor, LocalDate fecha, int tiempo,Vendedor vendedor,
-			float valor, E_estado estado, Sucursal sucursal, String observacion) {
+	public Pedido(int orden, Tipo tipo, Proveedor proveedor, LocalDate fecha,
+			int tiempo, Vendedor vendedor, float valor, E_estado estado,
+			Sucursal sucursal, String observacion, boolean activo) {
 		super();
+		this.orden = orden;
 		this.tipo = tipo;
 		this.proveedor = proveedor;
-		this.tiempo=tiempo;
+		this.tiempo = tiempo;
 		this.vendedor = vendedor;
-		this.valor=valor;
+		this.valor = valor;
 		this.estado = estado;
 		this.sucursal = sucursal;
 		this.fechaHora = fecha;
-		this.observacion=observacion;
+		this.observacion = observacion;
+		this.activo = activo;
 	}
 
 	public Pedido() {
 		super();
 	}
 
-	@MemberOrder(sequence="1")
+	@MemberOrder(sequence = "1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing=Editing.DISABLED)
+	@Property(editing = Editing.ENABLED)
+	public void setOrden(int orden) {
+		this.orden=orden;
+	}
+	
+	public int getOrden(){
+		return this.orden;
+	}
+	
+	
+	@MemberOrder(sequence = "1")
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	@Property(editing = Editing.DISABLED)
 	public Tipo getTipo() {
 		return tipo;
 	}
 
 	public void setTipo(Tipo tipo) {
-		this.tipo=tipo;
+		this.tipo = tipo;
 	}
 
-	@MemberOrder(sequence="2")
+	@MemberOrder(sequence = "2")
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing=Editing.DISABLED)
+	@Property(editing = Editing.DISABLED)
 	public Proveedor getProveedor() {
 		return proveedor;
 	}
@@ -119,21 +138,18 @@ public class Pedido {
 		this.proveedor = proveedor;
 	}
 
-	
-	@MemberOrder(sequence="3")
+	@MemberOrder(sequence = "3")
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing=Editing.DISABLED)
+	@Property(editing = Editing.DISABLED)
 	public int getTiempo() {
 		return tiempo;
 	}
 
 	public void setTiempo(int tiempo2) {
-		this.tiempo=tiempo2;
+		this.tiempo = tiempo2;
 	}
 
-	
-	
-	@MemberOrder(sequence="4")
+	@MemberOrder(sequence = "4")
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	public Vendedor getVendedor() {
 		return vendedor;
@@ -143,19 +159,17 @@ public class Pedido {
 		this.vendedor = vendedor;
 	}
 
-	
-	@MemberOrder(sequence="5")
+	@MemberOrder(sequence = "5")
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	public float getValor() {
 		return valor;
 	}
 
 	public void setValor(float valor) {
-		this.valor=valor;
+		this.valor = valor;
 	}
-	
-	
-	@MemberOrder(sequence="6")
+
+	@MemberOrder(sequence = "6")
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	public E_estado getEstado() {
 		return estado;
@@ -165,8 +179,7 @@ public class Pedido {
 		this.estado = estado;
 	}
 
-
-	@MemberOrder(sequence="7")
+	@MemberOrder(sequence = "7")
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	public Sucursal getSucursal() {
 		return sucursal;
@@ -175,15 +188,15 @@ public class Pedido {
 	public void setSucursal(Sucursal sucursal) {
 		this.sucursal = sucursal;
 	}
-		 	
- 	@MemberOrder( sequence = "4")
- 	@Column(allowsNull = "true")
- 	public LocalDate getFechaHora() {
- 		return fechaHora;
- 	}
+
 
  	public void setFechaHora(final LocalDate fechaHora) {
  		this.fechaHora = fechaHora;
+ 	}
+ 	@javax.jdo.annotations.Column(allowsNull = "true")
+ 	public LocalDate getFechaHora(){
+ 		return this.fechaHora;
+ 	
  	}
 	
 	 //Agrego campo observación 
@@ -206,9 +219,10 @@ public class Pedido {
 
 		//@Render(Type.EAGERLY)
 		@MemberOrder(sequence = "1.5")
+
 		@CollectionLayout(
-		            render = RenderType.EAGERLY
-		    )
+	            render = RenderType.EAGERLY
+	    )
 		public List <PedidoItem> getPedidoItem() {
 			return ListaPedidos;
 		}
@@ -226,20 +240,59 @@ public class Pedido {
 			final @ParameterLayout(named="Imagen") @Parameter(optionality=Optionality.OPTIONAL) Blob attachment)
 			{
 		final PedidoItem PedidoItem = container.newTransientInstance(PedidoItem.class);
+
 		PedidoItem.setCodigo(codigo);
 		PedidoItem.setMarca(marca);
 		PedidoItem.setCantidad(cantidad);
 		PedidoItem.setEstado(estado);
 		PedidoItem.setAttachment(attachment);
-		container.persistIfNotAlready(PedidoItem);	
-			getPedidoItem().add(PedidoItem);
-			return this;
-		}
+		container.persistIfNotAlready(PedidoItem);
+		getPedidoItem().add(PedidoItem);
+		return this;
+	}
 
-	  //fin
+	// fin
+
+	@Property(hidden = Where.EVERYWHERE)
+	@MemberOrder(sequence = "5")
+	public boolean isActivo() {
+		return activo;
+	}
+
+	public void setActivo(boolean activo) {
+		this.activo = activo;
+	}
+
+	@ActionLayout(named = "Eliminar Pedido")
+	public Pedido deletePedido() {
+		/*
+		 * boolean band = true; List<Empleado> lista = this.container
+		 * .allMatches(new QueryDefault<Empleado>(Empleado.class,
+		 * "ListarTodos")); for (Empleado e : lista) { if
+		 * (e.getArea().equals(this)) { band = false; } } if (band == true) {
+		 * this.setActivo(false); this.container
+		 * .informUser("El area ha sido eliminado de manera exitosa"); } else {
+		 * this.container .warnUser(
+		 * "No se pudo realizar esta acción. El objeto que intenta eliminar esta asignado"
+		 * ); }
+		 */
+		this.setActivo(false);
+		return this;
+	}
+
+	@Programmatic
+	public boolean hideDeletePedido() {
+		if (!isActivo())
+			return true;
+		else
+			return false;
+	}
+
 	@javax.inject.Inject
-    DomainObjectContainer container;
+	DomainObjectContainer container;
 
-    @javax.inject.Inject
-    RepositorioPedidoItem repositorioPedidoItem;
+	@javax.inject.Inject
+	RepositorioPedidoItem repositorioPedidoItem;
+
+	
 }

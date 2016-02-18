@@ -19,11 +19,11 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.RenderType;
-
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
+import domainapp.dom.app.pedido.RepositorioPedido;
 
-
+import domainapp.dom.app.servicios.E_estado;
 
 
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "id")
@@ -40,6 +40,7 @@ import domainapp.dom.app.pedido.Pedido;
 
 
 public class Ruta {
+	
 	private Cadete cadete;
 	private List<Pedido> listaPedidos=new ArrayList<Pedido>();
 	@PrimaryKey
@@ -62,7 +63,7 @@ public class Ruta {
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@javax.jdo.annotations.PrimaryKey(column = "numero")
 	@Persistent(valueStrategy = IdGeneratorStrategy.INCREMENT, sequence = "numero")
-	@MemberOrder(name="Orden de Servicio",sequence = "1")
+	@MemberOrder(name="Numero",sequence = "1")
 	public long getNumero() {
 		return numero;
 	}
@@ -81,9 +82,9 @@ public class Ruta {
 	public void setCadete(Cadete cadete) {
 		this.cadete = cadete;
 	}
-
-	@MemberOrder(sequence = "3")
+	
 	@javax.jdo.annotations.Column(allowsNull = "true")
+
 	@Property(editing = Editing.ENABLED)
 	  @CollectionLayout(
 	            render = RenderType.EAGERLY
@@ -91,17 +92,23 @@ public class Ruta {
 	public List<Pedido> getListaPedidos() {
 		return listaPedidos;
 	}
-
 	
 	public void setListaPedidos(List<Pedido> listaPedidos) {
 		this.listaPedidos = listaPedidos;
 	}
-
+	
 	@ActionLayout(named = "Agregar Pedido")
-	public void addPedido(Pedido pedido) {
+	public Ruta addPedido(
+			Pedido pedido
+			) {
+		pedido.setEstado(E_estado.ASIGNADO);
 		getListaPedidos().add(pedido);
+		return this;
 	}
 
 	@javax.inject.Inject
 	DomainObjectContainer container;
+	
+	@javax.inject.Inject
+	RepositorioPedido repositorioPedido;
 }

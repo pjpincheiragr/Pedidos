@@ -45,9 +45,9 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 @DomainService(repositoryFor = AlertaMatafuego.class)
-@DomainServiceLayout(menuOrder = "120", named = "OLD")
+@DomainServiceLayout(menuOrder = "120", named = "")
 
-public class RepositorioAlertaMatafuego {
+public class RepositorioAlertaMatafuego {/*
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Crear Nueva Alerta Matafuego")
 	public AlertaMatafuego createAlertaMatafuego(
@@ -294,5 +294,5 @@ public class RepositorioAlertaMatafuego {
 		return "Reporte Generado";
 	}
 	@javax.inject.Inject
-	DomainObjectContainer container;
+	DomainObjectContainer container;*/
 }

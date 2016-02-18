@@ -31,8 +31,10 @@ import net.sf.jasperreports.view.JasperViewer;
 
 
 @DomainService(repositoryFor = Aceite.class)
-@DomainServiceLayout(menuOrder = "60", named="OLD")
-public class RepositorioAceite {
+
+@DomainServiceLayout(menuOrder = "60", named="")
+
+public class RepositorioAceite {/*
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named="Crear nuevo Aceite")
 	public Aceite createAceite(
@@ -77,12 +79,12 @@ public class RepositorioAceite {
 	}
 
 	@MemberOrder(sequence ="2")
-	@ActionLayout(named="Listar Todos")
+	//@ActionLayout(named="Listar Todos")
 	public List<Aceite> listAll(){
 		return container.allMatches(new QueryDefault<Aceite>(Aceite.class, "ListarTodos"));
 	}
 
-	@ActionLayout(named="Buscar por Marca")
+	//@ActionLayout(named="Buscar por Marca")
 	@MemberOrder(sequence ="3")
 	public List<Aceite> findByMarca(
 			@ParameterLayout(named="Marca") @Parameter(regexPattern=domainapp.dom.regex.validador.Validador.ValidacionLetras.ADMITIDOS)String marca){
@@ -101,7 +103,7 @@ public class RepositorioAceite {
 	}
 
 
-	@ActionLayout(named="Buscar por Nombre")
+	//@ActionLayout(named="Buscar por Nombre")
 	@MemberOrder(sequence="4")
 	public List<Aceite> findByNombre(
 			@ParameterLayout(named="Nombre") @Parameter(regexPattern=domainapp.dom.regex.validador.Validador.ValidacionAlfanumerico.ADMITIDOS) String nombre){
@@ -119,7 +121,7 @@ public class RepositorioAceite {
 		return lista;
 	}
 
-	@ActionLayout(named="Buscar por Codigo")
+	//@ActionLayout(named="Buscar por Codigo")
 	@MemberOrder(sequence="5")
 	public List<Aceite> findByCodigo(
 			@ParameterLayout(named="Codigo") @Parameter(regexPattern = domainapp.dom.regex.validador.Validador.ValidacionAlfanumerico.ADMITIDOS) String codigo){
@@ -137,7 +139,7 @@ public class RepositorioAceite {
 		return lista;
 	}
 
-	@ActionLayout(named = "Listar por Tipo de Aceite")
+	//@ActionLayout(named = "Listar por Tipo de Aceite")
 	@MemberOrder(sequence = "6")
 	public List<Aceite> listTipoAceite(
 			@ParameterLayout(named = "Tipo de Aceite") @Parameter(regexPattern = domainapp.dom.regex.validador.Validador.ValidacionLetras.ADMITIDOS) TipoAceite tipoAceite) {
@@ -155,7 +157,7 @@ public class RepositorioAceite {
 		return lista;
 	}
 	@MemberOrder(sequence="7")
-	@ActionLayout(named="Exportar Aceites")
+	//@ActionLayout(named="Exportar Aceites")
 	public String downloadAll() throws JRException, IOException {
 		AceiteDataSource datasource = new AceiteDataSource();
 		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
@@ -187,4 +189,4 @@ public class RepositorioAceite {
 	}
 	@javax.inject.Inject
     DomainObjectContainer container;
-}
+*/}

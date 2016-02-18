@@ -14,8 +14,8 @@ import org.apache.isis.applib.query.QueryDefault;
 import domainapp.dom.app.combustible.TipoCombustible;
 
 @DomainService(repositoryFor = TipoCombustible.class)
-@DomainServiceLayout(menuOrder = "40", named = "OLD")
-public class RepositorioTipoCombustible {
+@DomainServiceLayout(menuOrder = "40", named = "")
+public class RepositorioTipoCombustible {/*
 
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named="Crear tipo combustible")
@@ -45,5 +45,5 @@ public class RepositorioTipoCombustible {
 	}
 
 	@javax.inject.Inject
-	DomainObjectContainer container;
+	DomainObjectContainer container;*/
 }

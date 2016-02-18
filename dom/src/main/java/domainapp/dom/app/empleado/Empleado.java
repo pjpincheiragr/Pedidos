@@ -261,11 +261,11 @@ public class Empleado extends Persona {
 	/**
 	 * Mostrar lista de Vehiculo
 	 * @return Lista de Vehiculo disponibles.
-	 */
+	 
 	public List<Vehiculo> choices0UpdateVehiculo(){
 		return repoVehiculo.noAsignados(container.allInstances(Vehiculo.class));
 	}
-
+*/
 	@Override
 	public String toString() {
 		return "Empleado [Legajo N°=" + legajo + "]";

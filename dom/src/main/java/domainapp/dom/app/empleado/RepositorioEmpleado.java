@@ -39,8 +39,8 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 @DomainService(repositoryFor = Empleado.class)
-@DomainServiceLayout(menuOrder = "20", named = "OLD")
-public class RepositorioEmpleado {
+@DomainServiceLayout(menuOrder = "20", named = "")
+public class RepositorioEmpleado {/*
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Crear nuevo Empleado")
 	public Empleado createEmpleado(
@@ -185,7 +185,7 @@ public class RepositorioEmpleado {
 	 * Cambia el listado de Ciudad a mostrar, según la Provincia seleccionada.
 	 *
 	 * @return List<Ciudad>
-	 */
+	 
 	public List<Ciudad> choices7CreateEmpleado(String nombre, String apellido,
 			Documento tipoDocumento, int nroDocumento,
 			LocalDate fechaNacimiento, Sexo sexo, Provincia provincia,
@@ -211,7 +211,7 @@ public class RepositorioEmpleado {
 	 *
 	 * @param listaEmpleados
 	 * @return Lista de Empleados activos.
-	 */
+	 
 	private List<Empleado> filtrarPorActivos(final List<Empleado> lista) {
 		List<Empleado> activos = new ArrayList<Empleado>();
 		for (Empleado empleado : lista) {
@@ -268,5 +268,5 @@ public class RepositorioEmpleado {
 		return "Reporte Generado";
 	}
 	@javax.inject.Inject
-	DomainObjectContainer container;
+	DomainObjectContainer container;*/
 }

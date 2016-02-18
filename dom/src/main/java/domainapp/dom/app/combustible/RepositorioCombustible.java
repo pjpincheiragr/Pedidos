@@ -32,8 +32,8 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 @DomainService(repositoryFor = Combustible.class)
-@DomainServiceLayout(menuOrder = "40.1", named = "OLD", menuBar = MenuBar.PRIMARY)
-public class RepositorioCombustible {
+@DomainServiceLayout(menuOrder = "40.1", named = "")
+public class RepositorioCombustible {/*
 
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Crear combustible")
@@ -204,5 +204,5 @@ public class RepositorioCombustible {
 		return "Reporte Generado";
 	}
 	@javax.inject.Inject
-	DomainObjectContainer container;
+	DomainObjectContainer container;*/
 }

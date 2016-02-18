@@ -89,7 +89,7 @@ public class AlertaMatafuego extends Alerta {
 	@ActionLayout(named = "Cambiar Fecha Alerta", position = Position.BELOW)
 	public AlertaMatafuego updateFechaAlerta(final @ParameterLayout(named = "Fecha Alerta")Date fechaAlerta){
 		this.setFechaAlerta(fechaAlerta);
-		this.setEstadoAlerta(repo.asignarAlertaEstado(fechaAlerta));
+		//this.setEstadoAlerta(repo.asignarAlertaEstado(fechaAlerta));
 		return this;
 	}
 	@ActionLayout(named = "Eliminar alerta")

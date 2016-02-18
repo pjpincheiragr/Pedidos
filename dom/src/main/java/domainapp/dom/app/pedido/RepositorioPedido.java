@@ -3,6 +3,7 @@ package domainapp.dom.app.pedido;
 import org.joda.time.LocalDate;
 
 import java.util.List;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -11,9 +12,9 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
-import org.apache.isis.applib.security.RoleMemento;
-import org.apache.isis.applib.security.UserMemento;
+
 
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
@@ -33,6 +34,7 @@ public class RepositorioPedido {
 	@ActionLayout(named = "Crear nuevo Pedido")
 	public Pedido createPedido(
 			@ParameterLayout(named="Tipo")@Parameter(optionality=Optionality.OPTIONAL)Tipo tipo,
+			@ParameterLayout(named="Orden")int orden,
 			@ParameterLayout(named="Lugar")@Parameter(optionality=Optionality.OPTIONAL)Proveedor proveedor,
 			@ParameterLayout(named="Vendedor")@Parameter(optionality=Optionality.OPTIONAL)Vendedor vendedor,
 			@ParameterLayout(named="Tiempo")@Parameter(optionality=Optionality.OPTIONAL)int tiempo,
@@ -51,6 +53,7 @@ public class RepositorioPedido {
 			
 			
 		}
+		Pedido.setOrden(orden);
 		Pedido.setVendedor(vendedor);
 		Pedido.setTiempo(tiempo);
 		Pedido.setValor(valor);
@@ -58,6 +61,7 @@ public class RepositorioPedido {
 		Pedido.setSucursal(sucursal);
 		Pedido.setFechaHora(LocalDate.now());
 		Pedido.setObservacion(observacion);
+		Pedido.setActivo(true);
 		container.persistIfNotAlready(Pedido);
 		return Pedido;
 	}
@@ -131,6 +135,9 @@ public class RepositorioPedido {
 		return container.allMatches(new QueryDefault<>(Pedido.class,
 				"findByCadete", "cadete", cadete));
 	}
+	
+
+	
 
 	@javax.inject.Inject
 	DomainObjectContainer container;

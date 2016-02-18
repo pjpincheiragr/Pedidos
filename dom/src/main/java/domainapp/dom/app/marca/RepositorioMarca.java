@@ -36,7 +36,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.query.QueryDefault;
 
 @DomainService(repositoryFor = Marca.class)
-@DomainServiceLayout(menuOrder = "1" , named="Marca")
+@DomainServiceLayout(menuOrder = "1" , named="Administración")
 
 public class RepositorioMarca {
 	

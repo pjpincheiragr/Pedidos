@@ -24,8 +24,8 @@ import java.util.List;
 import java.math.BigDecimal;
 
 @DomainService(repositoryFor = Mantenimiento.class)
-@DomainServiceLayout(menuOrder = "120", named = "OLD")
-public class RepositorioMantenimiento {
+@DomainServiceLayout(menuOrder = "120", named = "")
+public class RepositorioMantenimiento {/*
 
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Crear mantenimiento")
@@ -162,5 +162,5 @@ public class RepositorioMantenimiento {
 	@javax.inject.Inject
 	RepositorioMatafuego repoMatafuego;
 	@javax.inject.Inject
-	RepositorioVehiculo repoVehiculo;
+	RepositorioVehiculo repoVehiculo;*/
 }

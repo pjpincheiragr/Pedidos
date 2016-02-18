@@ -27,8 +27,8 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 @DomainService(repositoryFor = Taller.class)
-@DomainServiceLayout(menuOrder = "100", named = "OLD")
-public class RepositorioTaller {
+@DomainServiceLayout(menuOrder = "100", named = "")
+public class RepositorioTaller {/*
 
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Crear Taller")
@@ -168,5 +168,5 @@ public class RepositorioTaller {
 	}
 
 	@javax.inject.Inject
-	DomainObjectContainer container;
+	DomainObjectContainer container;*/
 }
