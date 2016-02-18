@@ -29,7 +29,9 @@ import java.util.Date;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.ViewModel;
 
 
@@ -75,7 +77,9 @@ public class HomePageViewModel {
 
 	
 	@HomePage
-	
+	  @CollectionLayout(
+	            render = RenderType.EAGERLY
+	    )
 	public List<Ruta> getlistRutas() {
 		return RepositorioRuta.listAll();
 		}

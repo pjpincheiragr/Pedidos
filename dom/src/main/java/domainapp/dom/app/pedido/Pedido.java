@@ -10,6 +10,7 @@ import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
@@ -18,6 +19,8 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.RenderType;
+
 import domainapp.dom.app.marca.Marca;
 import domainapp.dom.app.proveedor.Proveedor;
 import domainapp.dom.app.servicios.E_estado;
@@ -203,6 +206,9 @@ public class Pedido {
 
 		//@Render(Type.EAGERLY)
 		@MemberOrder(sequence = "1.5")
+		@CollectionLayout(
+		            render = RenderType.EAGERLY
+		    )
 		public List <PedidoItem> getPedidoItem() {
 			return ListaPedidos;
 		}

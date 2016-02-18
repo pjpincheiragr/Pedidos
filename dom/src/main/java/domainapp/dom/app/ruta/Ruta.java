@@ -1,4 +1,4 @@
-package domainapp.dom.app.ruta;
+ 	package domainapp.dom.app.ruta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +12,13 @@ import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.RenderType;
 
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
@@ -83,10 +85,14 @@ public class Ruta {
 	@MemberOrder(sequence = "3")
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	@Property(editing = Editing.ENABLED)
+	  @CollectionLayout(
+	            render = RenderType.EAGERLY
+	    )
 	public List<Pedido> getListaPedidos() {
 		return listaPedidos;
 	}
 
+	
 	public void setListaPedidos(List<Pedido> listaPedidos) {
 		this.listaPedidos = listaPedidos;
 	}
