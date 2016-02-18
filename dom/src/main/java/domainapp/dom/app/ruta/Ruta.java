@@ -17,12 +17,14 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.RenderType;
+import org.apache.isis.applib.annotation.Where;
+
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.pedido.RepositorioPedido;
-
 import domainapp.dom.app.servicios.E_estado;
 
 
@@ -32,7 +34,8 @@ import domainapp.dom.app.servicios.E_estado;
 @javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
 @javax.jdo.annotations.Queries({
 		@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.dom.app.ruta.Ruta ")
+				+ "FROM domainapp.dom.app.ruta.Ruta "
+				+"WHERE activo == true")
 		})
 @DomainObject(objectType = "ruta", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
@@ -45,15 +48,16 @@ public class Ruta {
 	private List<Pedido> listaPedidos=new ArrayList<Pedido>();
 	@PrimaryKey
 	private long numero;
+	private boolean activo;
 	
 	public String title() {		
 		return "Ruta: " + getNumero()   ;
 	}
 
-	public Ruta(Cadete cadete) {
+	public Ruta(Cadete cadete,boolean activo) {
 		super();
 		this.cadete = cadete;
-	
+		this.activo=activo;
 	}
 
 	public Ruta() {
@@ -106,6 +110,30 @@ public class Ruta {
 		return this;
 	}
 
+	@ActionLayout(named = "Eliminar Ruta")
+	public Ruta deleteRuta() {
+		this.setActivo(false);
+		return this;
+	}
+
+	@Programmatic
+	public boolean hideDeleteRuta() {
+		if (!isActivo())
+			return true;
+		else
+			return false;
+	}
+	
+	@Property(hidden = Where.EVERYWHERE)
+	@MemberOrder(sequence = "5")
+	public boolean isActivo() {
+		return activo;
+	}
+
+	public void setActivo(boolean activo) {
+		this.activo = activo;
+	}
+	
 	@javax.inject.Inject
 	DomainObjectContainer container;
 	

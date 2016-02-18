@@ -43,6 +43,7 @@ public class Proveedor {
 	private String nombre;
 	private String codigo;
 	private Direccion direccion;
+	
 	public String title() {		
 		return getNombre() + ' '+ getCodigo()   ;
 	}

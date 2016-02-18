@@ -26,6 +26,7 @@ public class RepositorioRuta {
 			) {
 		final Ruta Ruta = container.newTransientInstance(Ruta.class);
 		Ruta.setCadete(cadete);
+		Ruta.setActivo(true);
 		container.persistIfNotAlready(Ruta);
 		return Ruta;
 	}
