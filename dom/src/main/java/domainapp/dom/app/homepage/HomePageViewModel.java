@@ -75,6 +75,9 @@ public class HomePageViewModel {
 
 	*/
 	@HomePage
+	   @Action(
+	            semantics = SemanticsOf.SAFE
+	    )
 	public List<Ruta> getlistRutas() {
 		return RepositorioRuta.listAll();
 		}

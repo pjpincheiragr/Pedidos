@@ -41,32 +41,31 @@ import org.joda.time.LocalDate;
 @javax.jdo.annotations.Queries({
 		@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "WHERE activo == true"
-				+ " order by fechaHora "),
+				+ "WHERE activo == true" + " order by orden "),
 		@javax.jdo.annotations.Query(name = "ListarPendientes", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "Where (estado==ASIGNADO) || (estado=EN_PROCESO) && activo == true && this.ListaPedidos != null "
-				+ " order by fechaHora "),
+				+ " order by orden "),
 		@javax.jdo.annotations.Query(name = "ListarNuevos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "Where (estado==NUEVO) && activo == true && this.ListaPedidos != null "
-				+ " order by fechaHora "),
+				+ " order by orden "),
 		@javax.jdo.annotations.Query(name = "findByDescription", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "WHERE ((:descripcion=='') || (descripcion.toLowerCase().indexOf(:descripcion) >= 0)) && activo == true && this.ListaPedidos != null "
-				+ " order by fechaHora "),
+				+ " order by orden "),
 		@javax.jdo.annotations.Query(name = "findByState", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "WHERE (estado==:estado) && activo == true && this.ListaPedidos != null "
-				+ " order by fechaHora "),
+				+ " order by orden "),
 		@javax.jdo.annotations.Query(name = "findBySeller", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "WHERE (vendedor==:vendedor) && activo == true"
-				+ " && this.ListaPedidos != null " + " order by fechaHora ") })
-
+				+ " && this.ListaPedidos != null " + " order by orden ") })
 @DomainObject(objectType = "PEDIDO", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
 public class Pedido {
+	private int orden;
 	private Tipo tipo;
 	private Proveedor proveedor;
 	private LocalDate fechaHora;
@@ -83,10 +82,11 @@ public class Pedido {
 				+ " - " + getSucursal();
 	}
 
-	public Pedido(Tipo tipo, Proveedor proveedor, LocalDate fecha, int tiempo,
-			Vendedor vendedor, float valor, E_estado estado, Sucursal sucursal,
-			String observacion, boolean activo) {
+	public Pedido(int orden, Tipo tipo, Proveedor proveedor, LocalDate fecha,
+			int tiempo, Vendedor vendedor, float valor, E_estado estado,
+			Sucursal sucursal, String observacion, boolean activo) {
 		super();
+		this.orden = orden;
 		this.tipo = tipo;
 		this.proveedor = proveedor;
 		this.tiempo = tiempo;
@@ -103,6 +103,13 @@ public class Pedido {
 		super();
 	}
 
+	@MemberOrder(sequence = "1")
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	@Property(editing = Editing.ENABLED)
+	public void setOrden(int orden) {
+		this.orden=orden;
+	}
+	
 	@MemberOrder(sequence = "1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
@@ -276,4 +283,6 @@ public class Pedido {
 
 	@javax.inject.Inject
 	RepositorioPedidoItem repositorioPedidoItem;
+
+	
 }

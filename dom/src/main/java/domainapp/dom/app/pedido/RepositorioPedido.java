@@ -34,6 +34,7 @@ public class RepositorioPedido {
 	@ActionLayout(named = "Crear nuevo Pedido")
 	public Pedido createPedido(
 			@ParameterLayout(named="Tipo")@Parameter(optionality=Optionality.OPTIONAL)Tipo tipo,
+			@ParameterLayout(named="Orden")int orden,
 			@ParameterLayout(named="Lugar")@Parameter(optionality=Optionality.OPTIONAL)Proveedor proveedor,
 			@ParameterLayout(named="Vendedor")@Parameter(optionality=Optionality.OPTIONAL)Vendedor vendedor,
 			@ParameterLayout(named="Tiempo")@Parameter(optionality=Optionality.OPTIONAL)int tiempo,
@@ -52,6 +53,7 @@ public class RepositorioPedido {
 			
 			
 		}
+		Pedido.setOrden(orden);
 		Pedido.setVendedor(vendedor);
 		Pedido.setTiempo(tiempo);
 		Pedido.setValor(valor);
