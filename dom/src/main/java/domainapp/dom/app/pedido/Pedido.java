@@ -28,6 +28,7 @@ import domainapp.dom.app.marca.Marca;
 import domainapp.dom.app.proveedor.Proveedor;
 import domainapp.dom.app.servicios.E_estado;
 import domainapp.dom.app.servicios.E_estado_item;
+import domainapp.dom.app.servicios.E_urgencia_pedido;
 import domainapp.dom.app.sucursal.Sucursal;
 import domainapp.dom.app.tipo.Tipo;
 import domainapp.dom.app.vendedor.Vendedor;
@@ -77,6 +78,7 @@ public class Pedido {
 	private Sucursal sucursal;
 	private String observacion;
 	private boolean activo;
+	private E_urgencia_pedido urgencia;
 
 	public String title() {
 		return getFechaHora().toString() + " - " + getVendedor().getNombre()
@@ -85,7 +87,9 @@ public class Pedido {
 
 	public Pedido(int orden, Tipo tipo, Proveedor proveedor, LocalDate fecha,
 			int tiempo, Vendedor vendedor, float valor, E_estado estado,
-			Sucursal sucursal, String observacion, boolean activo) {
+			Sucursal sucursal, String observacion, boolean activo,
+			E_urgencia_pedido urgencia) {
+		
 		super();
 		this.orden = orden;
 		this.tipo = tipo;
@@ -98,6 +102,7 @@ public class Pedido {
 		this.fechaHora = fecha;
 		this.observacion = observacion;
 		this.activo = activo;
+		this.urgencia = urgencia;
 	}
 
 	public Pedido() {
@@ -105,17 +110,16 @@ public class Pedido {
 	}
 
 	@MemberOrder(sequence = "1")
-	@javax.jdo.annotations.Column(allowsNull = "false")
+	@javax.jdo.annotations.Column(allowsNull = "true")
 	@Property(editing = Editing.ENABLED)
 	public void setOrden(int orden) {
-		this.orden=orden;
+		this.orden = orden;
 	}
-	
-	public int getOrden(){
+
+	public int getOrden() {
 		return this.orden;
 	}
-	
-	
+
 	@MemberOrder(sequence = "1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
@@ -189,57 +193,55 @@ public class Pedido {
 		this.sucursal = sucursal;
 	}
 
+	public void setFechaHora(final LocalDate fechaHora) {
+		this.fechaHora = fechaHora;
+	}
 
- 	public void setFechaHora(final LocalDate fechaHora) {
- 		this.fechaHora = fechaHora;
- 	}
- 	@javax.jdo.annotations.Column(allowsNull = "true")
- 	public LocalDate getFechaHora(){
- 		return this.fechaHora;
- 	
- 	}
-	
-	 //Agrego campo observación 
-	 
-	 @javax.jdo.annotations.Column(allowsNull="false", length = 600)
-	 public String getObservacion(){
-	       return observacion;
-    }
-	 public void setObservacion(final String observacion) {
-				        this.observacion = observacion;
-	 }      
-				//Fin campo Descripcion del error
-		
-	 
-		// {{ Pedido Item (Property)
-		@Join
-		@javax.jdo.annotations.Column(allowsNull="true")
-		//@Persistent(mappedBy = "Pedido", dependentElement = "false")
-		private List <PedidoItem> ListaPedidos=new ArrayList<PedidoItem>();
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	public LocalDate getFechaHora() {
+		return this.fechaHora;
 
-		//@Render(Type.EAGERLY)
-		@MemberOrder(sequence = "1.5")
+	}
 
-		@CollectionLayout(
-	            render = RenderType.EAGERLY
-	    )
-		public List <PedidoItem> getPedidoItem() {
-			return ListaPedidos;
-		}
+	// Agrego campo observación
 
-		public void setPedidosItem(final List<PedidoItem> listaPedidos) {
-			this.ListaPedidos = listaPedidos;
-		}
-		
-		@ActionLayout(named = "Agregar Item")
-		public  Pedido addPedidoItem(
-			@ParameterLayout(named="Codigo")@Parameter(optionality=Optionality.OPTIONAL)String codigo,
-			@ParameterLayout(named="Marca")@Parameter(optionality=Optionality.OPTIONAL)Marca marca,
-			@ParameterLayout(named="Cantidad")@Parameter(optionality=Optionality.OPTIONAL)int cantidad,
-			@ParameterLayout(named="Estado")@Parameter(optionality=Optionality.OPTIONAL)E_estado_item estado,
-			final @ParameterLayout(named="Imagen") @Parameter(optionality=Optionality.OPTIONAL) Blob attachment)
-			{
-		final PedidoItem PedidoItem = container.newTransientInstance(PedidoItem.class);
+	@javax.jdo.annotations.Column(allowsNull = "true", length = 600)
+	public String getObservacion() {
+		return observacion;
+	}
+
+	public void setObservacion(final String observacion) {
+		this.observacion = observacion;
+	}
+
+	// Fin campo Descripcion del error
+
+	// {{ Pedido Item (Property)
+	@Join
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	// @Persistent(mappedBy = "Pedido", dependentElement = "false")
+	private List<PedidoItem> ListaPedidos = new ArrayList<PedidoItem>();
+
+	// @Render(Type.EAGERLY)
+	@MemberOrder(sequence = "1.5")
+	@CollectionLayout(render = RenderType.EAGERLY)
+	public List<PedidoItem> getPedidoItem() {
+		return ListaPedidos;
+	}
+
+	public void setPedidosItem(final List<PedidoItem> listaPedidos) {
+		this.ListaPedidos = listaPedidos;
+	}
+
+	@ActionLayout(named = "Agregar Item")
+	public Pedido addPedidoItem(
+			@ParameterLayout(named = "Codigo") @Parameter(optionality = Optionality.OPTIONAL) String codigo,
+			@ParameterLayout(named = "Marca") @Parameter(optionality = Optionality.OPTIONAL) Marca marca,
+			@ParameterLayout(named = "Cantidad") @Parameter(optionality = Optionality.OPTIONAL) int cantidad,
+			@ParameterLayout(named = "Estado") @Parameter(optionality = Optionality.OPTIONAL) E_estado_item estado,
+			final @ParameterLayout(named = "Imagen") @Parameter(optionality = Optionality.OPTIONAL) Blob attachment) {
+		final PedidoItem PedidoItem = container
+				.newTransientInstance(PedidoItem.class);
 
 		PedidoItem.setCodigo(codigo);
 		PedidoItem.setMarca(marca);
@@ -253,8 +255,22 @@ public class Pedido {
 
 	// fin
 
+	//sección correspondiente a la clasificación de urgencia del pedido
+	
+		@MemberOrder(sequence="8")
+		@javax.jdo.annotations.Column(allowsNull = "true")
+		public E_urgencia_pedido getUrgencia() {
+			return urgencia;
+		}
+
+		public void setUrgencia(E_urgencia_pedido urgencia) {
+			this.urgencia = urgencia;
+		}
+		
+		//fin sección urgencia de Pedido
+	
 	@Property(hidden = Where.EVERYWHERE)
-	@MemberOrder(sequence = "5")
+	@MemberOrder(sequence = "9")
 	public boolean isActivo() {
 		return activo;
 	}
@@ -288,11 +304,12 @@ public class Pedido {
 			return false;
 	}
 
+	
+	
 	@javax.inject.Inject
 	DomainObjectContainer container;
 
 	@javax.inject.Inject
 	RepositorioPedidoItem repositorioPedidoItem;
 
-	
 }

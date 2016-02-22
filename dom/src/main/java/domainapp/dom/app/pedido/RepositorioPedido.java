@@ -16,10 +16,12 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
 
 
+
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.proveedor.Proveedor;
 import domainapp.dom.app.servicios.E_estado;
+import domainapp.dom.app.servicios.E_urgencia_pedido;
 import domainapp.dom.app.sucursal.Sucursal;
 import domainapp.dom.app.tipo.Tipo;
 import domainapp.dom.app.vendedor.Vendedor;
@@ -34,8 +36,9 @@ public class RepositorioPedido {
 	@ActionLayout(named = "Crear nuevo Pedido")
 	public Pedido createPedido(
 			@ParameterLayout(named="Tipo")@Parameter(optionality=Optionality.OPTIONAL)Tipo tipo,
+			@ParameterLayout(named="Urgencia")@Parameter(optionality=Optionality.OPTIONAL)E_urgencia_pedido urgencia,
 			@ParameterLayout(named="Orden")int orden,
-			@ParameterLayout(named="Lugar")@Parameter(optionality=Optionality.OPTIONAL)Proveedor proveedor,
+			@ParameterLayout(named="Proveedor")@Parameter(optionality=Optionality.OPTIONAL)Proveedor proveedor,
 			@ParameterLayout(named="Vendedor")@Parameter(optionality=Optionality.OPTIONAL)Vendedor vendedor,
 			@ParameterLayout(named="Tiempo")@Parameter(optionality=Optionality.OPTIONAL)int tiempo,
 			@ParameterLayout(named="Valor")@Parameter(optionality=Optionality.OPTIONAL)float valor,
@@ -47,6 +50,7 @@ public class RepositorioPedido {
 
 		final Pedido Pedido = container.newTransientInstance(Pedido.class);
 		Pedido.setTipo(tipo);
+		Pedido.setUrgencia(urgencia);
 		Pedido.setProveedor(proveedor);
 		if (new Services().isVendedor(container.getUser()))
 		{
