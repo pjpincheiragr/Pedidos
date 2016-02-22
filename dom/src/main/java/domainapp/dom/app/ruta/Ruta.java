@@ -2,13 +2,11 @@
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.VersionStrategy;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -21,13 +19,10 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Where;
-
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.pedido.RepositorioPedido;
 import domainapp.dom.app.servicios.E_estado;
-
-
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "id")
 @javax.jdo.annotations.Uniques({ @javax.jdo.annotations.Unique(name = "OrdenServicio_numero_must_be_unique", members = { "numero" }) })
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.APPLICATION)
@@ -37,15 +32,16 @@ import domainapp.dom.app.servicios.E_estado;
 				+ "FROM domainapp.dom.app.ruta.Ruta "
 				+"WHERE activo == true")
 		})
+
 @DomainObject(objectType = "ruta", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
-
-
 
 public class Ruta {
 	
 	private Cadete cadete;
 	private List<Pedido> listaPedidos=new ArrayList<Pedido>();
+	private List<Pedido> listaPedidosUrgentes=new ArrayList<Pedido>();
+	private List<Pedido> listaPedidosDemorados=new ArrayList<Pedido>();
 	@PrimaryKey
 	private long numero;
 	private boolean activo;
@@ -88,17 +84,39 @@ public class Ruta {
 	}
 	
 	@javax.jdo.annotations.Column(allowsNull = "true")
-
 	@Property(editing = Editing.ENABLED)
 	  @CollectionLayout(
-	            render = RenderType.EAGERLY
-	    )
+	            render = RenderType.EAGERLY )
 	public List<Pedido> getListaPedidos() {
 		return listaPedidos;
 	}
-	
 	public void setListaPedidos(List<Pedido> listaPedidos) {
 		this.listaPedidos = listaPedidos;
+	}
+	
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	@Property(editing = Editing.ENABLED)
+	  @CollectionLayout(
+	            render = RenderType.EAGERLY )
+	public void setListaPedidosUrgente(List<Pedido> listaPedidosUrgentes) {
+		this.listaPedidosUrgentes = listaPedidosUrgentes;
+	}
+	
+	
+	public List<Pedido> getListaPedidosUrgentes() {
+		return repositorioPedido.listPending();
+	}
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	@Property(editing = Editing.ENABLED)
+	  @CollectionLayout(
+	            render = RenderType.EAGERLY )
+	public void setListaPedidosDemorados(List<Pedido> listaPedidosDemorados) {
+		this.listaPedidosDemorados = listaPedidosDemorados;
+	}
+	
+	
+	public List<Pedido> getListaPedidosDemorados() {
+		return repositorioPedido.listPending();
 	}
 	
 	@ActionLayout(named = "Agregar Pedido")
@@ -115,6 +133,7 @@ public class Ruta {
 		this.setActivo(false);
 		return this;
 	}
+	
 
 	@Programmatic
 	public boolean hideDeleteRuta() {
