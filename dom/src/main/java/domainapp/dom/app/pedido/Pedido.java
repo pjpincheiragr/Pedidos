@@ -19,7 +19,6 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Where;
@@ -28,6 +27,7 @@ import domainapp.dom.app.marca.Marca;
 import domainapp.dom.app.proveedor.Proveedor;
 import domainapp.dom.app.servicios.E_estado;
 import domainapp.dom.app.servicios.E_estado_item;
+import domainapp.dom.app.servicios.E_tieneMuestra;
 import domainapp.dom.app.servicios.E_urgencia_pedido;
 import domainapp.dom.app.sucursal.Sucursal;
 import domainapp.dom.app.tipo.Tipo;
@@ -89,7 +89,7 @@ public class Pedido {
 			int tiempo, Vendedor vendedor, float valor, E_estado estado,
 			Sucursal sucursal, String observacion, boolean activo,
 			E_urgencia_pedido urgencia) {
-		
+
 		super();
 		this.orden = orden;
 		this.tipo = tipo;
@@ -203,7 +203,7 @@ public class Pedido {
 
 	}
 
-	// Agrego campo observación
+	// Agrego campo observaciÃ³n
 
 	@javax.jdo.annotations.Column(allowsNull = "true", length = 600)
 	public String getObservacion() {
@@ -214,7 +214,7 @@ public class Pedido {
 		this.observacion = observacion;
 	}
 
-	// Fin campo Descripcion del error
+	// Fin campo observaciÃ³n
 
 	// {{ Pedido Item (Property)
 	@Join
@@ -226,7 +226,7 @@ public class Pedido {
 	@MemberOrder(sequence = "1.5")
 	@CollectionLayout(render = RenderType.EAGERLY)
 	public List<PedidoItem> getPedidoItem() {
-		return ListaPedidos;
+		return repositorioPedidoItem.listAll();
 	}
 
 	public void setPedidosItem(final List<PedidoItem> listaPedidos) {
@@ -235,19 +235,24 @@ public class Pedido {
 
 	@ActionLayout(named = "Agregar Item")
 	public Pedido addPedidoItem(
+			@ParameterLayout(named = "Muestra") @Parameter(optionality = Optionality.OPTIONAL) E_tieneMuestra muestra,
 			@ParameterLayout(named = "Codigo") @Parameter(optionality = Optionality.OPTIONAL) String codigo,
 			@ParameterLayout(named = "Marca") @Parameter(optionality = Optionality.OPTIONAL) Marca marca,
 			@ParameterLayout(named = "Cantidad") @Parameter(optionality = Optionality.OPTIONAL) int cantidad,
 			@ParameterLayout(named = "Estado") @Parameter(optionality = Optionality.OPTIONAL) E_estado_item estado,
+			@ParameterLayout(named = "Observación", multiLine=10) @Parameter(optionality = Optionality.OPTIONAL) String observacion,
 			final @ParameterLayout(named = "Imagen") @Parameter(optionality = Optionality.OPTIONAL) Blob attachment) {
-		final PedidoItem PedidoItem = container
-				.newTransientInstance(PedidoItem.class);
 
-		PedidoItem.setCodigo(codigo);
+		final PedidoItem PedidoItem = container.newTransientInstance(PedidoItem.class);
+
+		PedidoItem.setMuestra(muestra);
 		PedidoItem.setMarca(marca);
+		PedidoItem.setCodigo(codigo);
 		PedidoItem.setCantidad(cantidad);
 		PedidoItem.setEstado(estado);
+		PedidoItem.setObservacion(observacion);
 		PedidoItem.setAttachment(attachment);
+		PedidoItem.setActivo(true);
 		container.persistIfNotAlready(PedidoItem);
 		getPedidoItem().add(PedidoItem);
 		return this;
@@ -255,20 +260,20 @@ public class Pedido {
 
 	// fin
 
-	//sección correspondiente a la clasificación de urgencia del pedido
-	
-		@MemberOrder(sequence="8")
-		@javax.jdo.annotations.Column(allowsNull = "true")
-		public E_urgencia_pedido getUrgencia() {
-			return urgencia;
-		}
+	// secciÃ³n correspondiente a la clasificaciÃ³n de urgencia del pedido
 
-		public void setUrgencia(E_urgencia_pedido urgencia) {
-			this.urgencia = urgencia;
-		}
-		
-		//fin sección urgencia de Pedido
-	
+	@MemberOrder(sequence = "8")
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	public E_urgencia_pedido getUrgencia() {
+		return urgencia;
+	}
+
+	public void setUrgencia(E_urgencia_pedido urgencia) {
+		this.urgencia = urgencia;
+	}
+
+	// fin secciÃ³n urgencia de Pedido
+
 	@Property(hidden = Where.EVERYWHERE)
 	@MemberOrder(sequence = "9")
 	public boolean isActivo() {
@@ -289,23 +294,21 @@ public class Pedido {
 		 * this.setActivo(false); this.container
 		 * .informUser("El area ha sido eliminado de manera exitosa"); } else {
 		 * this.container .warnUser(
-		 * "No se pudo realizar esta acción. El objeto que intenta eliminar esta asignado"
+		 * "No se pudo realizar esta acciÃ³n. El objeto que intenta eliminar esta asignado"
 		 * ); }
 		 */
 		this.setActivo(false);
 		return this;
 	}
-
+/*
 	@Programmatic
 	public boolean hideDeletePedido() {
 		if (!isActivo())
 			return true;
 		else
 			return false;
-	}
+	}*/
 
-	
-	
 	@javax.inject.Inject
 	DomainObjectContainer container;
 
