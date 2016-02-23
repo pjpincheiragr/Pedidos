@@ -23,6 +23,7 @@ import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.pedido.RepositorioPedido;
 import domainapp.dom.app.servicios.E_estado;
+import domainapp.dom.app.servicios.E_urgencia_pedido;
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "id")
 @javax.jdo.annotations.Uniques({ @javax.jdo.annotations.Unique(name = "OrdenServicio_numero_must_be_unique", members = { "numero" }) })
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.APPLICATION)
@@ -39,9 +40,9 @@ import domainapp.dom.app.servicios.E_estado;
 public class Ruta {
 	
 	private Cadete cadete;
-	private List<Pedido> listaPedidos=new ArrayList<Pedido>();
-	private List<Pedido> listaPedidosUrgentes=new ArrayList<Pedido>();
-	private List<Pedido> listaPedidosDemorados=new ArrayList<Pedido>();
+	private List<RutaItem> listaPedidos=new ArrayList<RutaItem>();
+	private List<RutaItem> listaPedidosUrgentes=new ArrayList<RutaItem>();
+	private List<RutaItem> listaPedidosProgramables=new ArrayList<RutaItem>();
 	@PrimaryKey
 	private long numero;
 	private boolean activo;
@@ -87,10 +88,10 @@ public class Ruta {
 	@Property(editing = Editing.ENABLED)
 	  @CollectionLayout(
 	            render = RenderType.EAGERLY )
-	public List<Pedido> getListaPedidos() {
+	public List<RutaItem> getListaPedidos() {
 		return listaPedidos;
 	}
-	public void setListaPedidos(List<Pedido> listaPedidos) {
+	public void setListaPedidos(List<RutaItem> listaPedidos) {
 		this.listaPedidos = listaPedidos;
 	}
 	
@@ -98,27 +99,28 @@ public class Ruta {
 	@Property(editing = Editing.ENABLED)
 	  @CollectionLayout(
 	            render = RenderType.EAGERLY )
-	public void setListaPedidosUrgente(List<Pedido> listaPedidosUrgentes) {
+	public void setListaPedidosUrgentes(List<RutaItem> listaPedidosUrgentes) {
 		this.listaPedidosUrgentes = listaPedidosUrgentes;
 	}
 	
 	
-	public List<Pedido> getListaPedidosUrgentes() {
-		return repositorioPedido.listPending();
+	public List<RutaItem> getListaPedidosUrgentes() {
+		return repositorioRutaItem.listAllByUrgency(E_urgencia_pedido.RESPUESTA_RAPIDA);
 	}
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	@Property(editing = Editing.ENABLED)
 	  @CollectionLayout(
 	            render = RenderType.EAGERLY )
-	public void setListaPedidosDemorados(List<Pedido> listaPedidosDemorados) {
-		this.listaPedidosDemorados = listaPedidosDemorados;
+	public void setListaPedidosProgramables(List<RutaItem> listaPedidosProgramables) {
+		this.listaPedidosProgramables= listaPedidosProgramables;
 	}
 	
 	
-	public List<Pedido> getListaPedidosDemorados() {
-		return repositorioPedido.listPending();
+	public List<RutaItem> getListaPedidosProgramables() {
+		return repositorioRutaItem.listAllByUrgency(E_urgencia_pedido.PROGRAMABLE);
+
 	}
-	
+	/*
 	@ActionLayout(named = "Agregar Pedido")
 	public Ruta addPedido(
 			Pedido pedido
@@ -127,7 +129,7 @@ public class Ruta {
 		getListaPedidos().add(pedido);
 		return this;
 	}
-
+*/
 	@ActionLayout(named = "Eliminar Ruta")
 	public Ruta deleteRuta() {
 		this.setActivo(false);
@@ -157,5 +159,5 @@ public class Ruta {
 	DomainObjectContainer container;
 	
 	@javax.inject.Inject
-	RepositorioPedido repositorioPedido;
+	RepositorioRutaItem repositorioRutaItem;
 }
