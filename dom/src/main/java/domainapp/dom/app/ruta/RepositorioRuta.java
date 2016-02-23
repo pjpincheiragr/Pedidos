@@ -30,8 +30,10 @@ public class RepositorioRuta {
 		container.persistIfNotAlready(Ruta);
 		return Ruta;
 	}
+	
+	
 
-	@MemberOrder(sequence = "1")
+	@MemberOrder(sequence = "2")
 	@ActionLayout(named = "Listar Todos")
 	public List<Ruta> listAll() {
 		final List<Ruta> listaRutas = this.container
@@ -42,7 +44,7 @@ public class RepositorioRuta {
 		}
 		return listaRutas;
 	}
-
+	
 	@javax.inject.Inject
 	DomainObjectContainer container;
 }

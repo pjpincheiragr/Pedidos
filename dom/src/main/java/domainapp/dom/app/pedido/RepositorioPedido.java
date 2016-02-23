@@ -20,6 +20,7 @@ import org.apache.isis.applib.query.QueryDefault;
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.proveedor.Proveedor;
+import domainapp.dom.app.ruta.RutaItem;
 import domainapp.dom.app.servicios.E_estado;
 import domainapp.dom.app.servicios.E_urgencia_pedido;
 import domainapp.dom.app.sucursal.Sucursal;
@@ -45,9 +46,8 @@ public class RepositorioPedido {
 			@ParameterLayout(named="Estado")E_estado estado,
 			@ParameterLayout(named="Sucursal")Sucursal sucursal,
 			@ParameterLayout(named="Observaciones", multiLine=15) String observacion
-			
 			){
-
+		
 		final Pedido Pedido = container.newTransientInstance(Pedido.class);
 		Pedido.setTipo(tipo);
 		Pedido.setUrgencia(urgencia);
@@ -55,8 +55,8 @@ public class RepositorioPedido {
 		if (new Services().isVendedor(container.getUser()))
 		{
 			
-			
 		}
+		
 		Pedido.setOrden(orden);
 		Pedido.setVendedor(vendedor);
 		Pedido.setTiempo(tiempo);
@@ -66,8 +66,15 @@ public class RepositorioPedido {
 		Pedido.setFechaHora(LocalDate.now());
 		Pedido.setObservacion(observacion);
 		Pedido.setActivo(true);
+
 		container.persistIfNotAlready(Pedido);
+		RutaItem oRutaItem =new RutaItem();
+		oRutaItem.setEstado(false);
+		oRutaItem.setOrden(0);
+		oRutaItem.setPedido(Pedido);
+		container.persistIfNotAlready(oRutaItem);
 		return Pedido;
+		
 	}
 
 	@MemberOrder(sequence = "1")

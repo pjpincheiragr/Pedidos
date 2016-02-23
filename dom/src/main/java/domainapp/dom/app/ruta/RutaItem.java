@@ -21,7 +21,7 @@ import domainapp.dom.app.pedido.Pedido;
         column="version")
 @javax.jdo.annotations.Queries({
 	@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
-			+ "FROM domainapp.dom.app.pedido.Pedido "
+			+ "FROM domainapp.dom.app.ruta.RutaItem "
 			+ " order by fecha "),
 	@javax.jdo.annotations.Query(name = "ListarPendientes", language = "JDOQL", value = "SELECT "
 					+ "FROM domainapp.dom.app.pedido.Pedido "
@@ -47,17 +47,18 @@ public class RutaItem {
 	private Pedido pedido;
 	private int orden ;
 	private boolean estado;
+	private Ruta ruta;
 
 	public String title() {		
 		return  getPedido().toString() ;
 	}
 
-	public RutaItem(Pedido pedido, int orden, boolean estado) {
+	public RutaItem(Pedido pedido, int orden, boolean estado, Ruta ruta) {
 		super();
 		this.pedido = pedido;
 		this.orden = orden;
 		this.estado = estado;
-		
+		this.ruta=ruta;
 	}
 
 	public RutaItem() {
@@ -95,6 +96,15 @@ public class RutaItem {
 
 	public void setEstado(boolean estado) {
 		this.estado = estado;
+	}
+	
+	@MemberOrder(sequence="5")
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	public Ruta getRuta() {
+		return ruta;
+	}
+	public void setRuta(Ruta ruta) {
+		this.ruta=ruta;
 	}
 	
 
