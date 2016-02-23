@@ -45,12 +45,12 @@ public class RepositorioRutaItem {
 	@MemberOrder(sequence = "2")
 	@ActionLayout(named = "Listar Todos")
 	public List<RutaItem> listAllByUrgency(
-			@ParameterLayout(named = "Urgencia") @Parameter(optionality = Optionality.OPTIONAL)  E_urgencia_pedido urgencia)  {
+			@ParameterLayout(named = "Urgencia") @Parameter(optionality = Optionality.OPTIONAL)  E_urgencia_pedido estado)  {
 		
 		
 		final List<RutaItem> listaRutas = this.container
 				.allMatches(new QueryDefault<RutaItem>(RutaItem.class,
-						"ListarTodosPorUrgencia",urgencia));
+						"ListarTodosPorUrgencia",estado));
 		if (listaRutas.isEmpty()) {
 			this.container.warnUser("No hay rutas cargadas en el sistema");
 		}
