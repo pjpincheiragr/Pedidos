@@ -1,4 +1,4 @@
- 	package domainapp.dom.app.ruta;
+package domainapp.dom.app.ruta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +41,8 @@ public class Ruta {
 	
 	private Cadete cadete;
 	private List<RutaItem> listaPedidos=new ArrayList<RutaItem>();
-	private List<RutaItem> listaPedidosUrgentes=new ArrayList<RutaItem>();
-	private List<RutaItem> listaPedidosProgramables=new ArrayList<RutaItem>();
+	private List<Pedido> listaPedidosUrgentes=new ArrayList<Pedido>();
+	private List<Pedido> listaPedidosProgramables=new ArrayList<Pedido>();
 	@PrimaryKey
 	private long numero;
 	private boolean activo;
@@ -86,8 +86,7 @@ public class Ruta {
 	
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	@Property(editing = Editing.ENABLED)
-	  @CollectionLayout(
-	            render = RenderType.EAGERLY )
+	  @CollectionLayout(render = RenderType.EAGERLY )
 	public List<RutaItem> getListaPedidos() {
 		return listaPedidos;
 	}
@@ -95,29 +94,30 @@ public class Ruta {
 		this.listaPedidos = listaPedidos;
 	}
 	
+	
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	@Property(editing = Editing.ENABLED)
-	  @CollectionLayout(
-	            render = RenderType.EAGERLY )
-	public void setListaPedidosUrgentes(List<RutaItem> listaPedidosUrgentes) {
+	  @CollectionLayout(render = RenderType.EAGERLY )
+	public void setListaPedidosUrgentes(List<Pedido> listaPedidosUrgentes) {
 		this.listaPedidosUrgentes = listaPedidosUrgentes;
 	}
 	
 	
-	public List<RutaItem> getListaPedidosUrgentes() {
-		return repositorioRutaItem.listAllByUrgency(E_urgencia_pedido.RESPUESTA_RAPIDA);
+	public List<Pedido> getListaPedidosUrgentes() {
+		return repositorioPedido.listAllByUrgency(E_urgencia_pedido.RESPUESTA_RAPIDA);
 	}
+	
+	
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	@Property(editing = Editing.ENABLED)
-	  @CollectionLayout(
-	            render = RenderType.EAGERLY )
-	public void setListaPedidosProgramables(List<RutaItem> listaPedidosProgramables) {
+	  @CollectionLayout(render = RenderType.EAGERLY )
+	public void setListaPedidosProgramables(List<Pedido> listaPedidosProgramables) {
 		this.listaPedidosProgramables= listaPedidosProgramables;
 	}
 	
 	
-	public List<RutaItem> getListaPedidosProgramables() {
-		return repositorioRutaItem.listAllByUrgency(E_urgencia_pedido.PROGRAMABLE);
+	public List<Pedido> getListaPedidosProgramables() {
+		return repositorioPedido.listAllByUrgency(E_urgencia_pedido.PROGRAMABLE);
 
 	}
 	/*
@@ -160,4 +160,7 @@ public class Ruta {
 	
 	@javax.inject.Inject
 	RepositorioRutaItem repositorioRutaItem;
+	
+	@javax.inject.Inject
+	RepositorioPedido repositorioPedido;
 }
