@@ -20,9 +20,9 @@ import domainapp.dom.app.pedido.Pedido;
         strategy=VersionStrategy.VERSION_NUMBER,
         column="version")
 @javax.jdo.annotations.Queries({
-	@javax.jdo.annotations.Query(name = "ListarTodosPorUrgencia", language = "JDOQL", value = "SELECT "
+	@javax.jdo.annotations.Query(name = "ListarTodosPorUrgencia", language = "JDOQL", value = "SELECT  "
 			+ " FROM domainapp.dom.app.ruta.RutaItem "
-			+ " WHERE pedido.urgencia==:estado "
+			+ " WHERE pedido.urgencia==:urgencia "
 			+ "  "),
 	@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
 			+ "FROM domainapp.dom.app.ruta.RutaItem "

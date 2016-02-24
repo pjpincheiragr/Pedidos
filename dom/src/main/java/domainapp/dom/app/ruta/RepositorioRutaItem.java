@@ -21,7 +21,7 @@ import domainapp.dom.app.servicios.E_urgencia_pedido;
 @DomainServiceLayout(menuOrder = "60", named = "Rutas")
 
 public class RepositorioRutaItem {
-	
+	/*
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Crear nueva Ruta Item")
 	
@@ -40,17 +40,17 @@ public class RepositorioRutaItem {
 		return RutaItem;
 	}
 	
-	
+	*/
 
 	@MemberOrder(sequence = "2")
 	@ActionLayout(named = "Listar Todos")
 	public List<RutaItem> listAllByUrgency(
-			@ParameterLayout(named = "Urgencia") @Parameter(optionality = Optionality.OPTIONAL)  E_urgencia_pedido estado)  {
+			@ParameterLayout(named = "Urgencia") @Parameter(optionality = Optionality.OPTIONAL)  E_urgencia_pedido urgencia)  {
 		
 		
 		final List<RutaItem> listaRutas = this.container
 				.allMatches(new QueryDefault<RutaItem>(RutaItem.class,
-						"ListarTodosPorUrgencia",estado));
+						"ListarTodosPorUrgencia","urgencia",urgencia));
 		if (listaRutas.isEmpty()) {
 			this.container.warnUser("No hay rutas cargadas en el sistema");
 		}
