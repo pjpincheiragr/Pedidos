@@ -35,10 +35,9 @@ public class RepositorioPedido {
 	public Pedido createPedido(
 			@ParameterLayout(named = "Tipo") @Parameter(optionality = Optionality.OPTIONAL) Tipo tipo,
 			@ParameterLayout(named = "Urgencia") @Parameter(optionality = Optionality.OPTIONAL) E_urgencia_pedido urgencia,
-			@ParameterLayout(named = "Orden") int orden,
 			@ParameterLayout(named = "Proveedor") @Parameter(optionality = Optionality.OPTIONAL) Proveedor proveedor,
 			@ParameterLayout(named = "Vendedor") @Parameter(optionality = Optionality.OPTIONAL) Vendedor vendedor,
-			@ParameterLayout(named = "Tiempo") @Parameter(optionality = Optionality.OPTIONAL) int tiempo,
+			//@ParameterLayout(named = "Tiempo") @Parameter(optionality = Optionality.OPTIONAL) int tiempo,
 			@ParameterLayout(named = "Valor") @Parameter(optionality = Optionality.OPTIONAL) float valor,
 			@ParameterLayout(named = "Estado") E_estado estado, @ParameterLayout(named = "Sucursal") Sucursal sucursal,
 			@ParameterLayout(named = "Observaciones", multiLine = 15) String observacion) {
@@ -51,9 +50,8 @@ public class RepositorioPedido {
 
 		}
 
-		Pedido.setOrden(orden);
 		Pedido.setVendedor(vendedor);
-		Pedido.setTiempo(tiempo);
+		//Pedido.setTiempo(tiempo);
 		Pedido.setValor(valor);
 		Pedido.setEstado(estado);
 		Pedido.setSucursal(sucursal);

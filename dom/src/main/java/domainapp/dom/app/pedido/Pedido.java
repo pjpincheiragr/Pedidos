@@ -41,41 +41,40 @@ import org.joda.time.LocalDate;
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "Pedido_ID")
 @javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
 @javax.jdo.annotations.Queries({
-	@javax.jdo.annotations.Query(name = "ListarTodosPorUrgencia", language = "JDOQL", value = "SELECT  "
-			+ " FROM domainapp.dom.app.ruta.RutaItem "
-			+ " WHERE urgencia==:urgencia "
-			+ "  "),
+		@javax.jdo.annotations.Query(name = "ListarTodosPorUrgencia", language = "JDOQL", value = "SELECT  "
+				+ " FROM domainapp.dom.app.ruta.RutaItem "
+				+ " WHERE urgencia==:urgencia " + "  "),
 		@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "WHERE activo == true" + " order by orden "),
+				+ "WHERE activo == true" ),
 		@javax.jdo.annotations.Query(name = "ListarPendientes", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "Where (estado==ASIGNADO) || (estado=EN_PROCESO) && activo == true && this.ListaPedidos != null "
-				+ " order by orden "),
+				),
 		@javax.jdo.annotations.Query(name = "ListarNuevos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "Where (estado==NUEVO) && activo == true && this.ListaPedidos != null "
-				+ " order by orden "),
+				),
 		@javax.jdo.annotations.Query(name = "findByDescription", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "WHERE ((:descripcion=='') || (descripcion.toLowerCase().indexOf(:descripcion) >= 0)) && activo == true && this.ListaPedidos != null "
-				+ " order by orden "),
+				),
 		@javax.jdo.annotations.Query(name = "findByState", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "WHERE (estado==:estado) && activo == true && this.ListaPedidos != null "
-				+ " order by orden "),
+				),
 		@javax.jdo.annotations.Query(name = "findBySeller", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "WHERE (vendedor==:vendedor) && activo == true"
-				+ " && this.ListaPedidos != null " + " order by orden ") })
+				+ " && this.ListaPedidos != null " ) })
 @DomainObject(objectType = "PEDIDO", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
 public class Pedido {
-	private int orden;
+
 	private Tipo tipo;
 	private Proveedor proveedor;
 	private LocalDate fechaHora;
-	private int tiempo;
+	// private int tiempo;
 	private Vendedor vendedor;
 	private float valor;
 	private E_estado estado;
@@ -89,16 +88,15 @@ public class Pedido {
 				+ " - " + getSucursal();
 	}
 
-	public Pedido(int orden, Tipo tipo, Proveedor proveedor, LocalDate fecha,
-			int tiempo, Vendedor vendedor, float valor, E_estado estado,
-			Sucursal sucursal, String observacion, boolean activo,
-			E_urgencia_pedido urgencia) {
+	public Pedido(Tipo tipo, Proveedor proveedor, LocalDate fecha,
+			Vendedor vendedor, float valor, E_estado estado, Sucursal sucursal,
+			String observacion, boolean activo, E_urgencia_pedido urgencia) {
 
 		super();
-		this.orden = orden;
+
 		this.tipo = tipo;
 		this.proveedor = proveedor;
-		this.tiempo = tiempo;
+		// this.tiempo = tiempo;
 		this.vendedor = vendedor;
 		this.valor = valor;
 		this.estado = estado;
@@ -113,16 +111,18 @@ public class Pedido {
 		super();
 	}
 
-	@MemberOrder(sequence = "1")
-	@javax.jdo.annotations.Column(allowsNull = "true")
-	@Property(editing = Editing.ENABLED)
-	public void setOrden(int orden) {
-		this.orden = orden;
-	}
-
-	public int getOrden() {
-		return this.orden;
-	}
+	/*
+	 * Orden es responsabilidad de RutaItem
+	 * 
+	 * @MemberOrder(sequence = "1")
+	 * 
+	 * @javax.jdo.annotations.Column(allowsNull = "true")
+	 * 
+	 * @Property(editing = Editing.ENABLED) public void setOrden(int orden) {
+	 * this.orden = orden; }
+	 * 
+	 * public int getOrden() { return this.orden; }
+	 */
 
 	@MemberOrder(sequence = "1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
@@ -146,17 +146,16 @@ public class Pedido {
 		this.proveedor = proveedor;
 	}
 
-	@MemberOrder(sequence = "3")
-	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing = Editing.DISABLED)
-	public int getTiempo() {
-		return tiempo;
-	}
-
-	public void setTiempo(int tiempo2) {
-		this.tiempo = tiempo2;
-	}
-
+	/*Tiempo es responsabilidad de RutaItem
+	 * @MemberOrder(sequence = "3")
+	 * 
+	 * @javax.jdo.annotations.Column(allowsNull = "false")
+	 * 
+	 * @Property(editing = Editing.DISABLED) public int getTiempo() { return
+	 * tiempo; }
+	 * 
+	 * public void setTiempo(int tiempo2) { this.tiempo = tiempo2; }
+	 */
 	@MemberOrder(sequence = "4")
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	public Vendedor getVendedor() {
@@ -244,10 +243,11 @@ public class Pedido {
 			@ParameterLayout(named = "Marca") @Parameter(optionality = Optionality.OPTIONAL) Marca marca,
 			@ParameterLayout(named = "Cantidad") @Parameter(optionality = Optionality.OPTIONAL) int cantidad,
 			@ParameterLayout(named = "Estado") @Parameter(optionality = Optionality.OPTIONAL) E_estado_item estado,
-			@ParameterLayout(named = "Observación", multiLine=10) @Parameter(optionality = Optionality.OPTIONAL) String observacion,
+			@ParameterLayout(named = "Observación", multiLine = 10) @Parameter(optionality = Optionality.OPTIONAL) String observacion,
 			final @ParameterLayout(named = "Imagen") @Parameter(optionality = Optionality.OPTIONAL) Blob attachment) {
 
-		final PedidoItem PedidoItem = container.newTransientInstance(PedidoItem.class);
+		final PedidoItem PedidoItem = container
+				.newTransientInstance(PedidoItem.class);
 
 		PedidoItem.setMuestra(muestra);
 		PedidoItem.setMarca(marca);
@@ -304,14 +304,11 @@ public class Pedido {
 		this.setActivo(false);
 		return this;
 	}
-/*
-	@Programmatic
-	public boolean hideDeletePedido() {
-		if (!isActivo())
-			return true;
-		else
-			return false;
-	}*/
+
+	/*
+	 * @Programmatic public boolean hideDeletePedido() { if (!isActivo()) return
+	 * true; else return false; }
+	 */
 
 	@javax.inject.Inject
 	DomainObjectContainer container;

@@ -46,7 +46,7 @@ public class RepositorioRutaItem {
 	@ActionLayout(named = "Listar Todos")
 	public List<RutaItem> listAllByUrgency(
 			@ParameterLayout(named = "Urgencia") @Parameter(optionality = Optionality.OPTIONAL)  E_urgencia_pedido urgencia)  {
-		
+			
 		
 		final List<RutaItem> listaRutas = this.container
 				.allMatches(new QueryDefault<RutaItem>(RutaItem.class,

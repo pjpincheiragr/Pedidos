@@ -1,6 +1,5 @@
 package domainapp.dom.app.ruta;
 
-
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.DomainObjectContainer;
@@ -12,66 +11,60 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import domainapp.dom.app.pedido.Pedido;
 
-@javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
-@javax.jdo.annotations.DatastoreIdentity(
-        strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
-         column="RutaItem_ID")
-@javax.jdo.annotations.Version(
-        strategy=VersionStrategy.VERSION_NUMBER,
-        column="version")
+@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
+@javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "RutaItem_ID")
+@javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
 @javax.jdo.annotations.Queries({
-	@javax.jdo.annotations.Query(name = "ListarTodosPorUrgencia", language = "JDOQL", value = "SELECT  "
-			+ " FROM domainapp.dom.app.ruta.RutaItem "
-			+ " WHERE pedido.urgencia==:urgencia "
-			+ "  "),
-	@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
-			+ "FROM domainapp.dom.app.ruta.RutaItem "
-			+ " order by fecha "),
-	@javax.jdo.annotations.Query(name = "ListarPendientes", language = "JDOQL", value = "SELECT "
-					+ "FROM domainapp.dom.app.pedido.Pedido "
-					+ "Where (estado==ASIGNADO) || (estado=EN_PROCESO)"
-					+ " order by fecha "),
-	@javax.jdo.annotations.Query(name = "findByDescription", language = "JDOQL", value = "SELECT "
-			+ "FROM domainapp.dom.app.pedido.Pedido "
-			+ "WHERE ((:descripcion=='') || (descripcion.toLowerCase().indexOf(:descripcion) >= 0))"
-			+ " order by fecha "),
-	@javax.jdo.annotations.Query(name = "findByState", language = "JDOQL", value = "SELECT "
-			+ "FROM domainapp.dom.app.pedido.Pedido "
-			+ "WHERE (estado==:estado)"
-			+ " order by fecha "),
-	@javax.jdo.annotations.Query(name = "findBySeller", language = "JDOQL", value = "SELECT "
-					+ "FROM domainapp.dom.app.pedido.Pedido "
-					+ "WHERE (vendedor==:vendedor)"
-					+ " order by fecha ")
-})
-
-@DomainObject(objectType = "RUTAITEM",bounded=true)
+		@javax.jdo.annotations.Query(name = "ListarTodosPorUrgencia", language = "JDOQL", value = "SELECT  "
+				+ " FROM domainapp.dom.app.ruta.RutaItem "
+				+ " WHERE pedido.urgencia==:urgencia " + "  "),
+		@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.ruta.RutaItem " + " order by fecha "),
+		@javax.jdo.annotations.Query(name = "ListarPendientes", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.pedido.Pedido "
+				+ "Where (estado==ASIGNADO) || (estado=EN_PROCESO)"
+				+ " order by fecha "),
+		@javax.jdo.annotations.Query(name = "findByDescription", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.pedido.Pedido "
+				+ "WHERE ((:descripcion=='') || (descripcion.toLowerCase().indexOf(:descripcion) >= 0))"
+				+ " order by fecha "),
+		@javax.jdo.annotations.Query(name = "findByState", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.pedido.Pedido "
+				+ "WHERE (estado==:estado)" + " order by fecha "),
+		@javax.jdo.annotations.Query(name = "findBySeller", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.pedido.Pedido "
+				+ "WHERE (vendedor==:vendedor)" + " order by fecha ") })
+@DomainObject(objectType = "RUTAITEM", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
 public class RutaItem {
+
 	private Pedido pedido;
-	private int orden ;
+	private int orden;
 	private boolean estado;
 	private Ruta ruta;
+	private int tiempo;
 
-	public String title() {		
-		return  getPedido().toString() ;
+	public String title() {
+		return getPedido().toString();
 	}
 
-	public RutaItem(Pedido pedido, int orden, boolean estado, Ruta ruta) {
+	public RutaItem(Pedido pedido, int orden, boolean estado, Ruta ruta,
+			int tiempo) {
 		super();
 		this.pedido = pedido;
 		this.orden = orden;
 		this.estado = estado;
-		this.ruta=ruta;
+		this.ruta = ruta;
+		this.tiempo = tiempo;
 	}
 
 	public RutaItem() {
 		super();
 	}
 
-	@MemberOrder(sequence="1")
+	@MemberOrder(sequence = "1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing=Editing.DISABLED)
+	@Property(editing = Editing.DISABLED)
 	public Pedido getPedido() {
 		return pedido;
 	}
@@ -80,9 +73,9 @@ public class RutaItem {
 		this.pedido = pedido;
 	}
 
-	@MemberOrder(sequence="2")
+	@MemberOrder(sequence = "2")
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing=Editing.DISABLED)
+	@Property(editing = Editing.DISABLED)
 	public int getOrden() {
 		return orden;
 	}
@@ -91,8 +84,18 @@ public class RutaItem {
 		this.orden = orden;
 	}
 
+	@MemberOrder(sequence = "3")
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	@Property(editing = Editing.DISABLED)
+	public int getTiempo() {
+		return tiempo;
+	}
 
-	@MemberOrder(sequence="4")
+	public void setTiempo(int tiempo2) {
+		this.tiempo = tiempo2;
+	}
+
+	@MemberOrder(sequence = "4")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	public boolean getEstado() {
 		return estado;
@@ -101,18 +104,17 @@ public class RutaItem {
 	public void setEstado(boolean estado) {
 		this.estado = estado;
 	}
-	
-	@MemberOrder(sequence="5")
+
+	@MemberOrder(sequence = "5")
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	public Ruta getRuta() {
 		return ruta;
 	}
-	public void setRuta(Ruta ruta) {
-		this.ruta=ruta;
-	}
-	
 
+	public void setRuta(Ruta ruta) {
+		this.ruta = ruta;
+	}
 
 	@javax.inject.Inject
-    DomainObjectContainer container;
+	DomainObjectContainer container;
 }
