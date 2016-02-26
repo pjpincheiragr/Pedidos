@@ -17,29 +17,29 @@ import domainapp.dom.app.pedido.Pedido;
 @javax.jdo.annotations.Queries({
 		@javax.jdo.annotations.Query(name = "ListarTodosPorUrgencia", language = "JDOQL", value = "SELECT  "
 				+ " FROM domainapp.dom.app.ruta.RutaItem "
-				+ " WHERE pedido.urgencia==:urgencia " + "  "),
+				+ " WHERE pedido.urgencia==:urgencia " + " order by orden "),
 		@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.dom.app.ruta.RutaItem " + " order by fecha "),
+				+ "FROM domainapp.dom.app.ruta.RutaItem " + " order by orden "),
 		@javax.jdo.annotations.Query(name = "ListarPendientes", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "Where (estado==ASIGNADO) || (estado=EN_PROCESO)"
-				+ " order by fecha "),
+				+ " order by orden "),
 		@javax.jdo.annotations.Query(name = "findByDescription", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "WHERE ((:descripcion=='') || (descripcion.toLowerCase().indexOf(:descripcion) >= 0))"
-				+ " order by fecha "),
+				+ " order by orden "),
 		@javax.jdo.annotations.Query(name = "findByState", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "WHERE (estado==:estado)" + " order by fecha "),
+				+ "WHERE (estado==:estado)" + " order by orden "),
 		@javax.jdo.annotations.Query(name = "findBySeller", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "WHERE (vendedor==:vendedor)" + " order by fecha ") })
+				+ "WHERE (vendedor==:vendedor)" + " order by orden ") })
 @DomainObject(objectType = "RUTAITEM", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
 public class RutaItem {
 
 	private Pedido pedido;
-	private int orden;
+	private int orden;        
 	private boolean estado;
 	private Ruta ruta;
 	private int tiempo;

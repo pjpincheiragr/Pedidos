@@ -37,9 +37,11 @@ public class RepositorioPedido {
 			@ParameterLayout(named = "Urgencia") @Parameter(optionality = Optionality.OPTIONAL) E_urgencia_pedido urgencia,
 			@ParameterLayout(named = "Proveedor") @Parameter(optionality = Optionality.OPTIONAL) Proveedor proveedor,
 			@ParameterLayout(named = "Vendedor") @Parameter(optionality = Optionality.OPTIONAL) Vendedor vendedor,
-			//@ParameterLayout(named = "Tiempo") @Parameter(optionality = Optionality.OPTIONAL) int tiempo,
+			// @ParameterLayout(named = "Tiempo") @Parameter(optionality =
+			// Optionality.OPTIONAL) int tiempo,
 			@ParameterLayout(named = "Valor") @Parameter(optionality = Optionality.OPTIONAL) float valor,
-			@ParameterLayout(named = "Estado") E_estado estado, @ParameterLayout(named = "Sucursal") Sucursal sucursal,
+			@ParameterLayout(named = "Estado") E_estado estado,
+			@ParameterLayout(named = "Sucursal") Sucursal sucursal,
 			@ParameterLayout(named = "Observaciones", multiLine = 15) String observacion) {
 
 		final Pedido Pedido = container.newTransientInstance(Pedido.class);
@@ -51,7 +53,7 @@ public class RepositorioPedido {
 		}
 
 		Pedido.setVendedor(vendedor);
-		//Pedido.setTiempo(tiempo);
+		// Pedido.setTiempo(tiempo);
 		Pedido.setValor(valor);
 		Pedido.setEstado(estado);
 		Pedido.setSucursal(sucursal);
@@ -73,29 +75,31 @@ public class RepositorioPedido {
 	@ActionLayout(named = "Listar Todos")
 	public List<Pedido> listAll() {
 		final List<Pedido> listaPedidos = this.container
-				.allMatches(new QueryDefault<Pedido>(Pedido.class, "ListarTodos"));
+				.allMatches(new QueryDefault<Pedido>(Pedido.class,
+						"ListarTodos"));
 		if (listaPedidos.isEmpty()) {
 			this.container.warnUser("No hay pedidos cargados en el sistema");
 		}
 		return listaPedidos;
 	}
 
-	@MemberOrder(sequence = "2")
-	@ActionLayout(named = "Listar Pendientes")
-	public List<Pedido> listPending() {
-		final List<Pedido> listaPedidos = this.container
-				.allMatches(new QueryDefault<Pedido>(Pedido.class, "ListarPendientes"));
-		if (listaPedidos.isEmpty()) {
-			this.container.warnUser("No hay pedidos cargados en el sistema");
-		}
-		return listaPedidos;
-	}
-
+	/*
+	 * @MemberOrder(sequence = "2")
+	 * 
+	 * @ActionLayout(named = "Listar Pendientes") public List<Pedido>
+	 * listPending() { final List<Pedido> listaPedidos = this.container
+	 * .allMatches(new QueryDefault<Pedido>(Pedido.class,
+	 * "ListarPendientes","estado",E_estado.NUEVO )); if
+	 * (listaPedidos.isEmpty()) {
+	 * this.container.warnUser("No hay pedidos cargados en el sistema"); }
+	 * return listaPedidos; }
+	 */
 	@MemberOrder(sequence = "3")
 	@ActionLayout(named = "Listar Nuevos")
 	public List<Pedido> listNew() {
 		final List<Pedido> listaPedidos = this.container
-				.allMatches(new QueryDefault<Pedido>(Pedido.class, "ListarNuevos"));
+				.allMatches(new QueryDefault<Pedido>(Pedido.class,
+						"ListarNuevos", "estado", E_estado.NUEVO));
 		if (listaPedidos.isEmpty()) {
 			this.container.warnUser("No hay pedidos cargados en el sistema");
 		}
@@ -106,26 +110,33 @@ public class RepositorioPedido {
 	@MemberOrder(sequence = "4")
 	public List<Pedido> findByName(
 			@ParameterLayout(named = "Descripcion") @Parameter(optionality = Optionality.OPTIONAL) String descripcion) {
-		return container.allMatches(new QueryDefault<>(Pedido.class, "findByDescription", "descripcion",
-				(descripcion == null) ? "" : descripcion));
+		return container.allMatches(new QueryDefault<>(Pedido.class,
+				"findByDescription", "descripcion", (descripcion == null) ? ""
+						: descripcion));
 	}
 
 	@ActionLayout(named = "Buscar por Estado")
 	@MemberOrder(sequence = "5")
-	public List<Pedido> findByState(@ParameterLayout(named = "Estado") E_estado estado) {
-		return container.allMatches(new QueryDefault<>(Pedido.class, "findByState", "estado", estado));
+	public List<Pedido> findByState(
+			@ParameterLayout(named = "Estado") E_estado estado) {
+		return container.allMatches(new QueryDefault<>(Pedido.class,
+				"findByState", "estado", estado));
 	}
 
 	@ActionLayout(named = "Buscar por Vendedor")
 	@MemberOrder(sequence = "6")
-	public List<Pedido> findBySeller(@ParameterLayout(named = "Nombre") Vendedor vendedor) {
-		return container.allMatches(new QueryDefault<>(Pedido.class, "findBySeller", "vendedor", vendedor));
+	public List<Pedido> findBySeller(
+			@ParameterLayout(named = "Nombre") Vendedor vendedor) {
+		return container.allMatches(new QueryDefault<>(Pedido.class,
+				"findBySeller", "vendedor", vendedor));
 	}
 
 	@ActionLayout(named = "Buscar por Cadete")
 	@MemberOrder(sequence = "7")
-	public List<Pedido> findByCadete(@ParameterLayout(named = "Nombre") Cadete cadete) {
-		return container.allMatches(new QueryDefault<>(Pedido.class, "findByCadete", "cadete", cadete));
+	public List<Pedido> findByCadete(
+			@ParameterLayout(named = "Nombre") Cadete cadete) {
+		return container.allMatches(new QueryDefault<>(Pedido.class,
+				"findByCadete", "cadete", cadete));
 	}
 
 	// Obtener listado por Urgencia
@@ -136,7 +147,8 @@ public class RepositorioPedido {
 			@ParameterLayout(named = "Urgencia") @Parameter(optionality = Optionality.OPTIONAL) E_urgencia_pedido urgencia) {
 
 		final List<Pedido> listaPedidos = this.container
-				.allMatches(new QueryDefault<Pedido>(Pedido.class, "ListarTodosPorUrgencia", "urgencia", urgencia));
+				.allMatches(new QueryDefault<Pedido>(Pedido.class,
+						"ListarTodosPorUrgencia", "urgencia", urgencia,"estado",E_estado.NUEVO));
 		if (listaPedidos.isEmpty()) {
 			this.container.warnUser("No hay rutas cargadas en el sistema");
 		}

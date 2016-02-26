@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Where;
 
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
+import domainapp.dom.app.pedido.PedidoItem;
 import domainapp.dom.app.pedido.RepositorioPedido;
 import domainapp.dom.app.servicios.E_estado;
 import domainapp.dom.app.servicios.E_urgencia_pedido;
@@ -114,9 +115,25 @@ public class Ruta {
 	@MemberOrder(sequence = "1", name = "ListaPedidosUrgentes")
 	@ActionLayout(named = "Agregar Pedido a la Ruta Actual", position = Position.PANEL)
 	public Ruta asignarPedidoUrgente(Pedido pedido) {
+		final RutaItem oRutaItem = container
+				.newTransientInstance(RutaItem.class);
 
-		// hora.setMateriaDelCurso(materia);
+		oRutaItem.setEstado(false);
+		oRutaItem.setOrden(0);
+		oRutaItem.setPedido(pedido);
+		oRutaItem.setRuta(this);
+		oRutaItem.setTiempo(0);
+		container.persistIfNotAlready(oRutaItem);
+		this.getListaPedidos().add(oRutaItem);
+
+		pedido.setEstado(E_estado.ASIGNADO);
 		return this;
+	}
+
+	@Programmatic
+	public List<Pedido> choices0AsignarPedidoUrgente(final Pedido pedido) {
+		return repositorioPedido
+				.listAllByUrgency(E_urgencia_pedido.RESPUESTA_RAPIDA);
 	}
 
 	@javax.jdo.annotations.Column(allowsNull = "true")
@@ -137,8 +154,25 @@ public class Ruta {
 	@ActionLayout(named = "Agregar Pedido a la Ruta Actual", position = Position.PANEL)
 	public Ruta asignarPedidoProgramable(Pedido pedido) {
 
-		// hora.setMateriaDelCurso(materia);
+		final RutaItem oRutaItem = container
+				.newTransientInstance(RutaItem.class);
+
+		oRutaItem.setEstado(false);
+		oRutaItem.setOrden(0);
+		oRutaItem.setPedido(pedido);
+		oRutaItem.setRuta(this);
+		oRutaItem.setTiempo(0);
+		container.persistIfNotAlready(oRutaItem);
+		this.getListaPedidos().add(oRutaItem);
+
+		pedido.setEstado(E_estado.ASIGNADO);
 		return this;
+	}
+
+	@Programmatic
+	public List<Pedido> choices0AsignarPedidoProgramable(final Pedido pedido) {
+		return repositorioPedido
+				.listAllByUrgency(E_urgencia_pedido.PROGRAMABLE);
 	}
 
 	/*

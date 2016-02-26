@@ -43,30 +43,30 @@ import org.joda.time.LocalDate;
 @javax.jdo.annotations.Queries({
 		@javax.jdo.annotations.Query(name = "ListarTodosPorUrgencia", language = "JDOQL", value = "SELECT  "
 				+ " FROM domainapp.dom.app.ruta.RutaItem "
-				+ " WHERE urgencia==:urgencia " + "  "),
+				+ " WHERE urgencia==:urgencia && estado==:estado&& activo == true"),
 		@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "WHERE activo == true" ),
-		@javax.jdo.annotations.Query(name = "ListarPendientes", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "Where (estado==ASIGNADO) || (estado=EN_PROCESO) && activo == true && this.ListaPedidos != null "
-				),
+				+ "WHERE activo == true"),
+		/*
+		 * @javax.jdo.annotations.Query(name = "ListarPendientes", language =
+		 * "JDOQL", value = "SELECT " + "FROM domainapp.dom.app.pedido.Pedido "
+		 * +
+		 * "Where (estado==ASIGNADO) || (estado=EN_PROCESO) && activo == true && this.ListaPedidos != null "
+		 * ),·
+		 */
 		@javax.jdo.annotations.Query(name = "ListarNuevos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "Where (estado==NUEVO) && activo == true && this.ListaPedidos != null "
-				),
+				+ "Where (estado==:estado) && activo == true && this.ListaPedidos != null "),
 		@javax.jdo.annotations.Query(name = "findByDescription", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "WHERE ((:descripcion=='') || (descripcion.toLowerCase().indexOf(:descripcion) >= 0)) && activo == true && this.ListaPedidos != null "
-				),
+				+ "WHERE ((:descripcion=='') || (descripcion.toLowerCase().indexOf(:descripcion) >= 0)) && activo == true && this.ListaPedidos != null "),
 		@javax.jdo.annotations.Query(name = "findByState", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "WHERE (estado==:estado) && activo == true && this.ListaPedidos != null "
-				),
+				+ "WHERE (estado==:estado) && activo == true && this.ListaPedidos != null "),
 		@javax.jdo.annotations.Query(name = "findBySeller", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "WHERE (vendedor==:vendedor) && activo == true"
-				+ " && this.ListaPedidos != null " ) })
+				+ " && this.ListaPedidos != null ") })
 @DomainObject(objectType = "PEDIDO", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
 public class Pedido {
@@ -146,7 +146,9 @@ public class Pedido {
 		this.proveedor = proveedor;
 	}
 
-	/*Tiempo es responsabilidad de RutaItem
+	/*
+	 * Tiempo es responsabilidad de RutaItem
+	 * 
 	 * @MemberOrder(sequence = "3")
 	 * 
 	 * @javax.jdo.annotations.Column(allowsNull = "false")

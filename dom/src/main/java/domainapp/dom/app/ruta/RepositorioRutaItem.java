@@ -10,6 +10,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
 
 import domainapp.dom.app.pedido.Pedido;
@@ -42,6 +43,7 @@ public class RepositorioRutaItem {
 	
 	*/
 
+	@Programmatic 
 	@MemberOrder(sequence = "2")
 	@ActionLayout(named = "Listar Todos")
 	public List<RutaItem> listAllByUrgency(
