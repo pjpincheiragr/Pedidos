@@ -45,9 +45,7 @@ public class RepositorioRutaItem {
 	@MemberOrder(sequence = "2")
 	@ActionLayout(named = "Listar Todos")
 	public List<RutaItem> listAllByUrgency(
-			@ParameterLayout(named = "Urgencia") @Parameter(optionality = Optionality.OPTIONAL)  E_urgencia_pedido urgencia)  {
-			
-		
+			@ParameterLayout(named = "Urgencia") @Parameter(optionality = Optionality.OPTIONAL)  E_urgencia_pedido urgencia)  {	
 		final List<RutaItem> listaRutas = this.container
 				.allMatches(new QueryDefault<RutaItem>(RutaItem.class,
 						"ListarTodosPorUrgencia","urgencia",urgencia));
