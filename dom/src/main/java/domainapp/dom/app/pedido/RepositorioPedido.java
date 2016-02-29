@@ -52,19 +52,14 @@ public class RepositorioPedido {
 		}
 		else
 		Pedido.setVendedor(vendedor);
+		
 		Pedido.setValor(valor);
 		Pedido.setEstado(E_estado.NUEVO);
 		Pedido.setSucursal(sucursal);
 		Pedido.setFechaHora(LocalDate.now());
 		Pedido.setObservacion(observacion);
 		Pedido.setActivo(true);
-
 		container.persistIfNotAlready(Pedido);
-		RutaItem oRutaItem = new RutaItem();
-		oRutaItem.setEstado(false);
-		oRutaItem.setOrden(0);
-		oRutaItem.setPedido(Pedido);
-		container.persistIfNotAlready(oRutaItem);
 		return Pedido;
 
 	}
