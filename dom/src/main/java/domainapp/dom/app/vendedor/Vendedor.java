@@ -21,17 +21,20 @@ import org.apache.isis.applib.annotation.Property;
         column="version")
 @javax.jdo.annotations.Queries({
 	@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
-			+ "FROM domainapp.dom.app.vendedor.Vendedor "),
+			+ " FROM domainapp.dom.app.vendedor.Vendedor "),
 	@javax.jdo.annotations.Query(name = "findByName", language = "JDOQL", value = "SELECT "
-			+ "FROM domainapp.dom.app.vendedor.Vendedor "
-			+ "WHERE ((:nombre=='') || (nombre.toLowerCase().indexOf(:nombre) >= 0))"
+			+ " FROM domainapp.dom.app.vendedor.Vendedor "
+			+ " WHERE ((:nombre=='') || (nombre.toLowerCase().indexOf(:nombre) >= 0))"
 			+ " order by nombre "),
 	@javax.jdo.annotations.Query(name = "findByNameAuxiliar", language = "JDOQL", value = "SELECT "
 					+ "FROM domainapp.dom.app.vendedor.Vendedor "
 					+ "WHERE (nombre==nombre))"),
+	@javax.jdo.annotations.Query(name = "findByUserCode", language = "JDOQL", value = "SELECT "
+			+ " FROM domainapp.dom.app.vendedor.Vendedor "
+			+ " WHERE userCode==:userCode "),
 	@javax.jdo.annotations.Query(name = "findByCode", language = "JDOQL", value = "SELECT "
-			+ "FROM domainapp.dom.app.vendedor.Vendedor "
-			+ "WHERE ((:codigo=='') || (codigo.toLowerCase().indexOf(:codigo) >= 0))"
+			+ " FROM domainapp.dom.app.vendedor.Vendedor "
+			+ " WHERE ((:codigo=='') || (codigo.toLowerCase().indexOf(:codigo) >= 0)) "
 			+ " order by codigo ") })
 
 @DomainObject(objectType = "VENDEDOR",bounded=true)
@@ -88,7 +91,6 @@ public class Vendedor {
 	public void setUserCode(String codigo) {
 		this.userCode = codigo;
 	}
-
 	@javax.inject.Inject
     DomainObjectContainer container;
 }

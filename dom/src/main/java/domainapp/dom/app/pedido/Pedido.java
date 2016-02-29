@@ -25,7 +25,6 @@ import org.apache.isis.applib.annotation.Where;
 
 import domainapp.dom.app.marca.Marca;
 import domainapp.dom.app.proveedor.Proveedor;
-import domainapp.dom.app.ruta.RutaItem;
 import domainapp.dom.app.servicios.E_estado;
 import domainapp.dom.app.servicios.E_estado_item;
 import domainapp.dom.app.servicios.E_tieneMuestra;
@@ -75,7 +74,6 @@ public class Pedido {
 	private Tipo tipo;
 	private Proveedor proveedor;
 	private LocalDate fechaHora;
-	// private int tiempo;
 	private Vendedor vendedor;
 	private float valor;
 	private E_estado estado;
@@ -92,12 +90,9 @@ public class Pedido {
 	public Pedido(Tipo tipo, Proveedor proveedor, LocalDate fecha,
 			Vendedor vendedor, float valor, E_estado estado, Sucursal sucursal,
 			String observacion, boolean activo, E_urgencia_pedido urgencia) {
-
 		super();
-
 		this.tipo = tipo;
 		this.proveedor = proveedor;
-		// this.tiempo = tiempo;
 		this.vendedor = vendedor;
 		this.valor = valor;
 		this.estado = estado;

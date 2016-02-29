@@ -1,8 +1,6 @@
 package domainapp.dom.app.pedido;
-
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -13,7 +11,6 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.value.Blob;
-
 import domainapp.dom.app.marca.Marca;
 import domainapp.dom.app.servicios.E_estado_item;
 import domainapp.dom.app.servicios.E_tieneMuestra;
@@ -188,4 +185,6 @@ public class PedidoItem {
 
 	@javax.inject.Inject
 	DomainObjectContainer container;
+	
+	
 }
