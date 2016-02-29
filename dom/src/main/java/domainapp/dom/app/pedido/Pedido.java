@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.Where;
 
 import domainapp.dom.app.marca.Marca;
 import domainapp.dom.app.proveedor.Proveedor;
+import domainapp.dom.app.ruta.RutaItem;
 import domainapp.dom.app.servicios.E_estado;
 import domainapp.dom.app.servicios.E_estado_item;
 import domainapp.dom.app.servicios.E_tieneMuestra;
@@ -184,7 +185,13 @@ public class Pedido {
 		return estado;
 	}
 
+	/*
+	 * Se agrega en setEstado la creación de un nuevo Historial de pedido, con
+	 * la información del estado actual antes de que este cambie. Se propone que
+	 * el vendedor pueda visualizar el historial de Sus pedidos ACTIVOS
+	 */
 	public void setEstado(E_estado estado) {
+		
 		this.estado = estado;
 	}
 

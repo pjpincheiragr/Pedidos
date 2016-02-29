@@ -20,14 +20,17 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Where;
+import org.joda.time.LocalDate;
 
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
+import domainapp.dom.app.pedido.PedidoHistorial;
 import domainapp.dom.app.pedido.PedidoItem;
 import domainapp.dom.app.pedido.RepositorioPedido;
 import domainapp.dom.app.servicios.E_estado;
@@ -113,7 +116,7 @@ public class Ruta {
 	}
 
 	@MemberOrder(sequence = "1", name = "ListaPedidosUrgentes")
-	@ActionLayout(named = "Agregar Pedido a la Ruta Actual", position = Position.PANEL)
+	@ActionLayout(named = "Agregar", position = Position.PANEL)
 	public Ruta asignarPedidoUrgente(Pedido pedido) {
 		final RutaItem oRutaItem = container
 				.newTransientInstance(RutaItem.class);
@@ -127,6 +130,15 @@ public class Ruta {
 		this.getListaPedidos().add(oRutaItem);
 
 		pedido.setEstado(E_estado.ASIGNADO);
+		final PedidoHistorial oPedidoHistorial = container
+				.newTransientInstance(PedidoHistorial.class);
+		//PedidoHistorial oPedidoHistorial = new PedidoHistorial();
+		oPedidoHistorial.setPedido(pedido);
+		oPedidoHistorial.setObservacion("Asignación automática");
+		oPedidoHistorial.setFechaHora(LocalDate.now());
+		oPedidoHistorial.setEstado(pedido.getEstado());
+
+		container.persistIfNotAlready(oPedidoHistorial);
 		return this;
 	}
 
@@ -151,21 +163,32 @@ public class Ruta {
 	}
 
 	@MemberOrder(sequence = "1", name = "ListaPedidosProgramables")
-	@ActionLayout(named = "Agregar Pedido a la Ruta Actual", position = Position.PANEL)
-	public Ruta asignarPedidoProgramable(Pedido pedido) {
-
+	@ActionLayout(named = "Agregar", position = Position.PANEL)
+	public Ruta asignarPedidoProgramable(Pedido pedido, 
+			@ParameterLayout(named = "Orden") int orden, 
+			@ParameterLayout(named = "Tiempo") int tiempo) {
+		
 		final RutaItem oRutaItem = container
 				.newTransientInstance(RutaItem.class);
 
 		oRutaItem.setEstado(false);
-		oRutaItem.setOrden(0);
+		oRutaItem.setOrden(orden);
 		oRutaItem.setPedido(pedido);
 		oRutaItem.setRuta(this);
-		oRutaItem.setTiempo(0);
+		oRutaItem.setTiempo(tiempo);
 		container.persistIfNotAlready(oRutaItem);
 		this.getListaPedidos().add(oRutaItem);
 
 		pedido.setEstado(E_estado.ASIGNADO);
+		final PedidoHistorial oPedidoHistorial = container
+				.newTransientInstance(PedidoHistorial.class);
+				//PedidoHistorial oPedidoHistorial = new PedidoHistorial();
+				oPedidoHistorial.setPedido(pedido);
+				oPedidoHistorial.setObservacion("Asignación automática");
+				oPedidoHistorial.setFechaHora(LocalDate.now());
+				oPedidoHistorial.setEstado(pedido.getEstado());
+
+				container.persistIfNotAlready(oPedidoHistorial);
 		return this;
 	}
 
