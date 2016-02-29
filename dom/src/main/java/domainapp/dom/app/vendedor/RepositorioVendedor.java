@@ -14,10 +14,6 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.query.QueryDefault;
-import org.apache.isis.applib.security.RoleMemento;
-import org.apache.isis.applib.security.UserMemento;
-import org.isisaddons.module.security.dom.role.ApplicationRole;
-
 import domainapp.dom.app.vendedor.Vendedor;
 
 
@@ -31,13 +27,11 @@ public class RepositorioVendedor {
 			@ParameterLayout(named="nombre")@Parameter(optionality=Optionality.OPTIONAL)String nombre,
 			@ParameterLayout(named="codigo")@Parameter(optionality=Optionality.OPTIONAL)String codigo,
 			@ParameterLayout(named="userCode")@Parameter(optionality=Optionality.OPTIONAL)String userCode
-			//@ParameterLayout(named="sucursal")@Parameter(optionality=Optionality.OPTIONAL)String sucursal
 			){
 		final Vendedor vendedor = container.newTransientInstance(Vendedor.class);
 		vendedor.setNombre(nombre);
 		vendedor.setCodigo(codigo);
 		vendedor.setUserCode(userCode);
-		//vendedor.setSucursal(sucursal);
 		container.persistIfNotAlready(vendedor);
 		return vendedor;
 	}
@@ -75,6 +69,16 @@ public class RepositorioVendedor {
 						Vendedor.class,
 						"findByName",
 						"nombre", (codigo == null) ? "" : codigo));
+	}
+	
+	
+	public Vendedor findByUserCode(
+			@ParameterLayout(named = "userCode") @Parameter(optionality = Optionality.OPTIONAL) String userCode) {
+		return container.allMatches(
+				new QueryDefault<>(
+						Vendedor.class,
+						"findByUserCode",
+						"userCode", (userCode == null) ? "" : userCode)).get(0);
 	}
 	
 	public List<Vendedor> findByNameAuxiliar(
