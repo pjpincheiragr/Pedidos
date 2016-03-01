@@ -1,23 +1,18 @@
 package domainapp.dom.app.sucursal;
 
-import java.sql.Timestamp;
-import java.util.List;
+
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.VersionStrategy;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Where;
-
 import domainapp.dom.app.servicios.Direccion;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
@@ -39,7 +34,6 @@ public class Sucursal {
 	private String codigoSucursal;
 	private String nombre;
 	private Direccion direccion;
-	//private boolean activo;
 
 	public String title() {
 		return "Sucursal:" + " " + getNombre();
@@ -51,7 +45,6 @@ public class Sucursal {
 		this.codigoSucursal = codigoSucursal;
 		this.nombre = nombre;
 		this.direccion = direccion;
-		//this.activo = activo;
 	}
 
 	public Sucursal() {
@@ -93,28 +86,7 @@ public class Sucursal {
 		this.direccion = direccion;
 	}
 
-	/*
-	 * @Property(hidden = Where.EVERYWHERE)
-	 * 
-	 * @MemberOrder(sequence = "4") public boolean isActivo() { return activo; }
-	 * 
-	 * public void setActivo(boolean activo) { this.activo = activo; }
-	 * 
-	 * @ActionLayout(named = "Eliminar area") public Sucursal deleteSucursal() {
-	 * /* boolean band = true; List<Empleado> lista = this.container
-	 * .allMatches(new QueryDefault<Empleado>(Empleado.class, "ListarTodos"));
-	 * for (Empleado e : lista) { if (e.getArea().equals(this)) { band = false;
-	 * } } if (band == true) { this.setActivo(false); this.container
-	 * .informUser("El area ha sido eliminado de manera exitosa"); } else {
-	 * this.container .warnUser(
-	 * "No se pudo realizar esta acción. El objeto que intenta eliminar esta asignado"
-	 * ); }
-	 * 
-	 * this.setActivo(false); return this; }
-	 * 
-	 * @Programmatic public boolean hideDeleteSucursal() { if (!isActivo())
-	 * return true; else return false; }
-	 */
+
 	@javax.inject.Inject
 	DomainObjectContainer container;
 

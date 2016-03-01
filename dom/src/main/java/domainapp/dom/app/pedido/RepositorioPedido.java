@@ -82,12 +82,9 @@ public class RepositorioPedido {
 		Pedido.setUrgencia(urgencia);
 		Pedido.setProveedor(proveedor);
 		Vendedor oVendedor=new Vendedor();
-		//if (new Services().isVendedor(container.getUser())) {			
-			oVendedor= repositorioVendedor.findByUserCode( container.getUser().getName());
-			
-			Pedido.setVendedor(oVendedor);
-			
-		//}
+		oVendedor= repositorioVendedor.findByUserCode( container.getUser().getName());
+		Pedido.setVendedor(oVendedor);
+
 		Pedido.setValor(valor);
 		Pedido.setEstado(E_estado.NUEVO);
 		Pedido.setSucursal(sucursal);
@@ -111,17 +108,19 @@ public class RepositorioPedido {
 		return listaPedidos;
 	}
 
-	/*
-	 * @MemberOrder(sequence = "2")
-	 * 
-	 * @ActionLayout(named = "Listar Pendientes") public List<Pedido>
-	 * listPending() { final List<Pedido> listaPedidos = this.container
-	 * .allMatches(new QueryDefault<Pedido>(Pedido.class,
-	 * "ListarPendientes","estado",E_estado.NUEVO )); if
-	 * (listaPedidos.isEmpty()) {
-	 * this.container.warnUser("No hay pedidos cargados en el sistema"); }
-	 * return listaPedidos; }
-	 */
+	
+	@MemberOrder(sequence = "1")
+	@ActionLayout(named = "Listar Todos")
+	public List<Pedido> listAllByVendor() {
+		final List<Pedido> listaPedidos = this.container
+				.allMatches(new QueryDefault<Pedido>(Pedido.class,
+						"ListarTodosPorVendedor", "vendedor", repositorioVendedor.findByUserCode( container.getUser().getName()) ));
+		if (listaPedidos.isEmpty()) {
+			this.container.warnUser("No hay pedidos cargados en el sistema");
+		}
+		return listaPedidos;
+	}
+
 	@MemberOrder(sequence = "3")
 	@ActionLayout(named = "Listar Nuevos")
 	public List<Pedido> listNew() {

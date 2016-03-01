@@ -8,9 +8,9 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Editing;
+
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Property;
+
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(
@@ -61,7 +61,7 @@ public class Vendedor {
 
 	@MemberOrder(sequence="1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing=Editing.DISABLED)
+
 	public String getNombre() {
 		return nombre;
 	}
@@ -72,7 +72,7 @@ public class Vendedor {
 
 	@MemberOrder(sequence="2")
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing=Editing.DISABLED)
+	
 	public String getCodigo() {
 		return codigo;
 	}
@@ -83,7 +83,6 @@ public class Vendedor {
 	
 	@MemberOrder(sequence="3")
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing=Editing.DISABLED)
 	public String getUserCode() {
 		return this.userCode;
 	}

@@ -41,6 +41,11 @@ import org.joda.time.DateTime;
 		@javax.jdo.annotations.Query(name = "ListarTodosPorUrgencia", language = "JDOQL", value = "SELECT  "
 				+ " FROM domainapp.dom.app.ruta.RutaItem "
 				+ " WHERE urgencia==:urgencia && estado==:estado && activo == true"),
+		
+		@javax.jdo.annotations.Query(name = "ListarTodosPorVendedor", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.pedido.Pedido "
+				+ "WHERE activo == true && vendedor==:vendedor "),
+		
 		@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "WHERE activo == true"),
