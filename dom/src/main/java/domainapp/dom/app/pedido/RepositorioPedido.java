@@ -1,6 +1,6 @@
 package domainapp.dom.app.pedido;
 
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 
 import java.util.List;
 
@@ -57,7 +57,7 @@ public class RepositorioPedido {
 		Pedido.setValor(valor);
 		Pedido.setEstado(E_estado.NUEVO);
 		Pedido.setSucursal(sucursal);
-		Pedido.setFechaHora(LocalDate.now());
+		Pedido.setFechaHora(DateTime.now());
 		Pedido.setObservacion(observacion);
 		Pedido.setActivo(true);
 		container.persistIfNotAlready(Pedido);
@@ -87,7 +87,7 @@ public class RepositorioPedido {
 		Pedido.setValor(valor);
 		Pedido.setEstado(E_estado.NUEVO);
 		Pedido.setSucursal(sucursal);
-		Pedido.setFechaHora(LocalDate.now());
+		Pedido.setFechaHora(DateTime.now());
 		Pedido.setObservacion(observacion);
 		Pedido.setActivo(true);
 		container.persistIfNotAlready(Pedido);
@@ -124,7 +124,7 @@ public class RepositorioPedido {
 	public List<Pedido> listNew() {
 		final List<Pedido> listaPedidos = this.container
 				.allMatches(new QueryDefault<Pedido>(Pedido.class,
-						"ListarNuevos", "estado", E_estado.NUEVO));
+						"ListarNuevos"));
 		if (listaPedidos.isEmpty()) {
 			this.container.warnUser("No hay pedidos cargados en el sistema");
 		}
@@ -180,10 +180,11 @@ public class RepositorioPedido {
 		return listaPedidos;
 	}
 
-	
 
+	
 	@javax.inject.Inject
 	RepositorioVendedor repositorioVendedor;
+	
 	
 	@javax.inject.Inject
 	DomainObjectContainer container;

@@ -1,7 +1,4 @@
 package domainapp.dom.app.pedido;
-
-
-import org.joda.time.LocalDate;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.DomainObjectContainer;
@@ -11,13 +8,16 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
+import org.joda.time.DateTime;
 import domainapp.dom.app.servicios.E_estado;
+
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "PedidoHistorial_ID")
 @javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
-@javax.jdo.annotations.Queries({ @javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
-		+ "FROM domainapp.dom.app.pedido.PedidoHistorial")
+@javax.jdo.annotations.Queries({ @javax.jdo.annotations.Query(name = "VerHistorial", language = "JDOQL", value = "SELECT "
+		+ "FROM domainapp.dom.app.pedido.PedidoHistorial" 
+		)
 })
 @DomainObject(objectType = "PEDIDOHISTORIAL", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
@@ -25,9 +25,10 @@ import domainapp.dom.app.servicios.E_estado;
 public class PedidoHistorial {
 
 	private Pedido pedido;
+	//private long clavePedido;
 	private String observacion;
 	private E_estado estado;
-	private LocalDate fechaHora;
+	private DateTime fechaHora;
 	
 
 	public String title() {
@@ -35,10 +36,10 @@ public class PedidoHistorial {
 	}
 
 	public PedidoHistorial(Pedido pedido, String observacion, E_estado estado,
-			LocalDate fecha) {
-
+			DateTime fecha) {
 		super();
-		this.pedido = pedido;		
+		this.pedido = pedido;
+		//this.clavePedido=pedido.getNumero();
 		this.observacion = observacion;
 		this.estado = estado;
 		this.fechaHora = fecha;
@@ -84,14 +85,25 @@ public class PedidoHistorial {
 	@MemberOrder(sequence = "4")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
-	public LocalDate getFechaHora() {
+	public DateTime getFechaHora() {
 		return fechaHora;
 	}
 
-	public void setFechaHora(LocalDate fechaHora) {
+	public void setFechaHora(DateTime fechaHora) {
 		this.fechaHora = fechaHora;
 	}
 
+	/*@MemberOrder(sequence = "5")
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	@Property(editing = Editing.DISABLED)
+	public long getClavePedido() {
+		return this.clavePedido;
+	}
+
+	public void setClavePedido(long clavePedido) {
+		this.clavePedido=clavePedido;
+	}
+*/	
 	@javax.inject.Inject
 	DomainObjectContainer container;
 }

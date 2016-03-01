@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Where;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
@@ -117,7 +117,9 @@ public class Ruta {
 
 	@MemberOrder(sequence = "1", name = "ListaPedidosUrgentes")
 	@ActionLayout(named = "Agregar", position = Position.PANEL)
-	public Ruta asignarPedidoUrgente(Pedido pedido) {
+	public Ruta asignarPedidoUrgente(Pedido pedido, 
+			@ParameterLayout(named = "Orden") int orden, 
+			@ParameterLayout(named = "Tiempo") int tiempo) {
 		final RutaItem oRutaItem = container
 				.newTransientInstance(RutaItem.class);
 
@@ -135,7 +137,7 @@ public class Ruta {
 		//PedidoHistorial oPedidoHistorial = new PedidoHistorial();
 		oPedidoHistorial.setPedido(pedido);
 		oPedidoHistorial.setObservacion("Asignación automática");
-		oPedidoHistorial.setFechaHora(LocalDate.now());
+		oPedidoHistorial.setFechaHora(DateTime.now());
 		oPedidoHistorial.setEstado(pedido.getEstado());
 
 		container.persistIfNotAlready(oPedidoHistorial);
@@ -185,7 +187,7 @@ public class Ruta {
 				//PedidoHistorial oPedidoHistorial = new PedidoHistorial();
 				oPedidoHistorial.setPedido(pedido);
 				oPedidoHistorial.setObservacion("Asignación automática");
-				oPedidoHistorial.setFechaHora(LocalDate.now());
+				oPedidoHistorial.setFechaHora(DateTime.now());
 				oPedidoHistorial.setEstado(pedido.getEstado());
 
 				container.persistIfNotAlready(oPedidoHistorial);
