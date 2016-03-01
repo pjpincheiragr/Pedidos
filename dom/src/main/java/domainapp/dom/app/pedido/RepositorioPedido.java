@@ -4,6 +4,8 @@ import org.joda.time.DateTime;
 
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -44,12 +46,13 @@ public class RepositorioPedido {
 		Pedido.setTipo(tipo);
 		Pedido.setUrgencia(urgencia);
 		Pedido.setProveedor(proveedor);
-		
-		
+		JOptionPane.showMessageDialog(null, container.getUser().toString());
+
 		if (new Services().isVendedor(container.getUser())) {
 			Vendedor oVendedor=new Vendedor();
 			oVendedor= repositorioVendedor.findByUserCode(container.getUser().toString());
 			Pedido.setVendedor(oVendedor);
+			
 		}
 		else
 		Pedido.setVendedor(vendedor);
@@ -78,12 +81,13 @@ public class RepositorioPedido {
 		Pedido.setTipo(tipo);
 		Pedido.setUrgencia(urgencia);
 		Pedido.setProveedor(proveedor);
-		if (new Services().isVendedor(container.getUser())) {
-			Vendedor oVendedor=new Vendedor();
-			oVendedor= repositorioVendedor.findByUserCode(container.getUser().toString());
+		Vendedor oVendedor=new Vendedor();
+		//if (new Services().isVendedor(container.getUser())) {			
+			oVendedor= repositorioVendedor.findByUserCode( container.getUser().getName());
+			
 			Pedido.setVendedor(oVendedor);
-		}
-		
+			
+		//}
 		Pedido.setValor(valor);
 		Pedido.setEstado(E_estado.NUEVO);
 		Pedido.setSucursal(sucursal);
@@ -92,7 +96,6 @@ public class RepositorioPedido {
 		Pedido.setActivo(true);
 		container.persistIfNotAlready(Pedido);
 		return Pedido;
-
 	}
 
 	

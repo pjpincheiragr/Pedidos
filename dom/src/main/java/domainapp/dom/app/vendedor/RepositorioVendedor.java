@@ -78,7 +78,7 @@ public class RepositorioVendedor {
 				new QueryDefault<>(
 						Vendedor.class,
 						"findByUserCode",
-						"userCode", (userCode == null) ? "" : userCode)).get(0);
+						"userCode", userCode)).get(0);
 	}
 	
 	public List<Vendedor> findByNameAuxiliar(
