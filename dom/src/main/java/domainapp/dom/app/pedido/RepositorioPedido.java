@@ -4,6 +4,8 @@ import org.joda.time.LocalDate;
 
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -44,12 +46,13 @@ public class RepositorioPedido {
 		Pedido.setTipo(tipo);
 		Pedido.setUrgencia(urgencia);
 		Pedido.setProveedor(proveedor);
-		
-		
+		JOptionPane.showMessageDialog(null, container.getUser().toString());
+
 		if (new Services().isVendedor(container.getUser())) {
 			Vendedor oVendedor=new Vendedor();
 			oVendedor= repositorioVendedor.findByUserCode(container.getUser().toString());
 			Pedido.setVendedor(oVendedor);
+			
 		}
 		else
 		Pedido.setVendedor(vendedor);
@@ -58,7 +61,7 @@ public class RepositorioPedido {
 		Pedido.setEstado(E_estado.NUEVO);
 		Pedido.setSucursal(sucursal);
 		Pedido.setFechaHora(LocalDate.now());
-		Pedido.setObservacion(observacion);
+		Pedido.setObservacion( container.getUser().toString());
 		Pedido.setActivo(true);
 		container.persistIfNotAlready(Pedido);
 		return Pedido;
@@ -78,21 +81,21 @@ public class RepositorioPedido {
 		Pedido.setTipo(tipo);
 		Pedido.setUrgencia(urgencia);
 		Pedido.setProveedor(proveedor);
-		if (new Services().isVendedor(container.getUser())) {
-			Vendedor oVendedor=new Vendedor();
-			oVendedor= repositorioVendedor.findByUserCode(container.getUser().toString());
+		Vendedor oVendedor=new Vendedor();
+		//if (new Services().isVendedor(container.getUser())) {			
+			oVendedor= repositorioVendedor.findByUserCode( container.getUser().getName());
+			
 			Pedido.setVendedor(oVendedor);
-		}
-		
+			
+		//}
 		Pedido.setValor(valor);
 		Pedido.setEstado(E_estado.NUEVO);
 		Pedido.setSucursal(sucursal);
 		Pedido.setFechaHora(LocalDate.now());
-		Pedido.setObservacion(observacion);
+		Pedido.setObservacion( oVendedor.getNombre());
 		Pedido.setActivo(true);
 		container.persistIfNotAlready(Pedido);
 		return Pedido;
-
 	}
 
 	
@@ -124,7 +127,7 @@ public class RepositorioPedido {
 	public List<Pedido> listNew() {
 		final List<Pedido> listaPedidos = this.container
 				.allMatches(new QueryDefault<Pedido>(Pedido.class,
-						"ListarNuevos", "estado", E_estado.NUEVO));
+						"ListarNuevos"));
 		if (listaPedidos.isEmpty()) {
 			this.container.warnUser("No hay pedidos cargados en el sistema");
 		}

@@ -56,7 +56,7 @@ import org.joda.time.LocalDate;
 		 */
 		@javax.jdo.annotations.Query(name = "ListarNuevos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "Where (estado==:estado) && activo == true && this.ListaPedidos != null "),
+				+ "Where (estado==NUEVO) && activo == true && this.ListaPedidos != null "),
 		@javax.jdo.annotations.Query(name = "findByDescription", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "WHERE ((:descripcion=='') || (descripcion.toLowerCase().indexOf(:descripcion) >= 0)) && activo == true && this.ListaPedidos != null "),
