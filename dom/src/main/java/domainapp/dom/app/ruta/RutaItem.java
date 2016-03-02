@@ -49,7 +49,7 @@ public class RutaItem {
 
 
 	public String title() {
-		return getPedido().toString();
+		return this.getPedido().title();
 	}
 
 	public RutaItem(Pedido pedido, int orden, boolean estado, Ruta ruta,
@@ -79,7 +79,7 @@ public class RutaItem {
 
 	@MemberOrder(sequence = "2")
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing = Editing.DISABLED)
+	@Property(editing = Editing.ENABLED)
 	public int getOrden() {
 		return orden;
 	}
@@ -90,7 +90,7 @@ public class RutaItem {
 
 	@MemberOrder(sequence = "3")
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing = Editing.DISABLED)
+	@Property(editing = Editing.ENABLED)
 	public int getTiempo() {
 		return tiempo;
 	}
@@ -101,6 +101,7 @@ public class RutaItem {
 
 	@MemberOrder(sequence = "4")
 	@javax.jdo.annotations.Column(allowsNull = "false")
+	@Property(editing = Editing.DISABLED)
 	public boolean getEstado() {
 		return estado;
 	}
@@ -111,6 +112,7 @@ public class RutaItem {
 
 	@MemberOrder(sequence = "5")
 	@javax.jdo.annotations.Column(allowsNull = "true")
+	@Property(editing = Editing.DISABLED)
 	public Ruta getRuta() {
 		return ruta;
 	}

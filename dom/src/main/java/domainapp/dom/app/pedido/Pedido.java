@@ -82,7 +82,7 @@ public class Pedido {
 
 	public String title() {
 		return  getVendedor().getNombre()
-				+ " - " + getSucursal();
+				+ " - " + getSucursal() + "-" + this.getFechaHora() ;
 	}
 
 	public Pedido(Tipo tipo, Proveedor proveedor, DateTime fechaHora,

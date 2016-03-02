@@ -102,11 +102,11 @@ public class Ruta {
 	@MemberOrder(sequence = "1", name = "Quitar RutaItem")
 	@ActionLayout(named = "Quitar Pedido", position = Position.PANEL)
 	public Ruta quitarPedido(RutaItem rutaItem) {
-		final Pedido pedido= rutaItem.getPedido();	
+		final Pedido pedido = rutaItem.getPedido();
 		this.getListaPedidos().remove(rutaItem);
 
 		pedido.setEstado(E_estado.NUEVO);
-		
+
 		final PedidoHistorial oPedidoHistorial = container
 				.newTransientInstance(PedidoHistorial.class);
 		oPedidoHistorial.setPedido(pedido);
@@ -117,12 +117,12 @@ public class Ruta {
 		container.persistIfNotAlready(oPedidoHistorial);
 		return this;
 	}
-	
+
 	@Programmatic
 	public List<RutaItem> choices0QuitarPedido(final RutaItem rutaItem) {
 		return this.getListaPedidos();
 	}
-	
+
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	@Property(editing = Editing.ENABLED)
 	@CollectionLayout(render = RenderType.EAGERLY)
@@ -137,24 +137,25 @@ public class Ruta {
 
 	@MemberOrder(sequence = "1", name = "ListaPedidosUrgentes")
 	@ActionLayout(named = "Agregar", position = Position.PANEL)
-	public Ruta asignarPedidoUrgente(Pedido pedido, 
-			@ParameterLayout(named = "Orden") int orden, 
+	public Ruta asignarPedidoUrgente(Pedido pedido,
+			@ParameterLayout(named = "Orden") int orden,
 			@ParameterLayout(named = "Tiempo") int tiempo) {
 		final RutaItem oRutaItem = container
 				.newTransientInstance(RutaItem.class);
 
 		oRutaItem.setEstado(false);
-		oRutaItem.setOrden(0);
+		this.ordenarItems(orden);
+		oRutaItem.setOrden(orden);
 		oRutaItem.setPedido(pedido);
 		oRutaItem.setRuta(this);
-		oRutaItem.setTiempo(0);
+		oRutaItem.setTiempo(tiempo);
 		container.persistIfNotAlready(oRutaItem);
 		this.getListaPedidos().add(oRutaItem);
 
 		pedido.setEstado(E_estado.ASIGNADO);
 		final PedidoHistorial oPedidoHistorial = container
 				.newTransientInstance(PedidoHistorial.class);
-		//PedidoHistorial oPedidoHistorial = new PedidoHistorial();
+		// PedidoHistorial oPedidoHistorial = new PedidoHistorial();
 		oPedidoHistorial.setPedido(pedido);
 		oPedidoHistorial.setObservacion("Asignación automática");
 		oPedidoHistorial.setFechaHora(DateTime.now());
@@ -162,6 +163,23 @@ public class Ruta {
 
 		container.persistIfNotAlready(oPedidoHistorial);
 		return this;
+	}
+
+	@Programmatic
+	private void ordenarItems(int orden) {
+		if (!(this.getListaPedidos().isEmpty())) {
+			List<RutaItem> items = this.getListaPedidos();
+
+			int j;
+			int ordenItem = 0;
+
+			for (j = 0; j < items.size(); j++) {
+				ordenItem = items.get(j).getOrden();
+				if (ordenItem >= orden)
+					items.get(j).setOrden(ordenItem + 1);
+			}
+
+		}
 	}
 
 	@Programmatic
@@ -186,14 +204,15 @@ public class Ruta {
 
 	@MemberOrder(sequence = "1", name = "ListaPedidosProgramables")
 	@ActionLayout(named = "Agregar", position = Position.PANEL)
-	public Ruta asignarPedidoProgramable(Pedido pedido, 
-			@ParameterLayout(named = "Orden") int orden, 
+	public Ruta asignarPedidoProgramable(Pedido pedido,
+			@ParameterLayout(named = "Orden") int orden,
 			@ParameterLayout(named = "Tiempo") int tiempo) {
-		
+
 		final RutaItem oRutaItem = container
 				.newTransientInstance(RutaItem.class);
 
 		oRutaItem.setEstado(false);
+		this.ordenarItems(orden);
 		oRutaItem.setOrden(orden);
 		oRutaItem.setPedido(pedido);
 		oRutaItem.setRuta(this);
@@ -204,13 +223,13 @@ public class Ruta {
 		pedido.setEstado(E_estado.ASIGNADO);
 		final PedidoHistorial oPedidoHistorial = container
 				.newTransientInstance(PedidoHistorial.class);
-				//PedidoHistorial oPedidoHistorial = new PedidoHistorial();
-				oPedidoHistorial.setPedido(pedido);
-				oPedidoHistorial.setObservacion("Asignación automática");
-				oPedidoHistorial.setFechaHora(DateTime.now());
-				oPedidoHistorial.setEstado(pedido.getEstado());
+		// PedidoHistorial oPedidoHistorial = new PedidoHistorial();
+		oPedidoHistorial.setPedido(pedido);
+		oPedidoHistorial.setObservacion("Asignación automática");
+		oPedidoHistorial.setFechaHora(DateTime.now());
+		oPedidoHistorial.setEstado(pedido.getEstado());
 
-				container.persistIfNotAlready(oPedidoHistorial);
+		container.persistIfNotAlready(oPedidoHistorial);
 		return this;
 	}
 
