@@ -3,9 +3,6 @@ package domainapp.dom.app.pedido;
 import org.joda.time.DateTime;
 
 import java.util.List;
-
-import javax.swing.JOptionPane;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -24,7 +21,6 @@ import domainapp.dom.app.sucursal.Sucursal;
 import domainapp.dom.app.tipo.Tipo;
 import domainapp.dom.app.vendedor.RepositorioVendedor;
 import domainapp.dom.app.vendedor.Vendedor;
-import domainapp.dom.modules.security.Services;
 
 @DomainService(repositoryFor = Pedido.class)
 @DomainServiceLayout(menuOrder = "60", named = "Pedidos")
@@ -37,26 +33,15 @@ public class RepositorioPedido {
 			@ParameterLayout(named = "Urgencia") @Parameter(optionality = Optionality.OPTIONAL) E_urgencia_pedido urgencia,
 			@ParameterLayout(named = "Proveedor") @Parameter(optionality = Optionality.OPTIONAL) Proveedor proveedor,
 			@ParameterLayout(named = "Vendedor") @Parameter(optionality = Optionality.OPTIONAL) Vendedor vendedor,
-
 			@ParameterLayout(named = "Valor") @Parameter(optionality = Optionality.OPTIONAL) float valor, 
-
 			@ParameterLayout(named = "Sucursal") Sucursal sucursal,
 			@ParameterLayout(named = "Observaciones", multiLine = 15) String observacion) {
+		
 		final Pedido Pedido = container.newTransientInstance(Pedido.class);
 		Pedido.setTipo(tipo);
 		Pedido.setUrgencia(urgencia);
 		Pedido.setProveedor(proveedor);
-		JOptionPane.showMessageDialog(null, container.getUser().toString());
-
-		if (new Services().isVendedor(container.getUser())) {
-			Vendedor oVendedor=new Vendedor();
-			oVendedor= repositorioVendedor.findByUserCode(container.getUser().toString());
-			Pedido.setVendedor(oVendedor);
-			
-		}
-		else
 		Pedido.setVendedor(vendedor);
-
 		Pedido.setValor(valor);
 		Pedido.setEstado(E_estado.NUEVO);
 		Pedido.setSucursal(sucursal);
@@ -71,12 +56,14 @@ public class RepositorioPedido {
 	@MemberOrder(sequence = "2")
 	@ActionLayout(named = "Crear nuevo Pedido")
 	public Pedido createPedidoVendedores(
+			
 			@ParameterLayout(named = "Tipo") @Parameter(optionality = Optionality.OPTIONAL) Tipo tipo,
 			@ParameterLayout(named = "Urgencia") @Parameter(optionality = Optionality.OPTIONAL) E_urgencia_pedido urgencia,
 			@ParameterLayout(named = "Proveedor") @Parameter(optionality = Optionality.OPTIONAL) Proveedor proveedor,
 			@ParameterLayout(named = "Valor") @Parameter(optionality = Optionality.OPTIONAL) float valor, 
 			@ParameterLayout(named = "Sucursal") Sucursal sucursal,
-			@ParameterLayout(named = "Observaciones", multiLine = 15) String observacion) {
+			@ParameterLayout(named = "Observaciones", multiLine = 15) String observacion
+			) {
 		final Pedido Pedido = container.newTransientInstance(Pedido.class);
 		Pedido.setTipo(tipo);
 		Pedido.setUrgencia(urgencia);
@@ -84,7 +71,6 @@ public class RepositorioPedido {
 		Vendedor oVendedor=new Vendedor();
 		oVendedor= repositorioVendedor.findByUserCode( container.getUser().getName());
 		Pedido.setVendedor(oVendedor);
-
 		Pedido.setValor(valor);
 		Pedido.setEstado(E_estado.NUEVO);
 		Pedido.setSucursal(sucursal);
@@ -93,6 +79,7 @@ public class RepositorioPedido {
 		Pedido.setActivo(true);
 		container.persistIfNotAlready(Pedido);
 		return Pedido;
+	
 	}
 
 	

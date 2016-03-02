@@ -1,13 +1,8 @@
 package domainapp.dom.app.pedido;
 
-import java.util.List;
-
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.query.QueryDefault;
 
 @DomainService(repositoryFor = PedidoHistorial.class)
 @DomainServiceLayout(menuOrder = "60", named = "PedidosHistorial")

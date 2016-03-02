@@ -242,7 +242,7 @@ public class Pedido {
 	@MemberOrder(sequence = "1.5")
 	@CollectionLayout(render = RenderType.EAGERLY)
 	public List<PedidoItem> getPedidoItem() {
-		return repositorioPedidoItem.listAll();
+		return this.ListaPedidos;
 	}
 
 	public void setPedidosItem(final List<PedidoItem> listaPedidos) {
@@ -277,7 +277,7 @@ public class Pedido {
 
 	// fin
 
-	// secciÃ³n correspondiente a la clasificaciÃ³n de urgencia del pedido
+	// correspondiente a la clasificaciÃ³n de urgencia del pedido
 
 	@MemberOrder(sequence = "8")
 	@javax.jdo.annotations.Column(allowsNull = "true")
@@ -289,7 +289,7 @@ public class Pedido {
 		this.urgencia = urgencia;
 	}
 
-	// fin secciÃ³n urgencia de Pedido
+	// urgencia de Pedido
 
 	@Property(hidden = Where.EVERYWHERE)
 	@MemberOrder(sequence = "9")
