@@ -2,6 +2,7 @@ package domainapp.dom.app.ruta;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -9,6 +10,8 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Where;
+
 import domainapp.dom.app.pedido.Pedido;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
@@ -17,23 +20,23 @@ import domainapp.dom.app.pedido.Pedido;
 @javax.jdo.annotations.Queries({
 		@javax.jdo.annotations.Query(name = "ListarTodosPorUrgencia", language = "JDOQL", value = "SELECT  "
 				+ " FROM domainapp.dom.app.ruta.RutaItem "
-				+ " WHERE pedido.urgencia==:urgencia " + " order by orden "),
+				+ " WHERE pedido.urgencia==:urgencia && activo == true" + " order by orden "),
 		@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.ruta.RutaItem " + " order by orden "),
 		@javax.jdo.annotations.Query(name = "ListarPendientes", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "Where (estado==ASIGNADO) || (estado=EN_PROCESO)"
+				+ "Where (estado==ASIGNADO) || (estado=EN_PROCESO) && activo == true"
 				+ " order by orden "),
 		@javax.jdo.annotations.Query(name = "findByDescription", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "WHERE ((:descripcion=='') || (descripcion.toLowerCase().indexOf(:descripcion) >= 0))"
+				+ "WHERE ((:descripcion=='') || (descripcion.toLowerCase().indexOf(:descripcion) >= 0)) && activo == true"
 				+ " order by orden "),
 		@javax.jdo.annotations.Query(name = "findByState", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "WHERE (estado==:estado)" + " order by orden "),
+				+ "WHERE (estado==:estado) && activo == true" + " order by orden "),
 		@javax.jdo.annotations.Query(name = "findBySeller", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "WHERE (vendedor==:vendedor)" + " order by orden ") })
+				+ "WHERE (vendedor==:vendedor && activo == true)" + " order by orden ") })
 @DomainObject(objectType = "RUTAITEM", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
 public class RutaItem {
@@ -43,6 +46,7 @@ public class RutaItem {
 	private boolean estado;
 	private Ruta ruta;
 	private int tiempo;
+
 
 	public String title() {
 		return getPedido().toString();

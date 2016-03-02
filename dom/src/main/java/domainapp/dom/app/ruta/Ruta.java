@@ -19,24 +19,20 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Where;
 import org.joda.time.DateTime;
-
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.pedido.PedidoHistorial;
-import domainapp.dom.app.pedido.PedidoItem;
 import domainapp.dom.app.pedido.RepositorioPedido;
 import domainapp.dom.app.servicios.E_estado;
 import domainapp.dom.app.servicios.E_urgencia_pedido;
 
-@MemberGroupLayout(columnSpans = { 4, 0, 0, 8 }, left = "Detalles del Horario")
+//@MemberGroupLayout(columnSpans = { 4, 0, 0, 8 }, left = "Detalles del Horario")
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "id")
 @javax.jdo.annotations.Uniques({ @javax.jdo.annotations.Unique(name = "OrdenServicio_numero_must_be_unique", members = { "numero" }) })
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.APPLICATION)
@@ -103,6 +99,30 @@ public class Ruta {
 		this.listaPedidos = listaPedidos;
 	}
 
+	@MemberOrder(sequence = "1", name = "Quitar RutaItem")
+	@ActionLayout(named = "Quitar Pedido", position = Position.PANEL)
+	public Ruta quitarPedido(RutaItem rutaItem) {
+		final Pedido pedido= rutaItem.getPedido();	
+		this.getListaPedidos().remove(rutaItem);
+
+		pedido.setEstado(E_estado.NUEVO);
+		
+		final PedidoHistorial oPedidoHistorial = container
+				.newTransientInstance(PedidoHistorial.class);
+		oPedidoHistorial.setPedido(pedido);
+		oPedidoHistorial.setObservacion("Quitado de la ruta");
+		oPedidoHistorial.setFechaHora(DateTime.now());
+		oPedidoHistorial.setEstado(pedido.getEstado());
+
+		container.persistIfNotAlready(oPedidoHistorial);
+		return this;
+	}
+	
+	@Programmatic
+	public List<RutaItem> choices0QuitarPedido(final RutaItem rutaItem) {
+		return this.getListaPedidos();
+	}
+	
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	@Property(editing = Editing.ENABLED)
 	@CollectionLayout(render = RenderType.EAGERLY)
