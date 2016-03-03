@@ -1,7 +1,9 @@
 package domainapp.dom.app.pedido;
 
 import org.joda.time.DateTime;
+
 import java.util.List;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -10,7 +12,9 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
+
 import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.proveedor.Proveedor;
@@ -96,7 +100,8 @@ public class RepositorioPedido {
 
 	
 	@MemberOrder(sequence = "1")
-	@ActionLayout(named = "Listar Todos")
+	@ActionLayout(named = "Listar POR VENDEDOR")
+	@Programmatic
 	public List<Pedido> listAllByVendor() {
 		final List<Pedido> listaPedidos = this.container
 				.allMatches(new QueryDefault<Pedido>(Pedido.class,

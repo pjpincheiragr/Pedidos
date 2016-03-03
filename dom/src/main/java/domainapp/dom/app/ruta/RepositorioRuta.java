@@ -46,6 +46,20 @@ public class RepositorioRuta {
 		return listaRutas;
 	}
 	
+	@MemberOrder(sequence = "3")
+	@ActionLayout(named = "Listar por Cadete")
+	public List<Ruta> filterdByCadete(
+			@ParameterLayout(named = "Cadete") Cadete cadete
+			) {
+		final List<Ruta> listaRutas = this.container
+				.allMatches(new QueryDefault<Ruta>(Ruta.class,
+						"ListarPorCaadete","cadete",cadete));
+		if (listaRutas.isEmpty()) {
+			this.container.warnUser("No hay rutas cargadas en el sistema");
+		}
+		return listaRutas;
+	}
+	
 	
 	@javax.inject.Inject
 	DomainObjectContainer container;
