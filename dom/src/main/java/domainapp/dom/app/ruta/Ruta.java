@@ -34,21 +34,21 @@ import domainapp.dom.app.servicios.E_urgencia_pedido;
 
 //@MemberGroupLayout(columnSpans = { 4, 0, 0, 8 }, left = "Detalles del Horario")
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "id")
-@javax.jdo.annotations.Uniques({ @javax.jdo.annotations.Unique(name = "OrdenServicio_numero_must_be_unique", members = { "numero" }) })
+@javax.jdo.annotations.Uniques({ @javax.jdo.annotations.Unique(name = "Ruta_numero_must_be_unique", members = { "numero" }) })
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.APPLICATION)
 @javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
 @javax.jdo.annotations.Queries({ @javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
 		+ "FROM domainapp.dom.app.ruta.Ruta " + "WHERE activo == true") })
 @DomainObject(objectType = "ruta", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
+
 public class Ruta {
 
 	private Cadete cadete;
 	private List<RutaItem> listaPedidos = new ArrayList<RutaItem>();
 	private List<Pedido> listaPedidosUrgentes = new ArrayList<Pedido>();
 	private List<Pedido> listaPedidosProgramables = new ArrayList<Pedido>();
-	@PrimaryKey
-	private long numero;
+
 	private boolean activo;
 
 	public String title() {
@@ -64,11 +64,13 @@ public class Ruta {
 	public Ruta() {
 		super();
 	}
-
+	@PrimaryKey
+	private long numero;
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@javax.jdo.annotations.PrimaryKey(column = "numero")
-	@Persistent(valueStrategy = IdGeneratorStrategy.INCREMENT, sequence = "numero")
-	@MemberOrder(name = "Numero", sequence = "1")
+	
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY, sequence = "numero")
+	@MemberOrder(name = "Ruta", sequence = "1")
 	public long getNumero() {
 		return numero;
 	}
