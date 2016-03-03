@@ -255,7 +255,7 @@ public class Pedido {
 			@ParameterLayout(named = "Codigo") @Parameter(optionality = Optionality.OPTIONAL) String codigo,
 			@ParameterLayout(named = "Marca") @Parameter(optionality = Optionality.OPTIONAL) Marca marca,
 			@ParameterLayout(named = "Cantidad") @Parameter(optionality = Optionality.OPTIONAL) int cantidad,
-			@ParameterLayout(named = "Estado") @Parameter(optionality = Optionality.OPTIONAL) E_estado_item estado,
+			//@ParameterLayout(named = "Estado") @Parameter(optionality = Optionality.OPTIONAL) E_estado_item estado,
 			@ParameterLayout(named = "Observación", multiLine = 10) @Parameter(optionality = Optionality.OPTIONAL) String observacion,
 			final @ParameterLayout(named = "Imagen") @Parameter(optionality = Optionality.OPTIONAL) Blob attachment) {
 
@@ -266,7 +266,7 @@ public class Pedido {
 		PedidoItem.setMarca(marca);
 		PedidoItem.setCodigo(codigo);
 		PedidoItem.setCantidad(cantidad);
-		PedidoItem.setEstado(estado);
+		PedidoItem.setEstado(E_estado_item.ACTIVO);
 		PedidoItem.setObservacion(observacion);
 		PedidoItem.setAttachment(attachment);
 		PedidoItem.setActivo(true);
@@ -307,7 +307,6 @@ public class Pedido {
 		return this;
 	}
 
-
 	@ActionLayout(named = "Ver Historial")
 	public List<PedidoHistorial> viewHistory() {
 		
@@ -319,15 +318,14 @@ public class Pedido {
 		}
 		return historial;
 	}
+	
 	/*
 	 * @Programmatic public boolean hideDeletePedido() { if (!isActivo()) return
 	 * true; else return false; }
-	 */
-
+	*/
+	
 	@javax.inject.Inject
 	DomainObjectContainer container;
-
 	@javax.inject.Inject
 	RepositorioPedidoItem repositorioPedidoItem;
-
 }
