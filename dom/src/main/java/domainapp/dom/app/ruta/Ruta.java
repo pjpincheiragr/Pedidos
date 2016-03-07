@@ -37,11 +37,15 @@ import domainapp.dom.app.servicios.E_urgencia_pedido;
 @javax.jdo.annotations.Uniques({ @javax.jdo.annotations.Unique(name = "Ruta_numero_must_be_unique", members = { "numero" }) })
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.APPLICATION)
 @javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
-@javax.jdo.annotations.Queries({ @javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
-		+ "FROM domainapp.dom.app.ruta.Ruta " + "WHERE activo == true") })
+@javax.jdo.annotations.Queries({
+		@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.ruta.Ruta " + "WHERE activo == true"),
+		@javax.jdo.annotations.Query(name = "ListarPorCadete", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.ruta.Ruta " + "WHERE activo == true && cadete== :cadete")
+
+})
 @DomainObject(objectType = "ruta", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
-
 public class Ruta {
 
 	private Cadete cadete;
@@ -64,11 +68,12 @@ public class Ruta {
 	public Ruta() {
 		super();
 	}
+
 	@PrimaryKey
 	private long numero;
+
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@javax.jdo.annotations.PrimaryKey(column = "numero")
-	
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY, sequence = "numero")
 	@MemberOrder(name = "Ruta", sequence = "1")
 	public long getNumero() {

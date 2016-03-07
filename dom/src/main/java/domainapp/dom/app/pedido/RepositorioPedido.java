@@ -99,9 +99,12 @@ public class RepositorioPedido {
 	}
 
 	
-	@MemberOrder(sequence = "1")
-	@ActionLayout(named = "Listar POR VENDEDOR")
-	@Programmatic
+	/*
+	 * Aqui comienza el método que permite a un vendedor visualizar sus pedidos
+	 * */
+	@MemberOrder(sequence = "2")
+	@ActionLayout(named = "Listar Pedidos")
+	
 	public List<Pedido> listAllByVendor() {
 		final List<Pedido> listaPedidos = this.container
 				.allMatches(new QueryDefault<Pedido>(Pedido.class,
@@ -112,32 +115,26 @@ public class RepositorioPedido {
 		return listaPedidos;
 	}
 
+	//termina listar pedidos de VENDEDOR
+	
+	
 	@MemberOrder(sequence = "3")
 	@ActionLayout(named = "Listar Nuevos")
 	public List<Pedido> listNew() {
 		final List<Pedido> listaPedidos = this.container
 				.allMatches(new QueryDefault<Pedido>(Pedido.class,
-						"ListarNuevos"));
+						"ListarNuevos", "estado",E_estado.NUEVO));
 		if (listaPedidos.isEmpty()) {
 			this.container.warnUser("No hay pedidos cargados en el sistema");
 		}
 		return listaPedidos;
 	}
 
-	@ActionLayout(named = "Buscar por Descripcion")
-	@MemberOrder(sequence = "4")
-	public List<Pedido> findByName(
-			@ParameterLayout(named = "Descripcion") @Parameter(optionality = Optionality.OPTIONAL) String descripcion) {
-		return container.allMatches(new QueryDefault<>(Pedido.class,
-				"findByDescription", "descripcion", (descripcion == null) ? ""
-						: descripcion));
-	}
-
 	@ActionLayout(named = "Buscar por Estado")
 	@MemberOrder(sequence = "5")
 	public List<Pedido> findByState(
 			@ParameterLayout(named = "Estado") E_estado estado) {
-		return container.allMatches(new QueryDefault<>(Pedido.class,
+		return container.allMatches(new QueryDefault<Pedido>(Pedido.class,
 				"findByState", "estado", estado));
 	}
 
@@ -145,16 +142,8 @@ public class RepositorioPedido {
 	@MemberOrder(sequence = "6")
 	public List<Pedido> findBySeller(
 			@ParameterLayout(named = "Nombre") Vendedor vendedor) {
-		return container.allMatches(new QueryDefault<>(Pedido.class,
+		return container.allMatches(new QueryDefault<Pedido>(Pedido.class,
 				"findBySeller", "vendedor", vendedor));
-	}
-
-	@ActionLayout(named = "Buscar por Cadete")
-	@MemberOrder(sequence = "7")
-	public List<Pedido> findByCadete(
-			@ParameterLayout(named = "Nombre") Cadete cadete) {
-		return container.allMatches(new QueryDefault<>(Pedido.class,
-				"findByCadete", "cadete", cadete));
 	}
 
 	// Obtener listado por Urgencia

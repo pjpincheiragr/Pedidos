@@ -33,42 +33,42 @@ import javax.jdo.annotations.Join;
 import org.joda.time.DateTime;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
-//@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.APPLICATION)
-
+// @javax.jdo.annotations.PersistenceCapable(identityType =
+// IdentityType.APPLICATION)
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "Pedido_ID")
 @javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
 @javax.jdo.annotations.Queries({
+	
 		@javax.jdo.annotations.Query(name = "ListarTodosPorUrgencia", language = "JDOQL", value = "SELECT  "
 				+ " FROM domainapp.dom.app.ruta.RutaItem "
-				+ " WHERE urgencia==:urgencia && estado==:estado && activo == true"),
-		
+				+ " WHERE urgencia == :urgencia && estado == :estado && activo == true"),
+
 		@javax.jdo.annotations.Query(name = "ListarTodosPorVendedor", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "WHERE activo == true && vendedor==:vendedor "),
-		
+				+ "WHERE activo == true && vendedor == :vendedor "),
+
 		@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "WHERE activo == true"),
+				
 		@javax.jdo.annotations.Query(name = "ListarNuevos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "Where (estado==NUEVO) && activo == true && this.ListaPedidos != null "),
-		@javax.jdo.annotations.Query(name = "findByDescription", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "WHERE ((:descripcion=='') || (descripcion.toLowerCase().indexOf(:descripcion) >= 0)) && activo == true && this.ListaPedidos != null "),
+				+ "WHERE estado == :estado && activo == true"),
+
 		@javax.jdo.annotations.Query(name = "findByState", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.dom.app.pedido.Pedido"
-				+ "WHERE (estado==:estado) && activo == true && this.ListaPedidos != null "),
+				+ "FROM domainapp.dom.app.pedido.Pedido "
+				+ "WHERE estado == :estado && activo == true"),
+
 		@javax.jdo.annotations.Query(name = "findBySeller", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "WHERE (vendedor==:vendedor) && activo == true"
-				+ " && this.ListaPedidos != null ") })
-
+				+ "WHERE vendedor == :vendedor && activo == true") 
+		})
 @DomainObject(objectType = "PEDIDO", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
 public class Pedido {
 
-	//@PrimaryKey
-	//private long numero;
+	// @PrimaryKey
+	// private long numero;
 	private Tipo tipo;
 	private Proveedor proveedor;
 	private DateTime fechaHora;
@@ -79,10 +79,12 @@ public class Pedido {
 	private String observacion;
 	private boolean activo;
 	private E_urgencia_pedido urgencia;
+	private List<PedidoItem> ListaPedidos = new ArrayList<PedidoItem>();
+
 
 	public String title() {
-		return  getVendedor().getNombre()
-				+ " - " + getSucursal() + "-" + this.getFechaHora() ;
+		return getVendedor().getNombre() + " - " + getSucursal() + "-"
+				+ this.getFechaHora();
 	}
 
 	public Pedido(Tipo tipo, Proveedor proveedor, DateTime fechaHora,
@@ -105,31 +107,6 @@ public class Pedido {
 		super();
 	}
 
-	/*
-	 * Orden es responsabilidad de RutaItem
-	 * 
-	 * @MemberOrder(sequence = "1")
-	 * 
-	 * @javax.jdo.annotations.Column(allowsNull = "true")
-	 * 
-	 * @Property(editing = Editing.ENABLED) public void setOrden(int orden) {
-	 * this.orden = orden; }
-	 * 
-	 * public int getOrden() { return this.orden; }
-	
-
-	@javax.jdo.annotations.Column(allowsNull = "false")
-	@javax.jdo.annotations.PrimaryKey(column = "numero")
-	@Persistent(valueStrategy = IdGeneratorStrategy.INCREMENT, sequence = "numero")
-	@MemberOrder(name = "Numero", sequence = "1")
-	public long getNumero() {
-		return numero;
-	}
-
-	public void setNumero(final long numero) {
-		this.numero = numero;
-	}
-	 */
 	@MemberOrder(sequence = "1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
@@ -139,6 +116,7 @@ public class Pedido {
 
 	public void setTipo(Tipo tipo) {
 		this.tipo = tipo;
+		
 	}
 
 	@MemberOrder(sequence = "2")
@@ -152,18 +130,6 @@ public class Pedido {
 		this.proveedor = proveedor;
 	}
 
-	/*
-	 * Tiempo es responsabilidad de RutaItem
-	 * 
-	 * @MemberOrder(sequence = "3")
-	 * 
-	 * @javax.jdo.annotations.Column(allowsNull = "false")
-	 * 
-	 * @Property(editing = Editing.DISABLED) public int getTiempo() { return
-	 * tiempo; }
-	 * 
-	 * public void setTiempo(int tiempo2) { this.tiempo = tiempo2; }
-	 */
 	@MemberOrder(sequence = "4")
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	public Vendedor getVendedor() {
@@ -190,11 +156,6 @@ public class Pedido {
 		return estado;
 	}
 
-	/*
-	 * Se agrega en setEstado la creación de un nuevo Historial de pedido, con
-	 * la información del estado actual antes de que este cambie. Se propone que
-	 * el vendedor pueda visualizar el historial de Sus pedidos ACTIVOS
-	 */
 	public void setEstado(E_estado estado) {
 		this.estado = estado;
 	}
@@ -236,7 +197,6 @@ public class Pedido {
 	@Join
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	// @Persistent(mappedBy = "Pedido", dependentElement = "false")
-	private List<PedidoItem> ListaPedidos = new ArrayList<PedidoItem>();
 
 	// @Render(Type.EAGERLY)
 	@MemberOrder(sequence = "1.5")
@@ -245,7 +205,7 @@ public class Pedido {
 		return this.ListaPedidos;
 	}
 
-	public void setPedidosItem(final List<PedidoItem> listaPedidos) {
+	public void setPedidoItem(final List<PedidoItem> listaPedidos) {
 		this.ListaPedidos = listaPedidos;
 	}
 
@@ -255,7 +215,8 @@ public class Pedido {
 			@ParameterLayout(named = "Codigo") @Parameter(optionality = Optionality.OPTIONAL) String codigo,
 			@ParameterLayout(named = "Marca") @Parameter(optionality = Optionality.OPTIONAL) Marca marca,
 			@ParameterLayout(named = "Cantidad") @Parameter(optionality = Optionality.OPTIONAL) int cantidad,
-			//@ParameterLayout(named = "Estado") @Parameter(optionality = Optionality.OPTIONAL) E_estado_item estado,
+			// @ParameterLayout(named = "Estado") @Parameter(optionality =
+			// Optionality.OPTIONAL) E_estado_item estado,
 			@ParameterLayout(named = "Observación", multiLine = 10) @Parameter(optionality = Optionality.OPTIONAL) String observacion,
 			final @ParameterLayout(named = "Imagen") @Parameter(optionality = Optionality.OPTIONAL) Blob attachment) {
 
@@ -309,21 +270,16 @@ public class Pedido {
 
 	@ActionLayout(named = "Ver Historial")
 	public List<PedidoHistorial> viewHistory() {
-		
+
 		final List<PedidoHistorial> historial = this.container
-				.allMatches(new QueryDefault<PedidoHistorial>(PedidoHistorial.class,
-						"VerHistorial"));
+				.allMatches(new QueryDefault<PedidoHistorial>(
+						PedidoHistorial.class, "VerHistorial"));
 		if (historial.isEmpty()) {
 			this.container.warnUser("No hay pedidos cargados en el sistema");
 		}
 		return historial;
 	}
-	
-	/*
-	 * @Programmatic public boolean hideDeletePedido() { if (!isActivo()) return
-	 * true; else return false; }
-	*/
-	
+
 	@javax.inject.Inject
 	DomainObjectContainer container;
 	@javax.inject.Inject

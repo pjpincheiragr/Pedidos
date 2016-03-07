@@ -53,7 +53,7 @@ public class RepositorioRuta {
 			) {
 		final List<Ruta> listaRutas = this.container
 				.allMatches(new QueryDefault<Ruta>(Ruta.class,
-						"ListarPorCaadete","cadete",cadete));
+						"ListarPorCadete","cadete",cadete));
 		if (listaRutas.isEmpty()) {
 			this.container.warnUser("No hay rutas cargadas en el sistema");
 		}
