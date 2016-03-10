@@ -2,10 +2,16 @@ package domainapp.dom.app.pedido;
 
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.value.Blob;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.VersionStrategy;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -17,9 +23,11 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Where;
+
 import domainapp.dom.app.marca.Marca;
 import domainapp.dom.app.proveedor.Proveedor;
 import domainapp.dom.app.servicios.E_estado;
@@ -29,16 +37,19 @@ import domainapp.dom.app.servicios.E_urgencia_pedido;
 import domainapp.dom.app.sucursal.Sucursal;
 import domainapp.dom.app.tipo.Tipo;
 import domainapp.dom.app.vendedor.Vendedor;
-import javax.jdo.annotations.Join;
-import org.joda.time.DateTime;
 
-@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
-// @javax.jdo.annotations.PersistenceCapable(identityType =
-// IdentityType.APPLICATION)
+import javax.jdo.annotations.Join;
+
+import java.util.Calendar;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "Pedido_ID")
 @javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
+@javax.jdo.annotations.Uniques({ @javax.jdo.annotations.Unique(name = "Pedido_numero_must_be_unique", members = { "numeroPedido" }) })
+@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.APPLICATION)
 @javax.jdo.annotations.Queries({
-	
+
 		@javax.jdo.annotations.Query(name = "ListarTodosPorUrgencia", language = "JDOQL", value = "SELECT  "
 				+ " FROM domainapp.dom.app.ruta.RutaItem "
 				+ " WHERE urgencia == :urgencia && estado == :estado && activo == true"),
@@ -50,7 +61,7 @@ import org.joda.time.DateTime;
 		@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "WHERE activo == true"),
-				
+
 		@javax.jdo.annotations.Query(name = "ListarNuevos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "WHERE estado == :estado && activo == true"),
@@ -61,17 +72,15 @@ import org.joda.time.DateTime;
 
 		@javax.jdo.annotations.Query(name = "findBySeller", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "WHERE vendedor == :vendedor && activo == true") 
-		})
+				+ "WHERE vendedor == :vendedor && activo == true") })
+
 @DomainObject(objectType = "PEDIDO", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
 public class Pedido {
 
-	// @PrimaryKey
-	// private long numero;
 	private Tipo tipo;
 	private Proveedor proveedor;
-	private DateTime fechaHora;
+	private Calendar fechaHora;
 	private Vendedor vendedor;
 	private float valor;
 	private E_estado estado;
@@ -80,16 +89,21 @@ public class Pedido {
 	private boolean activo;
 	private E_urgencia_pedido urgencia;
 	private List<PedidoItem> ListaPedidos = new ArrayList<PedidoItem>();
-
+	private String numeroVenta;
+	private String tiempoEstimado;
 
 	public String title() {
-		return getVendedor().getNombre() + " - " + getSucursal() + "-"
-				+ this.getFechaHora();
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
+
+		return getVendedor().getNombre() + " - "
+				+ getSucursal().getCodigoSucursal() + " - "
+				+ dateFormat.format(this.fechaHora.getTime());
 	}
 
-	public Pedido(Tipo tipo, Proveedor proveedor, DateTime fechaHora,
+	public Pedido(Tipo tipo, Proveedor proveedor, Calendar fechaHora,
 			Vendedor vendedor, float valor, E_estado estado, Sucursal sucursal,
-			String observacion, boolean activo, E_urgencia_pedido urgencia) {
+			String observacion, boolean activo, E_urgencia_pedido urgencia,
+			String numeroVenta) {
 		super();
 		this.tipo = tipo;
 		this.proveedor = proveedor;
@@ -101,22 +115,49 @@ public class Pedido {
 		this.observacion = observacion;
 		this.activo = activo;
 		this.urgencia = urgencia;
+		this.numeroVenta = numeroVenta;
 	}
 
 	public Pedido() {
 		super();
 	}
 
-	@MemberOrder(sequence = "1")
+	@PrimaryKey
+	private long clave;
+
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing = Editing.DISABLED)
+	@javax.jdo.annotations.PrimaryKey(column = "clavePedido")
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY, sequence = "clavePedido")
+	@MemberOrder(sequence = "1")
+	public long getClave() {
+		return clave;
+	}
+
+	public void setClave(final long clave) {
+		this.clave = clave;
+	}
+
+	@MemberOrder(sequence = "2")
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	@Property(editing = Editing.ENABLED)
 	public Tipo getTipo() {
 		return tipo;
 	}
 
 	public void setTipo(Tipo tipo) {
 		this.tipo = tipo;
-		
+
+	}
+
+	@MemberOrder(sequence = "2")
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	@Property(editing = Editing.ENABLED)
+	public String getNumeroVenta() {
+		return this.numeroVenta;
+	}
+
+	public void setNumeroVenta(String numeroVenta) {
+		this.numeroVenta = numeroVenta;
 	}
 
 	@MemberOrder(sequence = "2")
@@ -132,6 +173,7 @@ public class Pedido {
 
 	@MemberOrder(sequence = "4")
 	@javax.jdo.annotations.Column(allowsNull = "true")
+	@Property(editing = Editing.DISABLED)
 	public Vendedor getVendedor() {
 		return vendedor;
 	}
@@ -151,7 +193,7 @@ public class Pedido {
 	}
 
 	@MemberOrder(sequence = "6")
-	@javax.jdo.annotations.Column(allowsNull = "true")
+	@javax.jdo.annotations.Column(allowsNull = "false")
 	public E_estado getEstado() {
 		return estado;
 	}
@@ -161,7 +203,8 @@ public class Pedido {
 	}
 
 	@MemberOrder(sequence = "7")
-	@javax.jdo.annotations.Column(allowsNull = "true")
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	@Property(editing = Editing.DISABLED)
 	public Sucursal getSucursal() {
 		return sucursal;
 	}
@@ -170,34 +213,50 @@ public class Pedido {
 		this.sucursal = sucursal;
 	}
 
-	public void setFechaHora(DateTime fechaHora) {
-		this.fechaHora = fechaHora;
-	}
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	@Property(editing = Editing.DISABLED)
+	@Programmatic
+	public Calendar getFechaHora() {
 
-	@javax.jdo.annotations.Column(allowsNull = "true")
-	public DateTime getFechaHora() {
 		return this.fechaHora;
 
 	}
 
-	// Agrego campo observaciÃ³n
+	public void setFechaHora(Calendar fechaHora) {
+		this.fechaHora = fechaHora;
+	}
+
+	// COMIENZA EL CAMPO OBSERVACION
 
 	@javax.jdo.annotations.Column(allowsNull = "true", length = 600)
+	@Property(editing = Editing.ENABLED)
 	public String getObservacion() {
 		return observacion;
 	}
-
+	
 	public void setObservacion(final String observacion) {
 		this.observacion = observacion;
 	}
 
-	// Fin campo observaciÃ³n
+	// Fin campo observacion
+
+	@MemberOrder(sequence = "8")
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	@Property(editing = Editing.ENABLED)
+	public String getTiempoEstimado() {
+
+		return this.tiempoEstimado;
+	}
+
+	public void setTiempoEstimado(String tiempoEstimado) {
+		this.tiempoEstimado = tiempoEstimado;
+
+	}
 
 	// {{ Pedido Item (Property)
 	@Join
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	// @Persistent(mappedBy = "Pedido", dependentElement = "false")
-
 	// @Render(Type.EAGERLY)
 	@MemberOrder(sequence = "1.5")
 	@CollectionLayout(render = RenderType.EAGERLY)

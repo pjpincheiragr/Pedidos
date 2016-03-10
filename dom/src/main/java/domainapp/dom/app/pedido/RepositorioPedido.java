@@ -1,9 +1,8 @@
 package domainapp.dom.app.pedido;
 
-import org.joda.time.DateTime;
-
+import java.util.Calendar;
+import java.text.DateFormat;
 import java.util.List;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -12,10 +11,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
-
-import domainapp.dom.app.cadete.Cadete;
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.proveedor.Proveedor;
 import domainapp.dom.app.servicios.E_estado;
@@ -33,24 +29,27 @@ public class RepositorioPedido {
 	@ActionLayout(named = "Crear nuevo Pedido")
 	public Pedido createPedido(
 			@ParameterLayout(named = "Tipo") @Parameter(optionality = Optionality.OPTIONAL) Tipo tipo,
+			@ParameterLayout(named = "Numero de Venta") @Parameter(optionality = Optionality.OPTIONAL) String numeroVenta,
 			@ParameterLayout(named = "Urgencia") @Parameter(optionality = Optionality.OPTIONAL) E_urgencia_pedido urgencia,
 			@ParameterLayout(named = "Proveedor") @Parameter(optionality = Optionality.OPTIONAL) Proveedor proveedor,
 			@ParameterLayout(named = "Vendedor") @Parameter(optionality = Optionality.OPTIONAL) Vendedor vendedor,
 			@ParameterLayout(named = "Valor") @Parameter(optionality = Optionality.OPTIONAL) float valor, 
 			@ParameterLayout(named = "Sucursal") Sucursal sucursal,
-			@ParameterLayout(named = "Observaciones", multiLine = 15) String observacion) {
+			@ParameterLayout(named = "Observaciones", multiLine = 15) String observacion){
 		
 		final Pedido Pedido = container.newTransientInstance(Pedido.class);
 		Pedido.setTipo(tipo);
+		Pedido.setNumeroVenta(numeroVenta);
 		Pedido.setUrgencia(urgencia);
 		Pedido.setProveedor(proveedor);
 		Pedido.setVendedor(vendedor);
 		Pedido.setValor(valor);
 		Pedido.setEstado(E_estado.NUEVO);
 		Pedido.setSucursal(sucursal);
-		Pedido.setFechaHora(DateTime.now());
+		Pedido.setFechaHora(Calendar.getInstance());
 		Pedido.setObservacion(observacion);
 		Pedido.setActivo(true);
+		Pedido.setTiempoEstimado("-");
 		container.persistIfNotAlready(Pedido);
 		return Pedido;
 
@@ -61,14 +60,16 @@ public class RepositorioPedido {
 	public Pedido createPedidoVendedores(
 			
 			@ParameterLayout(named = "Tipo") @Parameter(optionality = Optionality.OPTIONAL) Tipo tipo,
+			@ParameterLayout(named = "Numero de Venta") @Parameter(optionality = Optionality.OPTIONAL) String numeroVenta,
 			@ParameterLayout(named = "Urgencia") @Parameter(optionality = Optionality.OPTIONAL) E_urgencia_pedido urgencia,
 			@ParameterLayout(named = "Proveedor") @Parameter(optionality = Optionality.OPTIONAL) Proveedor proveedor,
 			@ParameterLayout(named = "Valor") @Parameter(optionality = Optionality.OPTIONAL) float valor, 
-			@ParameterLayout(named = "Sucursal") Sucursal sucursal,
-			@ParameterLayout(named = "Observaciones", multiLine = 15) String observacion
+			@ParameterLayout(named = "Sucursal")  @Parameter(optionality = Optionality.OPTIONAL) Sucursal sucursal,
+			@ParameterLayout(named = "Observaciones", multiLine = 15)  @Parameter(optionality = Optionality.OPTIONAL) String observacion
 			) {
 		final Pedido Pedido = container.newTransientInstance(Pedido.class);
 		Pedido.setTipo(tipo);
+		Pedido.setNumeroVenta(numeroVenta);
 		Pedido.setUrgencia(urgencia);
 		Pedido.setProveedor(proveedor);
 		Vendedor oVendedor=new Vendedor();
@@ -77,14 +78,14 @@ public class RepositorioPedido {
 		Pedido.setValor(valor);
 		Pedido.setEstado(E_estado.NUEVO);
 		Pedido.setSucursal(sucursal);
-		Pedido.setFechaHora(DateTime.now());
+		Pedido.setFechaHora(Calendar.getInstance());
 		Pedido.setObservacion(observacion);
 		Pedido.setActivo(true);
+		Pedido.setTiempoEstimado("-");
 		container.persistIfNotAlready(Pedido);
 		return Pedido;
 	
 	}
-
 	
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Listar Todos")
@@ -97,7 +98,6 @@ public class RepositorioPedido {
 		}
 		return listaPedidos;
 	}
-
 	
 	/*
 	 * Aqui comienza el método que permite a un vendedor visualizar sus pedidos
@@ -116,7 +116,6 @@ public class RepositorioPedido {
 	}
 
 	//termina listar pedidos de VENDEDOR
-	
 	
 	@MemberOrder(sequence = "3")
 	@ActionLayout(named = "Listar Nuevos")
