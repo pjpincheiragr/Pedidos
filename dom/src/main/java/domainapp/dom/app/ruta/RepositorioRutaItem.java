@@ -15,6 +15,7 @@ import org.apache.isis.applib.query.QueryDefault;
 
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.ruta.RutaItem;
+import domainapp.dom.app.servicios.E_estado;
 import domainapp.dom.app.servicios.E_urgencia_pedido;
 
 
@@ -55,6 +56,20 @@ public class RepositorioRutaItem {
 			this.container.warnUser("No hay rutas cargadas en el sistema");
 		}
 		return listaRutas;
+	}
+
+	@ActionLayout(named = "Update Estado")
+	public RutaItem updatePedido(
+			@ParameterLayout(named = "Clave Pedido")long clavePedido
+			) {
+		final List<RutaItem> listaPedidos = this.container.allMatches(new QueryDefault<RutaItem>(RutaItem.class,
+						"BuscarPorClave","clavePedido",clavePedido));
+		if (!listaPedidos.isEmpty()) {
+			listaPedidos.get(0).setEstado(true);
+		}
+	
+		 container.persistIfNotAlready(listaPedidos.get(0));
+		 return listaPedidos.get(0);
 	}
 	
 	@javax.inject.Inject

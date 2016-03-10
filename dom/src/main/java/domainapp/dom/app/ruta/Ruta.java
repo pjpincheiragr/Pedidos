@@ -154,6 +154,7 @@ public class Ruta {
 		this.ordenarItems(orden);
 		oRutaItem.setOrden(orden);
 		oRutaItem.setPedido(pedido);
+		oRutaItem.setClavePedido(pedido.getClave());
 		oRutaItem.setRuta(this);
 		oRutaItem.setTiempo(tiempo);
 		container.persistIfNotAlready(oRutaItem);
@@ -222,6 +223,7 @@ public class Ruta {
 		this.ordenarItems(orden);
 		oRutaItem.setOrden(orden);
 		oRutaItem.setPedido(pedido);
+		oRutaItem.setClavePedido(pedido.getClave());
 		oRutaItem.setRuta(this);
 		oRutaItem.setTiempo(tiempo);
 		container.persistIfNotAlready(oRutaItem);

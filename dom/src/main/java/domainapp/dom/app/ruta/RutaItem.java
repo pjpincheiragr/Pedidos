@@ -10,7 +10,6 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Where;
 
 import domainapp.dom.app.pedido.Pedido;
 
@@ -20,7 +19,8 @@ import domainapp.dom.app.pedido.Pedido;
 @javax.jdo.annotations.Queries({
 		@javax.jdo.annotations.Query(name = "ListarTodosPorUrgencia", language = "JDOQL", value = "SELECT  "
 				+ " FROM domainapp.dom.app.ruta.RutaItem "
-				+ " WHERE pedido.urgencia==:urgencia && activo == true" + " order by orden "),
+				+ " WHERE pedido.urgencia==:urgencia && activo == true"
+				+ " order by orden "),
 		@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.ruta.RutaItem " + " order by orden "),
 		@javax.jdo.annotations.Query(name = "ListarPendientes", language = "JDOQL", value = "SELECT "
@@ -33,29 +33,37 @@ import domainapp.dom.app.pedido.Pedido;
 				+ " order by orden "),
 		@javax.jdo.annotations.Query(name = "findByState", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "WHERE (estado==:estado) && activo == true" + " order by orden "),
+				+ "WHERE (estado==:estado) && activo == true"
+				+ " order by orden "),
 		@javax.jdo.annotations.Query(name = "findBySeller", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "WHERE (vendedor==:vendedor && activo == true)" + " order by orden ") })
+				+ "WHERE (vendedor==:vendedor && activo == true)"
+				+ " order by orden "),
+		@javax.jdo.annotations.Query(name = "BuscarPorClave", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.ruta.RutaItem "
+				+ "WHERE clavePedido == :clavePedido "),
+
+})
 @DomainObject(objectType = "RUTAITEM", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
 public class RutaItem {
 
 	private Pedido pedido;
-	private int orden;        
+	private long clavePedido;
+	private int orden;
 	private boolean estado;
 	private Ruta ruta;
 	private int tiempo;
-
 
 	public String title() {
 		return this.getPedido().title();
 	}
 
-	public RutaItem(Pedido pedido, int orden, boolean estado, Ruta ruta,
-			int tiempo) {
+	public RutaItem(Pedido pedido, long clavePedido, int orden, boolean estado,
+			Ruta ruta, int tiempo) {
 		super();
 		this.pedido = pedido;
+		this.clavePedido = clavePedido;
 		this.orden = orden;
 		this.estado = estado;
 		this.ruta = ruta;
@@ -75,6 +83,17 @@ public class RutaItem {
 
 	public void setPedido(Pedido pedido) {
 		this.pedido = pedido;
+	}
+
+	@MemberOrder(sequence = "1")
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	@Property(editing = Editing.DISABLED)
+	public long getClavePedido() {
+		return this.clavePedido;
+	}
+
+	public void setClavePedido(long clavePedido) {
+		this.clavePedido = clavePedido;
 	}
 
 	@MemberOrder(sequence = "2")
