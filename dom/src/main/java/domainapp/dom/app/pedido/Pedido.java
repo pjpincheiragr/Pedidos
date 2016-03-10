@@ -50,6 +50,10 @@ import java.text.SimpleDateFormat;
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.APPLICATION)
 @javax.jdo.annotations.Queries({
 
+		@javax.jdo.annotations.Query(name = "BuscarPorClave", language = "JDOQL", value = "SELECT "
+			+ "FROM domainapp.dom.app.pedido.Pedido "
+			+ "WHERE clave == :clave && activo == true "),
+
 		@javax.jdo.annotations.Query(name = "ListarTodosPorUrgencia", language = "JDOQL", value = "SELECT  "
 				+ " FROM domainapp.dom.app.ruta.RutaItem "
 				+ " WHERE urgencia == :urgencia && estado == :estado && activo == true"),

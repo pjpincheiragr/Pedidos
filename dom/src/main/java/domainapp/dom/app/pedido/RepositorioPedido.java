@@ -163,11 +163,10 @@ public class RepositorioPedido {
 	
 	@ActionLayout(named = "Update Estado")
 	public Pedido updatePedido(
-			@ParameterLayout(named = "Numero")String numero
+			@ParameterLayout(named = "Clave")long clave
 			) {
-		final List<Pedido> listaPedidos = this.container
-				.allMatches(new QueryDefault<Pedido>(Pedido.class,
-						"BuscarPorNumero"));
+		final List<Pedido> listaPedidos = this.container.allMatches(new QueryDefault<Pedido>(Pedido.class,
+						"BuscarPorClave","clave",clave));
 		if (!listaPedidos.isEmpty()) {
 			listaPedidos.get(0).setEstado(E_estado.TERMINADO);
 		}
