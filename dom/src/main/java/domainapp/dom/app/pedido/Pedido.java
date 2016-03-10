@@ -39,6 +39,9 @@ import org.joda.time.DateTime;
 @javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
 @javax.jdo.annotations.Queries({
 	
+		@javax.jdo.annotations.Query(name = "BuscarPorNumero", language = "JDOQL", value = "SELECT "
+			+ "FROM domainapp.dom.app.pedido.Pedido "
+			+ "WHERE activo == true "),
 		@javax.jdo.annotations.Query(name = "ListarTodosPorUrgencia", language = "JDOQL", value = "SELECT  "
 				+ " FROM domainapp.dom.app.ruta.RutaItem "
 				+ " WHERE urgencia == :urgencia && estado == :estado && activo == true"),

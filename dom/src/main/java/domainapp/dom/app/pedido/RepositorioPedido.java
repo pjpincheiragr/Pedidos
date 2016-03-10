@@ -161,6 +161,22 @@ public class RepositorioPedido {
 		}
 		return listaPedidos;
 	}
+	
+	@ActionLayout(named = "Update Estado")
+	public Pedido updatePedido(
+			@ParameterLayout(named = "Numero")String numero
+			) {
+		final List<Pedido> listaPedidos = this.container
+				.allMatches(new QueryDefault<Pedido>(Pedido.class,
+						"BuscarPorNumero"));
+		if (!listaPedidos.isEmpty()) {
+			listaPedidos.get(0).setEstado(E_estado.TERMINADO);
+		}
+		
+		 container.persistIfNotAlready(listaPedidos.get(0));
+		 return listaPedidos.get(0);
+	}
+
 
 
 	
