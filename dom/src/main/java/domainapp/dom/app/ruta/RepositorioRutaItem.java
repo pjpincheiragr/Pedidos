@@ -13,9 +13,7 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
 
-import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.ruta.RutaItem;
-import domainapp.dom.app.servicios.E_estado;
 import domainapp.dom.app.servicios.E_urgencia_pedido;
 
 
@@ -52,9 +50,9 @@ public class RepositorioRutaItem {
 		final List<RutaItem> listaRutas = this.container
 				.allMatches(new QueryDefault<RutaItem>(RutaItem.class,
 						"ListarTodosPorUrgencia","urgencia",urgencia));
-		if (listaRutas.isEmpty()) {
+		/*if (listaRutas.isEmpty()) {
 			this.container.warnUser("No hay rutas cargadas en el sistema");
-		}
+		}*/
 		return listaRutas;
 	}
 

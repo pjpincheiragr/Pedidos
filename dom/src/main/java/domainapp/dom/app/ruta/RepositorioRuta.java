@@ -40,9 +40,9 @@ public class RepositorioRuta {
 		final List<Ruta> listaRutas = this.container
 				.allMatches(new QueryDefault<Ruta>(Ruta.class,
 						"ListarTodos"));
-		if (listaRutas.isEmpty()) {
+		/*if (listaRutas.isEmpty()) {
 			this.container.warnUser("No hay rutas cargadas en el sistema");
-		}
+		}*/
 		return listaRutas;
 	}
 	
@@ -54,9 +54,9 @@ public class RepositorioRuta {
 		final List<Ruta> listaRutas = this.container
 				.allMatches(new QueryDefault<Ruta>(Ruta.class,
 						"ListarPorCadete","cadete",cadete));
-		if (listaRutas.isEmpty()) {
+		/*if (listaRutas.isEmpty()) {
 			this.container.warnUser("No hay rutas cargadas en el sistema");
-		}
+		}*/
 		return listaRutas;
 	}
 	

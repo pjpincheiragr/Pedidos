@@ -33,10 +33,10 @@ public class RepositorioPedido {
 			@ParameterLayout(named = "Urgencia") @Parameter(optionality = Optionality.OPTIONAL) E_urgencia_pedido urgencia,
 			@ParameterLayout(named = "Proveedor") @Parameter(optionality = Optionality.OPTIONAL) Proveedor proveedor,
 			@ParameterLayout(named = "Vendedor") @Parameter(optionality = Optionality.OPTIONAL) Vendedor vendedor,
-			@ParameterLayout(named = "Valor") @Parameter(optionality = Optionality.OPTIONAL) float valor, 
+			@ParameterLayout(named = "Valor") @Parameter(optionality = Optionality.OPTIONAL) float valor,
 			@ParameterLayout(named = "Sucursal") Sucursal sucursal,
-			@ParameterLayout(named = "Observaciones", multiLine = 15) String observacion){
-		
+			@ParameterLayout(named = "Observaciones", multiLine = 15) @Parameter(optionality = Optionality.OPTIONAL)String observacion) {
+
 		final Pedido Pedido = container.newTransientInstance(Pedido.class);
 		Pedido.setTipo(tipo);
 		Pedido.setNumeroVenta(numeroVenta);
@@ -58,22 +58,22 @@ public class RepositorioPedido {
 	@MemberOrder(sequence = "2")
 	@ActionLayout(named = "Crear nuevo Pedido")
 	public Pedido createPedidoVendedores(
-			
+
 			@ParameterLayout(named = "Tipo") @Parameter(optionality = Optionality.OPTIONAL) Tipo tipo,
 			@ParameterLayout(named = "Numero de Venta") @Parameter(optionality = Optionality.OPTIONAL) String numeroVenta,
 			@ParameterLayout(named = "Urgencia") @Parameter(optionality = Optionality.OPTIONAL) E_urgencia_pedido urgencia,
 			@ParameterLayout(named = "Proveedor") @Parameter(optionality = Optionality.OPTIONAL) Proveedor proveedor,
-			@ParameterLayout(named = "Valor") @Parameter(optionality = Optionality.OPTIONAL) float valor, 
-			@ParameterLayout(named = "Sucursal")  @Parameter(optionality = Optionality.OPTIONAL) Sucursal sucursal,
-			@ParameterLayout(named = "Observaciones", multiLine = 15)  @Parameter(optionality = Optionality.OPTIONAL) String observacion
-			) {
+			@ParameterLayout(named = "Valor") @Parameter(optionality = Optionality.OPTIONAL) float valor,
+			@ParameterLayout(named = "Sucursal") @Parameter(optionality = Optionality.OPTIONAL) Sucursal sucursal,
+			@ParameterLayout(named = "Observaciones", multiLine = 15) @Parameter(optionality = Optionality.OPTIONAL) String observacion) {
 		final Pedido Pedido = container.newTransientInstance(Pedido.class);
 		Pedido.setTipo(tipo);
 		Pedido.setNumeroVenta(numeroVenta);
 		Pedido.setUrgencia(urgencia);
 		Pedido.setProveedor(proveedor);
-		Vendedor oVendedor=new Vendedor();
-		oVendedor= repositorioVendedor.findByUserCode( container.getUser().getName());
+		Vendedor oVendedor = new Vendedor();
+		oVendedor = repositorioVendedor.findByUserCode(container.getUser()
+				.getName());
 		Pedido.setVendedor(oVendedor);
 		Pedido.setValor(valor);
 		Pedido.setEstado(E_estado.NUEVO);
@@ -84,9 +84,9 @@ public class RepositorioPedido {
 		Pedido.setTiempoEstimado("-");
 		container.persistIfNotAlready(Pedido);
 		return Pedido;
-	
+
 	}
-	
+
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Listar Todos")
 	public List<Pedido> listAll() {
@@ -98,31 +98,32 @@ public class RepositorioPedido {
 		}
 		return listaPedidos;
 	}
-	
+
 	/*
 	 * Aqui comienza el método que permite a un vendedor visualizar sus pedidos
-	 * */
+	 */
 	@MemberOrder(sequence = "2")
 	@ActionLayout(named = "Listar Pedidos")
-	
 	public List<Pedido> listAllByVendor() {
 		final List<Pedido> listaPedidos = this.container
 				.allMatches(new QueryDefault<Pedido>(Pedido.class,
-						"ListarTodosPorVendedor", "vendedor", repositorioVendedor.findByUserCode( container.getUser().getName()) ));
+						"ListarTodosPorVendedor", "vendedor",
+						repositorioVendedor.findByUserCode(container.getUser()
+								.getName())));
 		if (listaPedidos.isEmpty()) {
 			this.container.warnUser("No hay pedidos cargados en el sistema");
 		}
 		return listaPedidos;
 	}
 
-	//termina listar pedidos de VENDEDOR
-	
+	// termina listar pedidos de VENDEDOR
+
 	@MemberOrder(sequence = "3")
 	@ActionLayout(named = "Listar Nuevos")
 	public List<Pedido> listNew() {
 		final List<Pedido> listaPedidos = this.container
 				.allMatches(new QueryDefault<Pedido>(Pedido.class,
-						"ListarNuevos", "estado",E_estado.NUEVO));
+						"ListarNuevos", "estado", E_estado.NUEVO));
 		if (listaPedidos.isEmpty()) {
 			this.container.warnUser("No hay pedidos cargados en el sistema");
 		}
@@ -154,34 +155,27 @@ public class RepositorioPedido {
 
 		final List<Pedido> listaPedidos = this.container
 				.allMatches(new QueryDefault<Pedido>(Pedido.class,
-						"ListarTodosPorUrgencia", "urgencia", urgencia,"estado",E_estado.NUEVO));
-		if (listaPedidos.isEmpty()) {
-			this.container.warnUser("No hay rutas cargadas en el sistema");
-		}
+						"ListarTodosPorUrgencia", "urgencia", urgencia,
+						"estado", E_estado.NUEVO));
 		return listaPedidos;
 	}
-	
+
 	@ActionLayout(named = "Update Estado")
-	public Pedido updatePedido(
-			@ParameterLayout(named = "Clave")long clave
-			) {
-		final List<Pedido> listaPedidos = this.container.allMatches(new QueryDefault<Pedido>(Pedido.class,
-						"BuscarPorClave","clave",clave));
+	public Pedido updatePedido(@ParameterLayout(named = "Clave") long clave) {
+		final List<Pedido> listaPedidos = this.container
+				.allMatches(new QueryDefault<Pedido>(Pedido.class,
+						"BuscarPorClave", "clave", clave));
 		if (!listaPedidos.isEmpty()) {
 			listaPedidos.get(0).setEstado(E_estado.TERMINADO);
 		}
-		
-		 container.persistIfNotAlready(listaPedidos.get(0));
-		 return listaPedidos.get(0);
+
+		container.persistIfNotAlready(listaPedidos.get(0));
+		return listaPedidos.get(0);
 	}
 
-
-
-	
 	@javax.inject.Inject
 	RepositorioVendedor repositorioVendedor;
-	
-	
+
 	@javax.inject.Inject
 	DomainObjectContainer container;
 

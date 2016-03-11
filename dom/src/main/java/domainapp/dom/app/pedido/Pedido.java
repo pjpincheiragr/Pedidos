@@ -97,10 +97,10 @@ public class Pedido {
 	private String tiempoEstimado;
 
 	public String title() {
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM");
 
 		return getVendedor().getNombre() + " - "
-				+ getSucursal().getCodigoSucursal() + " - "
+				+ "Sucursal: " + getSucursal().getCodigoSucursal() + " - "
 				+ dateFormat.format(this.fechaHora.getTime());
 	}
 
@@ -142,8 +142,8 @@ public class Pedido {
 	}
 
 	@MemberOrder(sequence = "2")
-	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.ENABLED)
+	@javax.jdo.annotations.Column(allowsNull = "false")
 	public Tipo getTipo() {
 		return tipo;
 	}
@@ -154,8 +154,8 @@ public class Pedido {
 	}
 
 	@MemberOrder(sequence = "2")
-	@javax.jdo.annotations.Column(allowsNull = "true")
 	@Property(editing = Editing.ENABLED)
+	@javax.jdo.annotations.Column(allowsNull = "true")
 	public String getNumeroVenta() {
 		return this.numeroVenta;
 	}
@@ -165,8 +165,8 @@ public class Pedido {
 	}
 
 	@MemberOrder(sequence = "2")
-	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
+	@javax.jdo.annotations.Column(allowsNull = "false")
 	public Proveedor getProveedor() {
 		return proveedor;
 	}
@@ -207,8 +207,8 @@ public class Pedido {
 	}
 
 	@MemberOrder(sequence = "7")
-	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
+	@javax.jdo.annotations.Column(allowsNull = "false")
 	public Sucursal getSucursal() {
 		return sucursal;
 	}
@@ -217,9 +217,10 @@ public class Pedido {
 		this.sucursal = sucursal;
 	}
 
-	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing = Editing.DISABLED)
+	
 	@Programmatic
+	@Property(editing = Editing.DISABLED)
+	@javax.jdo.annotations.Column(allowsNull = "false")
 	public Calendar getFechaHora() {
 
 		return this.fechaHora;
@@ -232,8 +233,9 @@ public class Pedido {
 
 	// COMIENZA EL CAMPO OBSERVACION
 
-	@javax.jdo.annotations.Column(allowsNull = "true", length = 600)
+
 	@Property(editing = Editing.ENABLED)
+	@javax.jdo.annotations.Column(allowsNull = "true", length = 600)
 	public String getObservacion() {
 		return observacion;
 	}

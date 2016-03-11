@@ -17,7 +17,6 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -155,6 +154,7 @@ public class Ruta {
 		oRutaItem.setOrden(orden);
 		oRutaItem.setPedido(pedido);
 		oRutaItem.setClavePedido(pedido.getClave());
+		oRutaItem.setProveedor(pedido.getProveedor());
 		oRutaItem.setRuta(this);
 		oRutaItem.setTiempo(tiempo);
 		container.persistIfNotAlready(oRutaItem);
@@ -224,6 +224,7 @@ public class Ruta {
 		oRutaItem.setOrden(orden);
 		oRutaItem.setPedido(pedido);
 		oRutaItem.setClavePedido(pedido.getClave());
+		oRutaItem.setProveedor(pedido.getProveedor());
 		oRutaItem.setRuta(this);
 		oRutaItem.setTiempo(tiempo);
 		container.persistIfNotAlready(oRutaItem);
@@ -261,11 +262,8 @@ public class Ruta {
 
 	@Programmatic
 	public boolean hideDeleteRuta() {
-		if (!isActivo())
-			return true;
-		else
-			return false;
-	}
+		return isActivo() ? false : true;
+		}
 
 	@Property(hidden = Where.EVERYWHERE)
 	@MemberOrder(sequence = "5")

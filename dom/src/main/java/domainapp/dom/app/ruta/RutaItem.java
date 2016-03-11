@@ -12,6 +12,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 
 import domainapp.dom.app.pedido.Pedido;
+import domainapp.dom.app.proveedor.Proveedor;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "RutaItem_ID")
@@ -49,6 +50,7 @@ import domainapp.dom.app.pedido.Pedido;
 public class RutaItem {
 
 	private Pedido pedido;
+	private Proveedor proveedor;
 	private long clavePedido;
 	private int orden;
 	private boolean estado;
@@ -59,11 +61,12 @@ public class RutaItem {
 		return this.getPedido().title();
 	}
 
-	public RutaItem(Pedido pedido, long clavePedido, int orden, boolean estado,
-			Ruta ruta, int tiempo) {
+	public RutaItem(Pedido pedido, long clavePedido, Proveedor proveedor,
+			int orden, boolean estado, Ruta ruta, int tiempo) {
 		super();
 		this.pedido = pedido;
 		this.clavePedido = clavePedido;
+		this.proveedor = proveedor;
 		this.orden = orden;
 		this.estado = estado;
 		this.ruta = ruta;
@@ -96,6 +99,18 @@ public class RutaItem {
 		this.clavePedido = clavePedido;
 	}
 
+	@MemberOrder(sequence = "1")
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	@Property(editing = Editing.DISABLED)
+	public Proveedor getProveedor() {
+		return this.proveedor;
+	}
+
+	public void setProveedor(Proveedor proveedor) {
+		this.proveedor = proveedor;
+	}
+
+	
 	@MemberOrder(sequence = "2")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.ENABLED)
