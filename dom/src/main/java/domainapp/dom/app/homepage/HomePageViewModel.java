@@ -19,38 +19,54 @@
 package domainapp.dom.app.homepage;
 
 import java.util.List;
+import java.util.Timer;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.RenderType;
 
 import org.apache.isis.applib.annotation.ViewModel;
-import domainapp.dom.app.proveedor.RepositorioProveedor;
 import domainapp.dom.app.ruta.RepositorioRuta;
 import domainapp.dom.app.ruta.Ruta;
-import domainapp.dom.app.sucursal.RepositorioSucursal;
-import domainapp.dom.app.sucursal.Sucursal;
+import domainapp.dom.app.servicios.E_urgencia_pedido;
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.pedido.RepositorioPedido;
-import domainapp.dom.app.vendedor.Vendedor;
+
 import domainapp.dom.app.vendedor.RepositorioVendedor;
 
 @ViewModel
 public class HomePageViewModel {
-
+	private final Timer timer = new  Timer();
 	//region > title
 	public String title() {
 		return ("Pedidos y Rutas pendientes");
 	}
 	// endregion
-
-	// region > object (collection)
-	/*@HomePage
-	public List<Sucursal> getlistAllSucursal() {
-		return repositorioSucursal.listAll();
+	
+	 
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	@Property(editing = Editing.ENABLED)
+	@CollectionLayout(render = RenderType.EAGERLY)
+	public List<Pedido> getListaPedidosUrgentes() {
+	
+		return repositorioPedido
+				.listAllByUrgency(E_urgencia_pedido.RESPUESTA_RAPIDA);
 	}
 
-	*/
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	@Property(editing = Editing.ENABLED)
+	@CollectionLayout(render = RenderType.EAGERLY)
+	public List<Pedido> getListaPedidosProgramables() {
+		return repositorioPedido
+				.listAllByUrgency(E_urgencia_pedido.PROGRAMABLE);
+
+	}
+	
+
+
 	@HomePage
 	  @CollectionLayout(
 	            render = RenderType.EAGERLY
@@ -96,10 +112,6 @@ public class HomePageViewModel {
 */
 	@javax.inject.Inject
 	DomainObjectContainer container;
-	@javax.inject.Inject
-	RepositorioSucursal repositorioSucursal;
-	@javax.inject.Inject
-	RepositorioProveedor repositorioProveedor;
 	@javax.inject.Inject
 	RepositorioPedido repositorioPedido;
 	@javax.inject.Inject

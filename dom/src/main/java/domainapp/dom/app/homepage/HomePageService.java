@@ -18,12 +18,19 @@
  */
 package domainapp.dom.app.homepage;
 
+
+
+
+
+import javax.swing.Timer;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
+
 
 @DomainService(
         nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY // trick to suppress the actions from the top-level menu
@@ -37,10 +44,15 @@ public class HomePageService {
     )
     @HomePage
     public HomePageViewModel homePage() {
+    	Timer displayTimer = new Timer(100, null);
+    	displayTimer.start();
+    
+
         return container.injectServicesInto(new HomePageViewModel());
     }
 
     //endregion
+
 
     //region > injected services
 
