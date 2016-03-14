@@ -3,6 +3,9 @@ package domainapp.dom.app.pedido;
 import java.util.Calendar;
 import java.text.DateFormat;
 import java.util.List;
+
+import javax.inject.Inject;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -12,6 +15,8 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
+
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.proveedor.Proveedor;
 import domainapp.dom.app.servicios.E_estado;
@@ -170,6 +175,7 @@ public class RepositorioPedido {
 		}
 
 		container.persistIfNotAlready(listaPedidos.get(0));
+		container.flush();
 		return listaPedidos.get(0);
 	}
 
@@ -178,5 +184,8 @@ public class RepositorioPedido {
 
 	@javax.inject.Inject
 	DomainObjectContainer container;
+	
+	 @Inject
+	    IsisJdoSupport isisJdoSupport;
 
 }

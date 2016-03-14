@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 			+ " order by nombre "),
 	@javax.jdo.annotations.Query(name = "findByNameAuxiliar", language = "JDOQL", value = "SELECT "
 					+ "FROM domainapp.dom.app.vendedor.Vendedor "
-					+ "WHERE (nombre==nombre))"),
+					+ "WHERE nombre  == :nombre"),
 	@javax.jdo.annotations.Query(name = "findByUserCode", language = "JDOQL", value = "SELECT "
 			+ " FROM domainapp.dom.app.vendedor.Vendedor "
 			+ " WHERE userCode==:userCode "),

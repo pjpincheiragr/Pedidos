@@ -105,8 +105,8 @@ public class Ruta {
 		this.listaPedidos = listaPedidos;
 	}
 
-	@MemberOrder(sequence = "1", name = "Quitar RutaItem")
-	@ActionLayout(named = "Quitar Pedido", position = Position.PANEL)
+	@MemberOrder(sequence = "1", name = "ListaPedidos")
+	@ActionLayout(named = "Quitar", position = Position.PANEL)
 	public Ruta quitarPedido(RutaItem rutaItem) {
 		final Pedido pedido = rutaItem.getPedido();
 		this.getListaPedidos().remove(rutaItem);
@@ -165,7 +165,7 @@ public class Ruta {
 				.newTransientInstance(PedidoHistorial.class);
 		// PedidoHistorial oPedidoHistorial = new PedidoHistorial();
 		oPedidoHistorial.setPedido(pedido);
-		oPedidoHistorial.setObservacion("Asignación automática");
+		oPedidoHistorial.setObservacion("Asignado a Ruta: " + this.getNumero());
 		oPedidoHistorial.setFechaHora(DateTime.now());
 		oPedidoHistorial.setEstado(pedido.getEstado());
 
@@ -235,7 +235,7 @@ public class Ruta {
 				.newTransientInstance(PedidoHistorial.class);
 		// PedidoHistorial oPedidoHistorial = new PedidoHistorial();
 		oPedidoHistorial.setPedido(pedido);
-		oPedidoHistorial.setObservacion("Asignación automática");
+		oPedidoHistorial.setObservacion("Asignado a Ruta: " + this.getNumero());
 		oPedidoHistorial.setFechaHora(DateTime.now());
 		oPedidoHistorial.setEstado(pedido.getEstado());
 

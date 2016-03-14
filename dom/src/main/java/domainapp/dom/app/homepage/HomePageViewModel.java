@@ -25,16 +25,16 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.RenderType;
-
 import org.apache.isis.applib.annotation.ViewModel;
+
 import domainapp.dom.app.ruta.RepositorioRuta;
 import domainapp.dom.app.ruta.Ruta;
 import domainapp.dom.app.servicios.E_urgencia_pedido;
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.pedido.RepositorioPedido;
-
 import domainapp.dom.app.vendedor.RepositorioVendedor;
 
 @ViewModel
@@ -48,6 +48,7 @@ public class HomePageViewModel {
 	
 	 
 	@javax.jdo.annotations.Column(allowsNull = "true")
+	@MemberOrder(sequence = "1")
 	@Property(editing = Editing.ENABLED)
 	@CollectionLayout(render = RenderType.EAGERLY)
 	public List<Pedido> getListaPedidosUrgentes() {
@@ -57,6 +58,7 @@ public class HomePageViewModel {
 	}
 
 	@javax.jdo.annotations.Column(allowsNull = "true")
+	@MemberOrder(sequence = "2")
 	@Property(editing = Editing.ENABLED)
 	@CollectionLayout(render = RenderType.EAGERLY)
 	public List<Pedido> getListaPedidosProgramables() {
