@@ -1,5 +1,8 @@
 package domainapp.dom.app.pedido;
+import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -15,9 +18,13 @@ import domainapp.dom.app.marca.Marca;
 import domainapp.dom.app.servicios.E_estado_item;
 import domainapp.dom.app.servicios.E_tieneMuestra;
 
-@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
+
+
+
+
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "PedidoItem_ID")
 @javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
+@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.APPLICATION)
 @javax.jdo.annotations.Queries({
 		@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido " + "WHERE activo == true"),
@@ -68,7 +75,23 @@ public class PedidoItem {
 		super();
 	}
 
+	
+	@PrimaryKey
+	private long clave;
+
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	@javax.jdo.annotations.PrimaryKey(column = "clave")
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY, sequence = "clave")
 	@MemberOrder(sequence = "1")
+	public long getClave() {
+		return clave;
+	}
+
+	public void setClave(final long clave) {
+		this.clave = clave;
+	}
+	
+	@MemberOrder(sequence = "2")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
 	public E_tieneMuestra getMuestra() {
@@ -84,7 +107,7 @@ public class PedidoItem {
 	 * public boolean hideCodigo() { return tieneMuestra(); }
 	 */
 
-	@MemberOrder(sequence = "2")
+	@MemberOrder(sequence = "3")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
 	public String getCodigo() {
@@ -95,7 +118,7 @@ public class PedidoItem {
 		this.codigo = codigo;
 	}
 
-	@MemberOrder(sequence = "3")
+	@MemberOrder(sequence = "4")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
 	public Marca getMarca() {
@@ -106,7 +129,7 @@ public class PedidoItem {
 		this.marca = marca;
 	}
 
-	@MemberOrder(sequence = "4")
+	@MemberOrder(sequence = "5")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
 	public int getCantidad() {
@@ -117,7 +140,7 @@ public class PedidoItem {
 		this.cantidad = cantidad;
 	}
 
-	@MemberOrder(sequence = "5")
+	@MemberOrder(sequence = "6")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	public E_estado_item getEstado() {
 		return estado;
@@ -128,7 +151,7 @@ public class PedidoItem {
 	}
 
 	// Agrego campo observaciÃ³n
-	@MemberOrder(sequence = "6")
+	@MemberOrder(sequence = "7")
 	@javax.jdo.annotations.Column(allowsNull = "true", length = 600)
 	public String getObservacion() {
 		return observacion;
@@ -155,7 +178,7 @@ public class PedidoItem {
 	// SecciÃ³n de Borrar Pedido
 
 	@Property(hidden = Where.EVERYWHERE)
-	@MemberOrder(sequence = "7")
+	@MemberOrder(sequence = "8")
 	public boolean isActivo() {
 		return activo;
 	}

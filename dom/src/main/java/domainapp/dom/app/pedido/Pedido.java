@@ -46,7 +46,7 @@ import java.text.SimpleDateFormat;
 
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "Pedido_ID")
 @javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
-@javax.jdo.annotations.Uniques({ @javax.jdo.annotations.Unique(name = "Pedido_numero_must_be_unique", members = { "numeroPedido" }) })
+@javax.jdo.annotations.Uniques({ @javax.jdo.annotations.Unique(name = "Pedido_clave_must_be_unique", members = { "clave" }) })
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.APPLICATION)
 @javax.jdo.annotations.Queries({
 
@@ -130,8 +130,8 @@ public class Pedido {
 	private long clave;
 
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	@javax.jdo.annotations.PrimaryKey(column = "clavePedido")
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY, sequence = "clavePedido")
+	@javax.jdo.annotations.PrimaryKey(column = "clave")
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY, sequence = "clave")
 	@MemberOrder(sequence = "1")
 	public long getClave() {
 		return clave;
