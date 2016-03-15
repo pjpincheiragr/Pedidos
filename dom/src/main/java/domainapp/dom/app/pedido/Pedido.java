@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotation.ActionLayout.Position;
 
 import domainapp.dom.app.marca.Marca;
 import domainapp.dom.app.proveedor.Proveedor;
@@ -95,6 +96,7 @@ public class Pedido {
 	private List<PedidoItem> ListaPedidos = new ArrayList<PedidoItem>();
 	private String numeroVenta;
 	private String tiempoEstimado;
+	private boolean confirmado;
 
 	public String title() {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM");
@@ -125,6 +127,38 @@ public class Pedido {
 	public Pedido() {
 		super();
 	}
+
+	@MemberOrder(name = "Estado del Pedido", sequence = "1")
+	@ActionLayout(named = "Confirmar", position = Position.BELOW)
+	public Pedido confirmar(){
+		this.setConfirmado(true);
+		return this;	
+	}
+	
+	public String disableConfirmar(){
+		return getConfirmado() ? "El pedido ya fué confirmado" : null;
+	}
+	
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	public boolean getConfirmado() {
+		return this.confirmado;
+	}
+
+	public void setConfirmado(boolean confirmado) {
+		this.confirmado = confirmado;;
+
+	}
+	
+	@MemberOrder(name = "Estado del Pedido", sequence = "2")
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	public E_estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(E_estado estado) {
+		this.estado = estado;
+	}
+	
 
 	@PrimaryKey
 	private long clave;
@@ -196,15 +230,7 @@ public class Pedido {
 		this.valor = valor;
 	}
 
-	@MemberOrder(sequence = "6")
-	@javax.jdo.annotations.Column(allowsNull = "false")
-	public E_estado getEstado() {
-		return estado;
-	}
-
-	public void setEstado(E_estado estado) {
-		this.estado = estado;
-	}
+	
 
 	@MemberOrder(sequence = "7")
 	@Property(editing = Editing.DISABLED)
@@ -345,6 +371,8 @@ public class Pedido {
 		return historial;
 	}
 
+	
+	
 	@javax.inject.Inject
 	DomainObjectContainer container;
 	@javax.inject.Inject
