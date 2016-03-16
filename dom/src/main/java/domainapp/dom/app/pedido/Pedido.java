@@ -4,6 +4,7 @@ import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.value.Blob;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -139,6 +140,15 @@ public class Pedido {
 		return getConfirmado() ? "El pedido ya fue confirmado" : null;
 	}
 	
+
+	@ActionLayout(named = "Actualizar T.E.", position = Position.BELOW)
+	public Pedido actualizarTiempo(String tEstimado){
+		this.setTiempoEstimado(tEstimado);
+		this.repositorioPedido.enviarSMS();
+		return this;	
+	}
+	
+	
 	@MemberOrder(name = "Estado del Pedido", sequence = "1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	public boolean getConfirmado() {
@@ -245,13 +255,11 @@ public class Pedido {
 	}
 
 	
-	@Programmatic
+	
 	@Property(editing = Editing.DISABLED)
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	public Calendar getFechaHora() {
-
-		return this.fechaHora;
-
+	public Date getFechaHora() {
+		return this.fechaHora.getTime();
 	}
 
 	public void setFechaHora(Calendar fechaHora) {
@@ -380,4 +388,7 @@ public class Pedido {
 	
 	@javax.inject.Inject
 	RepositorioPedidoItem repositorioPedidoItem;
+	
+	@javax.inject.Inject
+	RepositorioPedido repositorioPedido;
 }

@@ -77,6 +77,8 @@ public class HomePageViewModel {
 		return RepositorioRuta.listAll();
 		}
 
+    public String cssClass() {return "my-special-auto-updating-entity"; }
+
 	/*@HomePage
 	public List<Pedido> getlistPedidosVendedor1() {                                  //Ver este método
 		Vendedor ObjetoVendedor1= new Vendedor();

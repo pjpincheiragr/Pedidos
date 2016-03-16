@@ -1,6 +1,7 @@
 package domainapp.dom.app.pedido;
 
 import java.util.Calendar;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.List;
 
@@ -26,6 +27,12 @@ import domainapp.dom.app.tipo.Tipo;
 import domainapp.dom.app.vendedor.RepositorioVendedor;
 import domainapp.dom.app.vendedor.Vendedor;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClientBuilder;
+
 @DomainService(repositoryFor = Pedido.class)
 @DomainServiceLayout(menuOrder = "60", named = "Pedidos")
 public class RepositorioPedido {
@@ -40,7 +47,7 @@ public class RepositorioPedido {
 			@ParameterLayout(named = "Vendedor") @Parameter(optionality = Optionality.OPTIONAL) Vendedor vendedor,
 			@ParameterLayout(named = "Valor") @Parameter(optionality = Optionality.OPTIONAL) float valor,
 			@ParameterLayout(named = "Sucursal") Sucursal sucursal,
-			@ParameterLayout(named = "Observaciones", multiLine = 15) @Parameter(optionality = Optionality.OPTIONAL)String observacion) {
+			@ParameterLayout(named = "Observaciones", multiLine = 15) @Parameter(optionality = Optionality.OPTIONAL) String observacion) {
 
 		final Pedido Pedido = container.newTransientInstance(Pedido.class);
 		Pedido.setTipo(tipo);
@@ -91,61 +98,65 @@ public class RepositorioPedido {
 		return Pedido;
 
 	}
-	
-	/*Envio de SMS */
+
+	/* Envio de SMS */
+
+	public RepositorioPedido enviarSMS() {
+		/*if (OrdenServicio.this.estado == E_estado.SIN_REVISAR) {
+
+			container
+					.informUser("El SMS no se puede enviar si el equipo no fue revisado");
+		}*/
+
+		//else {
+
+			String url = "http://servicio.smsmasivos.com.ar/enviar_sms.asp?api=1&relogin=1&usuario=PABLO9999&clave=PABLO9999819&tos="
+					+ "2996202578"
+					+ "&idinterno=&texto=Tiempo+estimado:+"
+					/*+ OrdenServicio.this.estado + "+X+8300+Comunicaciones"*/;
+
+			HttpClient client = HttpClientBuilder.create().build();
+			HttpPost post = new HttpPost(url);
+			// add header
+			// post.setHeader("User-Agent", USER_AGENT);
+
+			// List<NameValuePair> urlParameters = new
+			// ArrayList<NameValuePair>();
+			// urlParameters.add(new BasicNameValuePair("sn", "C02G8416DRJM"));
+			// urlParameters.add(new BasicNameValuePair("cn", ""));
+			// urlParameters.add(new BasicNameValuePair("locale", ""));
+			// urlParameters.add(new BasicNameValuePair("caller", ""));
+			// urlParameters.add(new BasicNameValuePair("num", "12345"));
+
+			// post.setEntity(new UrlEncodedFormEntity(urlParameters));
+			container
+					.informUser("El SMS a sido enviado correctamente al cliente");
+			try {
+			client.execute(post);
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		//}
+
+		return this;
+	}
+
 	/*
-	   public  EnviarSMS() {	
-	    	if (OrdenServicio.this.estado == E_estado.SIN_REVISAR) {
-	    		
-	    		container.informUser("El SMS no se puede enviar si el equipo no fue revisado");}
-	    		
-	    		else{
-	    				
-	    		String url = "http://servicio.smsmasivos.com.ar/enviar_sms.asp?api=1&relogin=1&usuario=SMSDEMO77832&clave=SMSDEMO77832666&tos=" + getCliente().getTelefono() + "&idinterno=&texto=Puede+retirar+su+celular+" + OrdenServicio.this.estado + "+X+8300+Comunicaciones";
+	 * //Enviamos alerta via mail al tecnico para informar de un nuevo equipo.
+	 * public OrdenServicio EnviarAlertaTecnico() { if
+	 * (OrdenServicio.this.estado == E_estado.SIN_REVISAR) {
+	 * EnvioCorreo.send(getTecnico().getEmail(), "Nuevo equipo para revisar",
+	 * "La Orden de Servicio :" + OrdenServicio.this.numero +
+	 * " con el Estado : "+ OrdenServicio.this.estado +
+	 * "Necesita ser chequeada por el tecnico antes de las 48 horas");
+	 * 
+	 * container.informUser("Se envio mail al tecnico correctamente"); }
+	 * 
+	 * return this; }
+	 */
 
-	    		HttpClient client = HttpClientBuilder.create().build();
-	    		HttpPost post = new HttpPost(url);
-	    		// add header
-	    		//post.setHeader("User-Agent", USER_AGENT);
-
-	    		//List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
-	    		//urlParameters.add(new BasicNameValuePair("sn", "C02G8416DRJM"));
-	    		//urlParameters.add(new BasicNameValuePair("cn", ""));
-	    		//urlParameters.add(new BasicNameValuePair("locale", ""));
-	    		//urlParameters.add(new BasicNameValuePair("caller", ""));
-	    		//urlParameters.add(new BasicNameValuePair("num", "12345"));
-
-	    		//post.setEntity(new UrlEncodedFormEntity(urlParameters));
-	    		container.informUser("El SMS a sido enviado correctamente al cliente");
-	    		try {
-					HttpResponse response = client.execute(post);
-				} catch (ClientProtocolException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-	    		}
-	    					
-			return this;
-		}
-	    
-	    
-	    //Enviamos alerta via mail al tecnico para informar de un nuevo equipo.
-	    public OrdenServicio EnviarAlertaTecnico() {	
-	    	if (OrdenServicio.this.estado == E_estado.SIN_REVISAR) {
-	    		EnvioCorreo.send(getTecnico().getEmail(),
-	    				"Nuevo equipo para revisar", 
-	    				"La Orden de Servicio :" + OrdenServicio.this.numero +
-	    				" con el Estado : "+ OrdenServicio.this.estado + 
-	    				"Necesita ser chequeada por el tecnico antes de las 48 horas");
-	    		
-	    		container.informUser("Se envio mail al tecnico correctamente");
-	    	}
-	    					
-			return this;
-		}
-	    */
-	
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Listar Todos")
 	public List<Pedido> listAll() {
@@ -238,8 +249,8 @@ public class RepositorioPedido {
 
 	@javax.inject.Inject
 	DomainObjectContainer container;
-	
-	 @Inject
-	    IsisJdoSupport isisJdoSupport;
+
+	@Inject
+	IsisJdoSupport isisJdoSupport;
 
 }
