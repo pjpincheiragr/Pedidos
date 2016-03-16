@@ -15043,7 +15043,7 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 
 var Container = _interopRequire(require("./container"));
 
-// CSS at-rule like ìthis.keyframes name { }î.
+// CSS at-rule like ‘¥his.keyframes name { }‘Æ
 //
 // Can contain declarations (like this.font-face or this.page) ot another rules.
 
@@ -15819,7 +15819,7 @@ var vendor = _interopRequire(require("./vendor"));
 
 var Node = _interopRequire(require("./node"));
 
-// CSS declaration like ìcolor: blackî in rules
+// CSS declaration like ‘£olor: black‘†in rules
 
 var Declaration = (function (Node) {
     function Declaration(defaults) {
@@ -17791,8 +17791,7 @@ var Container = _interopRequire(require("./container"));
 
 var list = _interopRequire(require("./list"));
 
-// CSS rule like ìa { }î
-
+// CSS rule like ‘° { }‘ä
 var Rule = (function (Container) {
     function Rule(defaults) {
         _classCallCheck(this, Rule);

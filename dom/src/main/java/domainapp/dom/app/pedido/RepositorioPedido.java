@@ -91,7 +91,61 @@ public class RepositorioPedido {
 		return Pedido;
 
 	}
+	
+	/*Envio de SMS */
+	/*
+	   public  EnviarSMS() {	
+	    	if (OrdenServicio.this.estado == E_estado.SIN_REVISAR) {
+	    		
+	    		container.informUser("El SMS no se puede enviar si el equipo no fue revisado");}
+	    		
+	    		else{
+	    				
+	    		String url = "http://servicio.smsmasivos.com.ar/enviar_sms.asp?api=1&relogin=1&usuario=SMSDEMO77832&clave=SMSDEMO77832666&tos=" + getCliente().getTelefono() + "&idinterno=&texto=Puede+retirar+su+celular+" + OrdenServicio.this.estado + "+X+8300+Comunicaciones";
 
+	    		HttpClient client = HttpClientBuilder.create().build();
+	    		HttpPost post = new HttpPost(url);
+	    		// add header
+	    		//post.setHeader("User-Agent", USER_AGENT);
+
+	    		//List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+	    		//urlParameters.add(new BasicNameValuePair("sn", "C02G8416DRJM"));
+	    		//urlParameters.add(new BasicNameValuePair("cn", ""));
+	    		//urlParameters.add(new BasicNameValuePair("locale", ""));
+	    		//urlParameters.add(new BasicNameValuePair("caller", ""));
+	    		//urlParameters.add(new BasicNameValuePair("num", "12345"));
+
+	    		//post.setEntity(new UrlEncodedFormEntity(urlParameters));
+	    		container.informUser("El SMS a sido enviado correctamente al cliente");
+	    		try {
+					HttpResponse response = client.execute(post);
+				} catch (ClientProtocolException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	    		}
+	    					
+			return this;
+		}
+	    
+	    
+	    //Enviamos alerta via mail al tecnico para informar de un nuevo equipo.
+	    public OrdenServicio EnviarAlertaTecnico() {	
+	    	if (OrdenServicio.this.estado == E_estado.SIN_REVISAR) {
+	    		EnvioCorreo.send(getTecnico().getEmail(),
+	    				"Nuevo equipo para revisar", 
+	    				"La Orden de Servicio :" + OrdenServicio.this.numero +
+	    				" con el Estado : "+ OrdenServicio.this.estado + 
+	    				"Necesita ser chequeada por el tecnico antes de las 48 horas");
+	    		
+	    		container.informUser("Se envio mail al tecnico correctamente");
+	    	}
+	    					
+			return this;
+		}
+	    */
+	
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Listar Todos")
 	public List<Pedido> listAll() {
