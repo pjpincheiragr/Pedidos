@@ -116,7 +116,7 @@ public class Ruta {
 		final PedidoHistorial oPedidoHistorial = container
 				.newTransientInstance(PedidoHistorial.class);
 		oPedidoHistorial.setPedido(pedido);
-		oPedidoHistorial.setObservacion("Quitado de la ruta");
+		oPedidoHistorial.setObservacion("Quitado de la ruta: "+this.getNumero());
 		oPedidoHistorial.setFechaHora(DateTime.now());
 		oPedidoHistorial.setEstado(pedido.getEstado());
 

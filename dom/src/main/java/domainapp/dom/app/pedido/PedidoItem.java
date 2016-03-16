@@ -187,8 +187,8 @@ public class PedidoItem {
 		this.activo = activo;
 	}
 
-	@ActionLayout(named = "Eliminar Pedido")
-	public void deletePedido() {
+	@ActionLayout(named = "Eliminar Item")
+	public PedidoItem deletePedidoItem() {
 		/*
 		 * boolean band = true; List<Empleado> lista = this.container
 		 * .allMatches(new QueryDefault<Empleado>(Empleado.class,
@@ -201,7 +201,7 @@ public class PedidoItem {
 		 * ); }
 		 */
 		this.setActivo(false);
-
+		return this;
 	}
 
 	// Fin secciÃ³n borrar pedido

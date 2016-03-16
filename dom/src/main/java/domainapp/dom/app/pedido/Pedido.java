@@ -128,7 +128,7 @@ public class Pedido {
 		super();
 	}
 
-	@MemberOrder(name = "Estado del Pedido", sequence = "1")
+	
 	@ActionLayout(named = "Confirmar", position = Position.BELOW)
 	public Pedido confirmar(){
 		this.setConfirmado(true);
@@ -139,6 +139,7 @@ public class Pedido {
 		return getConfirmado() ? "El pedido ya fué confirmado" : null;
 	}
 	
+	@MemberOrder(name = "Estado del Pedido", sequence = "1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	public boolean getConfirmado() {
 		return this.confirmado;
@@ -300,7 +301,8 @@ public class Pedido {
 		this.ListaPedidos = listaPedidos;
 	}
 
-	@ActionLayout(named = "Agregar Item")
+	@MemberOrder(sequence = "1", name = "PedidoItem")
+	@ActionLayout(named = "Agregar Item", position = Position.PANEL)
 	public Pedido addPedidoItem(
 			@ParameterLayout(named = "Muestra") @Parameter(optionality = Optionality.OPTIONAL) E_tieneMuestra muestra,
 			@ParameterLayout(named = "Codigo") @Parameter(optionality = Optionality.OPTIONAL) String codigo,
