@@ -39,7 +39,11 @@ import domainapp.dom.app.servicios.E_tieneMuestra;
 				+ "WHERE (estado==:estado) && activo == true"),
 		@javax.jdo.annotations.Query(name = "findBySeller", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
-				+ "WHERE (vendedor==:vendedor) && activo == true") })
+				+ "WHERE (vendedor==:vendedor) && activo == true"),
+				@javax.jdo.annotations.Query(name = "BuscarPorClave", language = "JDOQL", value = "SELECT "
+						+ "FROM domainapp.dom.app.pedido.PedidoItem "
+						+ "WHERE (clave == :clave) && activo == true")
+})
 
 @DomainObject(objectType = "PEDIDOITEM", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)

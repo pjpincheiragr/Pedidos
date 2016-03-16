@@ -136,7 +136,7 @@ public class Pedido {
 	}
 	
 	public String disableConfirmar(){
-		return getConfirmado() ? "El pedido ya fué confirmado" : null;
+		return getConfirmado() ? "El pedido ya fue confirmado" : null;
 	}
 	
 	@MemberOrder(name = "Estado del Pedido", sequence = "1")
@@ -320,7 +320,7 @@ public class Pedido {
 		PedidoItem.setMarca(marca);
 		PedidoItem.setCodigo(codigo);
 		PedidoItem.setCantidad(cantidad);
-		PedidoItem.setEstado(E_estado_item.ACTIVO);
+		PedidoItem.setEstado(E_estado_item.PENDIENTE);
 		PedidoItem.setObservacion(observacion);
 		PedidoItem.setAttachment(attachment);
 		PedidoItem.setActivo(true);
@@ -377,6 +377,7 @@ public class Pedido {
 	
 	@javax.inject.Inject
 	DomainObjectContainer container;
+	
 	@javax.inject.Inject
 	RepositorioPedidoItem repositorioPedidoItem;
 }
