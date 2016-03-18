@@ -19,7 +19,6 @@
 package domainapp.dom.app.homepage;
 
 import java.util.List;
-import java.util.Timer;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.CollectionLayout;
@@ -39,7 +38,8 @@ import domainapp.dom.app.vendedor.RepositorioVendedor;
 
 @ViewModel
 public class HomePageViewModel {
-	private final Timer timer = new  Timer();
+    public String cssClass() {return "my-special-auto-updating-entity"; }
+
 	//region > title
 	public String title() {
 		return ("Pedidos y Rutas pendientes");
@@ -77,7 +77,7 @@ public class HomePageViewModel {
 		return RepositorioRuta.listAll();
 		}
 
-    public String cssClass() {return "my-special-auto-updating-entity"; }
+
 
 	/*@HomePage
 	public List<Pedido> getlistPedidosVendedor1() {                                  //Ver este método

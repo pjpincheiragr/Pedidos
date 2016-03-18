@@ -98,7 +98,8 @@ public class Pedido {
 	private String numeroVenta;
 	private String tiempoEstimado;
 	private boolean confirmado;
-
+	
+	
 	public String title() {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM");
 
