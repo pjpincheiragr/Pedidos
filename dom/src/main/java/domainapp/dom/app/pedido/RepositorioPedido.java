@@ -1,12 +1,15 @@
 package domainapp.dom.app.pedido;
 
-import java.util.Calendar;
 import java.io.IOException;
-import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -18,20 +21,14 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 
-import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.proveedor.Proveedor;
 import domainapp.dom.app.servicios.E_estado;
 import domainapp.dom.app.servicios.E_urgencia_pedido;
+import domainapp.dom.app.servicios.EnvioCorreo;
 import domainapp.dom.app.sucursal.Sucursal;
 import domainapp.dom.app.tipo.Tipo;
 import domainapp.dom.app.vendedor.RepositorioVendedor;
 import domainapp.dom.app.vendedor.Vendedor;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.HttpClientBuilder;
 
 @DomainService(repositoryFor = Pedido.class)
 @DomainServiceLayout(menuOrder = "60", named = "Pedidos")
@@ -100,24 +97,24 @@ public class RepositorioPedido {
 	}
 
 	/* Envio de SMS */
-
+/*
 	public RepositorioPedido enviarSMS() {
 		/*if (OrdenServicio.this.estado == E_estado.SIN_REVISAR) {
 
 			container
 					.informUser("El SMS no se puede enviar si el equipo no fue revisado");
-		}*/
+		}
 
 		//else {
 
 			String url = "http://servicio.smsmasivos.com.ar/enviar_sms.asp?api=1&relogin=1&usuario=PABLO9999&clave=PABLO9999819&tos="
 					+ "2996202578"
 					+ "&idinterno=&texto=Tiempo+estimado:+"
-					/*+ OrdenServicio.this.estado + "+X+8300+Comunicaciones"*/;
+					/*+ OrdenServicio.this.estado + "+X+8300+Comunicaciones";
 
 			HttpClient client = HttpClientBuilder.create().build();
 			HttpPost post = new HttpPost(url);
-			// add header
+			 //add header;
 			// post.setHeader("User-Agent", USER_AGENT);
 
 			// List<NameValuePair> urlParameters = new
@@ -141,21 +138,18 @@ public class RepositorioPedido {
 		//}
 
 		return this;
-	}
+	}*/
 
-	/*
-	 * //Enviamos alerta via mail al tecnico para informar de un nuevo equipo.
-	 * public OrdenServicio EnviarAlertaTecnico() { if
-	 * (OrdenServicio.this.estado == E_estado.SIN_REVISAR) {
-	 * EnvioCorreo.send(getTecnico().getEmail(), "Nuevo equipo para revisar",
-	 * "La Orden de Servicio :" + OrdenServicio.this.numero +
-	 * " con el Estado : "+ OrdenServicio.this.estado +
-	 * "Necesita ser chequeada por el tecnico antes de las 48 horas");
-	 * 
-	 * container.informUser("Se envio mail al tecnico correctamente"); }
-	 * 
-	 * return this; }
-	 */
+	
+	 //Enviamos alerta via mail al tecnico para informar de un nuevo equipo.
+	  public RepositorioPedido EnviarCorreo() { 
+	  //(OrdenServicio.this.estado == E_estado.SIN_REVISAR) {
+		  EnvioCorreo.send("nicodinolfo@gmail.com", "PRUEBA","PRUEBA");
+	  
+	  container.informUser("Se envio mail al tecnico correctamente"); //}
+	  
+	  return this; }
+
 
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Listar Todos")

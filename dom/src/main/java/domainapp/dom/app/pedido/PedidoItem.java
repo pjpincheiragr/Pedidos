@@ -123,7 +123,7 @@ public class PedidoItem {
 	}
 
 	@MemberOrder(sequence = "4")
-	@javax.jdo.annotations.Column(allowsNull = "false")
+	@javax.jdo.annotations.Column(allowsNull = "true")
 	@Property(editing = Editing.DISABLED)
 	public Marca getMarca() {
 		return marca;

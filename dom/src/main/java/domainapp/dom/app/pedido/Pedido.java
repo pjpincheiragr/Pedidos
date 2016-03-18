@@ -144,7 +144,7 @@ public class Pedido {
 	@ActionLayout(named = "Actualizar T.E.", position = Position.BELOW)
 	public Pedido actualizarTiempo(String tEstimado){
 		this.setTiempoEstimado(tEstimado);
-		this.repositorioPedido.enviarSMS();
+		//this.repositorioPedido.enviarSMS();
 		return this;	
 	}
 	
@@ -258,8 +258,9 @@ public class Pedido {
 	
 	@Property(editing = Editing.DISABLED)
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	public Date getFechaHora() {
-		return this.fechaHora.getTime();
+	@Programmatic
+	public Calendar getFechaHora() {
+		return this.fechaHora;
 	}
 
 	public void setFechaHora(Calendar fechaHora) {
