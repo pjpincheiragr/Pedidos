@@ -33,7 +33,7 @@ import domainapp.dom.app.vendedor.Vendedor;
 @DomainService(repositoryFor = Pedido.class)
 @DomainServiceLayout(menuOrder = "60", named = "Pedidos")
 public class RepositorioPedido {
-
+	
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Crear nuevo Pedido")
 	public Pedido createPedido(

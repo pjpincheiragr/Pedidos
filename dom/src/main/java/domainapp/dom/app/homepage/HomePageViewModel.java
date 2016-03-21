@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.ViewModel;
 
@@ -38,7 +39,6 @@ import domainapp.dom.app.vendedor.RepositorioVendedor;
 
 @ViewModel
 public class HomePageViewModel {
-    public String cssClass() {return "my-special-auto-updating-entity"; }
 
 	//region > title
 	public String title() {
@@ -51,6 +51,7 @@ public class HomePageViewModel {
 	@MemberOrder(sequence = "1")
 	@Property(editing = Editing.ENABLED)
 	@CollectionLayout(render = RenderType.EAGERLY)
+	@PropertyLayout(cssClass="my-special-auto-updating-entity")
 	public List<Pedido> getListaPedidosUrgentes() {
 	
 		return repositorioPedido
