@@ -1,6 +1,8 @@
 package domainapp.dom.app.cadete;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
@@ -8,13 +10,27 @@ import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotation.ActionLayout.Position;
+import org.joda.time.DateTime;
+
+import domainapp.dom.app.pedido.Pedido;
+import domainapp.dom.app.pedido.PedidoHistorial;
+import domainapp.dom.app.pedido.RepositorioPedido;
+import domainapp.dom.app.ruta.RepositorioRutaItem;
+import domainapp.dom.app.ruta.Ruta;
+import domainapp.dom.app.ruta.RutaItem;
+import domainapp.dom.app.servicios.E_estado;
+import domainapp.dom.app.servicios.E_urgencia_pedido;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "Cadete_ID")
@@ -36,21 +52,25 @@ import org.apache.isis.applib.annotation.Where;
 public class Cadete {
 	private String nombre;
 	private String codigo;
+	private List<RutaItem> listaPedidos = new ArrayList<RutaItem>();
+	private List<Pedido> listaPedidosUrgentes = new ArrayList<Pedido>();
+	private List<Pedido> listaPedidosProgramables = new ArrayList<Pedido>();
+	private boolean activo;
 	
 	public String title() {		
 		return  getNombre();
 	}
 
-	public Cadete(String nombre, String codigo) {
+	public Cadete(String nombre, String codigo,boolean activo) {
 		super();
 		this.nombre = nombre;
 		this.codigo = codigo;
+		this.activo = activo;
 	}
 
 	public Cadete() {
 		super();
 	}
-
 	
 	@MemberOrder(sequence = "1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
@@ -73,7 +93,188 @@ public class Cadete {
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	@Property(editing = Editing.ENABLED)
+	@CollectionLayout(render = RenderType.EAGERLY)
+	public List<RutaItem> getListaPedidos() {
+		return listaPedidos;
+	}
 
+	public void setListaPedidos(List<RutaItem> listaPedidos) {
+		this.listaPedidos = listaPedidos;
+	}
+
+	@MemberOrder(sequence = "1", name = "ListaPedidos")
+	@ActionLayout(named = "Quitar", position = Position.PANEL)
+	public Cadete quitarPedido(RutaItem rutaItem) {
+		final Pedido pedido = rutaItem.getPedido();
+		this.getListaPedidos().remove(rutaItem);
+		pedido.setEstado(E_estado.NUEVO);
+		final PedidoHistorial oPedidoHistorial = container
+				.newTransientInstance(PedidoHistorial.class);
+		oPedidoHistorial.setPedido(pedido);
+		oPedidoHistorial.setObservacion("Quitado de la ruta: ");
+		oPedidoHistorial.setFechaHora(DateTime.now());
+		oPedidoHistorial.setEstado(pedido.getEstado());
+
+		container.persistIfNotAlready(oPedidoHistorial);
+		return this;
+	}
+
+	@Programmatic
+	public List<RutaItem> choices0QuitarPedido(final RutaItem rutaItem) {
+		return this.getListaPedidos();
+	}
+
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	@Property(editing = Editing.ENABLED)
+	@CollectionLayout(render = RenderType.EAGERLY)
+	public List<Pedido> getListaPedidosUrgentes() {
+		return repositorioPedido
+				.listAllByUrgency(E_urgencia_pedido.RESPUESTA_RAPIDA);
+	}
+
+	public void setListaPedidosUrgentes(List<Pedido> listaPedidosUrgentes) {
+		this.listaPedidosUrgentes = listaPedidosUrgentes;
+	}
+
+	@MemberOrder(sequence = "1", name = "ListaPedidosUrgentes")
+	@ActionLayout(named = "Agregar", position = Position.PANEL)
+	public Cadete asignarPedidoUrgente(Pedido pedido,
+			@ParameterLayout(named = "Orden") int orden,
+			@ParameterLayout(named = "Tiempo") int tiempo) {
+		final RutaItem oRutaItem = container
+				.newTransientInstance(RutaItem.class);
+		oRutaItem.setEstado(false);
+		this.ordenarItems(orden);
+		oRutaItem.setOrden(orden);
+		oRutaItem.setPedido(pedido);
+		oRutaItem.setClavePedido(pedido.getClave());
+		oRutaItem.setProveedor(pedido.getProveedor());
+		//oRutaItem.setRuta(this);
+		oRutaItem.setTiempo(tiempo);
+		container.persistIfNotAlready(oRutaItem);
+		this.getListaPedidos().add(oRutaItem);
+		pedido.setEstado(E_estado.ASIGNADO);
+		final PedidoHistorial oPedidoHistorial = container
+				.newTransientInstance(PedidoHistorial.class);
+		// PedidoHistorial oPedidoHistorial = new PedidoHistorial();
+		oPedidoHistorial.setPedido(pedido);
+	//	oPedidoHistorial.setObservacion("Asignado a Ruta: " + this.getNumero());
+		oPedidoHistorial.setFechaHora(DateTime.now());
+		oPedidoHistorial.setEstado(pedido.getEstado());
+		container.persistIfNotAlready(oPedidoHistorial);
+		return this;
+	}
+
+	@Programmatic
+	private void ordenarItems(int orden) {
+		if (!(this.getListaPedidos().isEmpty())) {
+			List<RutaItem> items = this.getListaPedidos();
+
+			int j;
+			int ordenItem = 0;
+
+			for (j = 0; j < items.size(); j++) {
+				ordenItem = items.get(j).getOrden();
+				if (ordenItem >= orden)
+					items.get(j).setOrden(ordenItem + 1);
+			}
+
+		}
+	}
+
+	@Programmatic
+	public List<Pedido> choices0AsignarPedidoUrgente(final Pedido pedido) {
+		return repositorioPedido
+				.listAllByUrgency(E_urgencia_pedido.RESPUESTA_RAPIDA);
+	}
+
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	@Property(editing = Editing.ENABLED)
+	@CollectionLayout(render = RenderType.EAGERLY)
+	public List<Pedido> getListaPedidosProgramables() {
+		return repositorioPedido
+				.listAllByUrgency(E_urgencia_pedido.PROGRAMABLE);
+
+	}
+
+	public void setListaPedidosProgramables(
+			List<Pedido> listaPedidosProgramables) {
+		this.listaPedidosProgramables = listaPedidosProgramables;
+	}
+
+	@MemberOrder(sequence = "1", name = "ListaPedidosProgramables")
+	@ActionLayout(named = "Agregar", position = Position.PANEL)
+	public Cadete asignarPedidoProgramable(Pedido pedido,
+			@ParameterLayout(named = "Orden") int orden,
+			@ParameterLayout(named = "Tiempo") int tiempo) {
+
+		final RutaItem oRutaItem = container
+				.newTransientInstance(RutaItem.class);
+
+		oRutaItem.setEstado(false);
+		this.ordenarItems(orden);
+		oRutaItem.setOrden(orden);
+		oRutaItem.setPedido(pedido);
+		oRutaItem.setClavePedido(pedido.getClave());
+		oRutaItem.setProveedor(pedido.getProveedor());
+		//oRutaItem.setRuta(this);
+		oRutaItem.setTiempo(tiempo);
+		container.persistIfNotAlready(oRutaItem);
+		this.getListaPedidos().add(oRutaItem);
+
+		pedido.setEstado(E_estado.ASIGNADO);
+		final PedidoHistorial oPedidoHistorial = container
+				.newTransientInstance(PedidoHistorial.class);
+		// PedidoHistorial oPedidoHistorial = new PedidoHistorial();
+		oPedidoHistorial.setPedido(pedido);
+		//oPedidoHistorial.setObservacion("Asignado a Ruta: " + this.getNumero());
+		oPedidoHistorial.setFechaHora(DateTime.now());
+		oPedidoHistorial.setEstado(pedido.getEstado());
+
+		container.persistIfNotAlready(oPedidoHistorial);
+		return this;
+	}
+
+	@Programmatic
+	public List<Pedido> choices0AsignarPedidoProgramable(final Pedido pedido) {
+		return repositorioPedido
+				.listAllByUrgency(E_urgencia_pedido.PROGRAMABLE);
+	}
+
+	/*
+	 * @ActionLayout(named = "Agregar Pedido") public Ruta addPedido( Pedido
+	 * pedido ) { pedido.setEstado(E_estado.ASIGNADO);
+	 * getListaPedidos().add(pedido); return this; }
+	 */
+	@ActionLayout(named = "Eliminar Ruta")
+	public Cadete deleteRuta() {
+		this.setActivo(false);
+		return this;
+	}
+
+	@Programmatic
+	public boolean hideDeleteRuta() {
+		return isActivo() ? false : true;
+		}
+
+	@Property(hidden = Where.EVERYWHERE)
+	@MemberOrder(sequence = "5")
+	public boolean isActivo() {
+		return activo;
+	}
+
+	public void setActivo(boolean activo) {
+		this.activo = activo;
+	}
+
+
+	@javax.inject.Inject
+	RepositorioPedido repositorioPedido;
+	
+	@javax.inject.Inject
+	RepositorioRutaItem repositorioRutaItem;
 	@javax.inject.Inject
 	DomainObjectContainer container;
 }
