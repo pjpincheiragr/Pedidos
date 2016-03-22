@@ -29,13 +29,11 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.ViewModel;
-
-import domainapp.dom.app.ruta.RepositorioRuta;
-import domainapp.dom.app.ruta.Ruta;
 import domainapp.dom.app.servicios.E_urgencia_pedido;
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.pedido.RepositorioPedido;
 import domainapp.dom.app.vendedor.RepositorioVendedor;
+import domainapp.dom.app.cadete.*;
 
 @ViewModel
 public class HomePageViewModel {
@@ -71,113 +69,24 @@ public class HomePageViewModel {
 
 
 	@HomePage
-	  @CollectionLayout(
+	
+	@CollectionLayout(
 	            render = RenderType.EAGERLY
 	    )
-	public List<Ruta> getlistRutas() {
-		return RepositorioRuta.listAll();
-		}
-
-
-
-	/*@HomePage
-	public List<Pedido> getlistPedidosVendedor1() {                                  //Ver este método
-		Vendedor ObjetoVendedor1= new Vendedor();
-		ObjetoVendedor1	=(repositorioVendedor.findByNameAuxiliar(""")).get(0);
-		return repositorioPedido.findBySeller(ObjetoVendedor1);
-	}
-<<<<<<< HEAD
-=======
-	
-	@HomePage
-
-	public List<Cadete> getCadetes() {
-		return repositorioCadete.listAll();	}
->>>>>>> e6078a5134d902acf586ae155ae6657cf6a23f4d
-
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(describedAs = "El documento se almacenara en ReporteAlertas/AlertasMatafuego")
-	public String downloadByPeriodMatafuego(@ParameterLayout(named = "Desde") Date desde, @ParameterLayout(named = "Hasta") Date hasta)
-					throws JRException, IOException {
-			return repositorioAlertaMatafuego.exportarPorPeriodo(desde, hasta);
+	public List<Cadete> getlistCadetes() {
+		return repositorioCadete.listAll();
 	}
 
-	@Action(semantics = SemanticsOf.SAFE)
-	public String downloadAllVehiculo() throws JRException, IOException{
-		return repositorioAlertaVehiculo.downloadAll();
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(describedAs = "El documento se almacenara en ReporteAlertas/AlertasVehiculo")
-	public String downloadByPeriodVehiculo(@ParameterLayout(named = "Desde") Date desde, @ParameterLayout(named = "Hasta") Date hasta)
-					throws JRException, IOException {
-		return repositorioAlertaVehiculo.exportarPorPeriodo(desde, hasta);
-	}
-*/
 	@javax.inject.Inject
 	DomainObjectContainer container;
 	@javax.inject.Inject
 	RepositorioPedido repositorioPedido;
 	@javax.inject.Inject
 	RepositorioVendedor repositorioVendedor;
-	@javax.inject.Inject RepositorioRuta RepositorioRuta;
+	@javax.inject.Inject 
+	RepositorioCadete repositorioCadete;
 	
 
 
-
-	// endregion
-	/*
-	// region > title
-	public String title() {
-		return (getAlertasMatafuego().size() + getAlertasVehiculo().size()) + " Alertas";
-	}
-	// endregion
-	// region > object (collection)
-	@HomePage
-	public List<AlertaMatafuego> getAlertasMatafuego() {
-		return repositorioAlertaMatafuego.listAllMatafuego();
-	}
-
-	@HomePage
-	public List<AlertaVehiculo> getAlertasVehiculo() {
-		return repositorioAlertaVehiculo.listAllVehiculo();
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	public String downloadAllMatafuego() throws JRException, IOException{
-		return repositorioAlertaMatafuego.downloadAll();
-
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(describedAs = "El documento se almacenara en ReporteAlertas/AlertasMatafuego")
-	public String downloadByPeriodMatafuego(@ParameterLayout(named = "Desde") Date desde, @ParameterLayout(named = "Hasta") Date hasta)
-					throws JRException, IOException {
-			return repositorioAlertaMatafuego.exportarPorPeriodo(desde, hasta);
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	public String downloadAllVehiculo() throws JRException, IOException{
-		return repositorioAlertaVehiculo.downloadAll();
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(describedAs = "El documento se almacenara en ReporteAlertas/AlertasVehiculo")
-	public String downloadByPeriodVehiculo(@ParameterLayout(named = "Desde") Date desde, @ParameterLayout(named = "Hasta") Date hasta)
-					throws JRException, IOException {
-		return repositorioAlertaVehiculo.exportarPorPeriodo(desde, hasta);
-	}
-
-	@javax.inject.Inject
-	DomainObjectContainer container;
-	@javax.inject.Inject
-	RepositorioAlertaMatafuego repositorioAlertaMatafuego;
-	@javax.inject.Inject
-	RepositorioAlertaVehiculo repositorioAlertaVehiculo;
-
-	// endregion
-	 * 
-	 * */
 
 }

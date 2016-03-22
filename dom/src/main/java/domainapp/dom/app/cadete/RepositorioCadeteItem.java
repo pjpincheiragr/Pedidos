@@ -1,4 +1,4 @@
-package domainapp.dom.app.ruta;
+package domainapp.dom.app.cadete;
 
 import java.util.List;
 
@@ -12,15 +12,13 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
-
-import domainapp.dom.app.ruta.RutaItem;
 import domainapp.dom.app.servicios.E_urgencia_pedido;
 
 
-@DomainService(repositoryFor = RutaItem.class)
-@DomainServiceLayout(menuOrder = "60", named = "Rutas")
+@DomainService(repositoryFor = CadeteItem.class)
+@DomainServiceLayout(menuOrder = "60", named = "Cadetes")
 
-public class RepositorioRutaItem {
+public class RepositorioCadeteItem {
 	/*
 	@MemberOrder(sequence = "1")
 	@ActionLayout(named = "Crear nueva Ruta Item")
@@ -45,10 +43,10 @@ public class RepositorioRutaItem {
 	@Programmatic 
 	@MemberOrder(sequence = "2")
 	@ActionLayout(named = "Listar Todos")
-	public List<RutaItem> listAllByUrgency(
+	public List<CadeteItem> listAllByUrgency(
 			@ParameterLayout(named = "Urgencia") @Parameter(optionality = Optionality.OPTIONAL)  E_urgencia_pedido urgencia)  {	
-		final List<RutaItem> listaRutas = this.container
-				.allMatches(new QueryDefault<RutaItem>(RutaItem.class,
+		final List<CadeteItem> listaRutas = this.container
+				.allMatches(new QueryDefault<CadeteItem>(CadeteItem.class,
 						"ListarTodosPorUrgencia","urgencia",urgencia));
 		/*if (listaRutas.isEmpty()) {
 			this.container.warnUser("No hay rutas cargadas en el sistema");
@@ -57,10 +55,10 @@ public class RepositorioRutaItem {
 	}
 
 	@ActionLayout(named = "Update Estado")
-	public RutaItem updatePedido(
+	public CadeteItem updatePedido(
 			@ParameterLayout(named = "Clave Pedido")long clavePedido
 			) {
-		final List<RutaItem> listaPedidos = this.container.allMatches(new QueryDefault<RutaItem>(RutaItem.class,
+		final List<CadeteItem> listaPedidos = this.container.allMatches(new QueryDefault<CadeteItem>(CadeteItem.class,
 						"BuscarPorClave","clavePedido",clavePedido));
 		if (!listaPedidos.isEmpty()) {
 			listaPedidos.get(0).setEstado(true);

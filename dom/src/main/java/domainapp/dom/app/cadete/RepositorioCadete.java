@@ -1,6 +1,5 @@
 package domainapp.dom.app.cadete;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.applib.DomainObjectContainer;
@@ -12,11 +11,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.query.QueryDefault;
-
 import domainapp.dom.app.cadete.Cadete;
-import domainapp.dom.app.cadete.Cadete;
-import domainapp.dom.app.sucursal.Sucursal;
-
 @DomainService(repositoryFor = Cadete.class)
 @DomainServiceLayout(menuOrder = "60", named = "Administración")
 public class RepositorioCadete {
@@ -45,26 +40,6 @@ public class RepositorioCadete {
 		return listaCadetes;
 	}
 
-	/*
-	 * public List<Sucursal> listAll() { final List<Sucursal> listaSucursal =
-	 * this.container .allMatches(new QueryDefault<Sucursal>(Sucursal.class,
-	 * "ListarTodos")); if (listaSucursal.isEmpty()) {
-	 * this.container.warnUser("No hay areas cargadas en el sistema"); } return
-	 * listaSucursal;
-	 * 
-	 * 
-	 * @MemberOrder(sequence = "3")
-	 * 
-	 * @ActionLayout(named = "Buscar por nombre") public List<Sucursal>
-	 * buscarPorApellidoNombre(
-	 * 
-	 * @ParameterLayout(named="Nombre")
-	 * 
-	 * @Parameter(optionality=Optionality.OPTIONAL) String nombre ) {
-	 * 
-	 * return container.allMatches( new QueryDefault<>( Sucursal.class,
-	 * "findByName", "nombre", (nombre==null)?"":nombre)); } }
-	 */
 
 	@ActionLayout(named = "Buscar por Nombre")
 	@MemberOrder(sequence = "4")
@@ -76,6 +51,7 @@ public class RepositorioCadete {
 						"findByName",
 						"nombre", (nombre == null) ? "" : nombre));
 	}
+	
 
 	@ActionLayout(named = "Buscar por Codigo")
 	@MemberOrder(sequence = "5")

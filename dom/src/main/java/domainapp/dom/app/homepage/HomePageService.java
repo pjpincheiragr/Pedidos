@@ -18,12 +18,6 @@
  */
 package domainapp.dom.app.homepage;
 
-
-
-
-
-import javax.swing.Timer;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
@@ -44,9 +38,6 @@ public class HomePageService {
     )
     @HomePage
     public HomePageViewModel homePage() {
-    	Timer displayTimer = new Timer(100, null);
-    	displayTimer.start();
-    
 
         return container.injectServicesInto(new HomePageViewModel());
     }

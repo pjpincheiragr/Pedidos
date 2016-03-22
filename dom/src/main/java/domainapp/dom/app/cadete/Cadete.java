@@ -1,6 +1,5 @@
 package domainapp.dom.app.cadete;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +25,6 @@ import org.joda.time.DateTime;
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.pedido.PedidoHistorial;
 import domainapp.dom.app.pedido.RepositorioPedido;
-import domainapp.dom.app.ruta.RepositorioRutaItem;
-import domainapp.dom.app.ruta.Ruta;
-import domainapp.dom.app.ruta.RutaItem;
 import domainapp.dom.app.servicios.E_estado;
 import domainapp.dom.app.servicios.E_urgencia_pedido;
 
@@ -52,7 +48,7 @@ import domainapp.dom.app.servicios.E_urgencia_pedido;
 public class Cadete {
 	private String nombre;
 	private String codigo;
-	private List<RutaItem> listaPedidos = new ArrayList<RutaItem>();
+	private List<CadeteItem> listaPedidos = new ArrayList<CadeteItem>();
 	private List<Pedido> listaPedidosUrgentes = new ArrayList<Pedido>();
 	private List<Pedido> listaPedidosProgramables = new ArrayList<Pedido>();
 	private boolean activo;
@@ -96,19 +92,19 @@ public class Cadete {
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	@Property(editing = Editing.ENABLED)
 	@CollectionLayout(render = RenderType.EAGERLY)
-	public List<RutaItem> getListaPedidos() {
+	public List<CadeteItem> getListaPedidos() {
 		return listaPedidos;
 	}
 
-	public void setListaPedidos(List<RutaItem> listaPedidos) {
+	public void setListaPedidos(List<CadeteItem> listaPedidos) {
 		this.listaPedidos = listaPedidos;
 	}
 
 	@MemberOrder(sequence = "1", name = "ListaPedidos")
 	@ActionLayout(named = "Quitar", position = Position.PANEL)
-	public Cadete quitarPedido(RutaItem rutaItem) {
-		final Pedido pedido = rutaItem.getPedido();
-		this.getListaPedidos().remove(rutaItem);
+	public Cadete quitarPedido(CadeteItem cadeteItem) {
+		final Pedido pedido = cadeteItem.getPedido();
+		this.getListaPedidos().remove(cadeteItem);
 		pedido.setEstado(E_estado.NUEVO);
 		final PedidoHistorial oPedidoHistorial = container
 				.newTransientInstance(PedidoHistorial.class);
@@ -122,7 +118,7 @@ public class Cadete {
 	}
 
 	@Programmatic
-	public List<RutaItem> choices0QuitarPedido(final RutaItem rutaItem) {
+	public List<CadeteItem> choices0QuitarPedido(final CadeteItem rutaItem) {
 		return this.getListaPedidos();
 	}
 
@@ -143,24 +139,24 @@ public class Cadete {
 	public Cadete asignarPedidoUrgente(Pedido pedido,
 			@ParameterLayout(named = "Orden") int orden,
 			@ParameterLayout(named = "Tiempo") int tiempo) {
-		final RutaItem oRutaItem = container
-				.newTransientInstance(RutaItem.class);
-		oRutaItem.setEstado(false);
+		final CadeteItem oCadeteItem = container
+				.newTransientInstance(CadeteItem.class);
+		oCadeteItem.setEstado(false);
 		this.ordenarItems(orden);
-		oRutaItem.setOrden(orden);
-		oRutaItem.setPedido(pedido);
-		oRutaItem.setClavePedido(pedido.getClave());
-		oRutaItem.setProveedor(pedido.getProveedor());
-		//oRutaItem.setRuta(this);
-		oRutaItem.setTiempo(tiempo);
-		container.persistIfNotAlready(oRutaItem);
-		this.getListaPedidos().add(oRutaItem);
+		oCadeteItem.setOrden(orden);
+		oCadeteItem.setPedido(pedido);
+		oCadeteItem.setClavePedido(pedido.getClave());
+		oCadeteItem.setProveedor(pedido.getProveedor());
+		oCadeteItem.setCadete(this);
+		oCadeteItem.setTiempo(tiempo);
+		container.persistIfNotAlready(oCadeteItem);
+		this.getListaPedidos().add(oCadeteItem);
 		pedido.setEstado(E_estado.ASIGNADO);
 		final PedidoHistorial oPedidoHistorial = container
 				.newTransientInstance(PedidoHistorial.class);
-		// PedidoHistorial oPedidoHistorial = new PedidoHistorial();
+		
 		oPedidoHistorial.setPedido(pedido);
-	//	oPedidoHistorial.setObservacion("Asignado a Ruta: " + this.getNumero());
+		oPedidoHistorial.setObservacion("Asignado a Cadete: " + this.getNombre());
 		oPedidoHistorial.setFechaHora(DateTime.now());
 		oPedidoHistorial.setEstado(pedido.getEstado());
 		container.persistIfNotAlready(oPedidoHistorial);
@@ -170,7 +166,7 @@ public class Cadete {
 	@Programmatic
 	private void ordenarItems(int orden) {
 		if (!(this.getListaPedidos().isEmpty())) {
-			List<RutaItem> items = this.getListaPedidos();
+			List<CadeteItem> items = this.getListaPedidos();
 
 			int j;
 			int ordenItem = 0;
@@ -210,8 +206,8 @@ public class Cadete {
 			@ParameterLayout(named = "Orden") int orden,
 			@ParameterLayout(named = "Tiempo") int tiempo) {
 
-		final RutaItem oRutaItem = container
-				.newTransientInstance(RutaItem.class);
+		final CadeteItem oRutaItem = container
+				.newTransientInstance(CadeteItem.class);
 
 		oRutaItem.setEstado(false);
 		this.ordenarItems(orden);
@@ -274,7 +270,7 @@ public class Cadete {
 	RepositorioPedido repositorioPedido;
 	
 	@javax.inject.Inject
-	RepositorioRutaItem repositorioRutaItem;
+	RepositorioCadeteItem repositorioRutaItem;
 	@javax.inject.Inject
 	DomainObjectContainer container;
 }

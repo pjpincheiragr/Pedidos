@@ -1,4 +1,4 @@
-package domainapp.dom.app.ruta;
+package domainapp.dom.app.cadete;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
@@ -15,15 +15,15 @@ import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.proveedor.Proveedor;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
-@javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "RutaItem_ID")
+@javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "CadeteItem_ID")
 @javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
 @javax.jdo.annotations.Queries({
 		@javax.jdo.annotations.Query(name = "ListarTodosPorUrgencia", language = "JDOQL", value = "SELECT  "
-				+ " FROM domainapp.dom.app.ruta.RutaItem "
+				+ " FROM domainapp.dom.app.ruta.CadeteItem "
 				+ " WHERE pedido.urgencia==:urgencia && activo == true"
 				+ " order by orden "),
 		@javax.jdo.annotations.Query(name = "ListarTodos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.dom.app.ruta.RutaItem " + " order by orden "),
+				+ "FROM domainapp.dom.app.ruta.CadeteItem " + " order by orden "),
 		@javax.jdo.annotations.Query(name = "ListarPendientes", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "Where (estado==ASIGNADO) || (estado=EN_PROCESO) && activo == true"
@@ -41,39 +41,39 @@ import domainapp.dom.app.proveedor.Proveedor;
 				+ "WHERE (vendedor==:vendedor && activo == true)"
 				+ " order by orden "),
 		@javax.jdo.annotations.Query(name = "BuscarPorClave", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.dom.app.ruta.RutaItem "
+				+ "FROM domainapp.dom.app.ruta.CadeteItem "
 				+ "WHERE clavePedido == :clavePedido "),
 
 })
-@DomainObject(objectType = "RUTAITEM", bounded = true)
+@DomainObject(objectType = "CADETEITEM", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
-public class RutaItem {
+public class CadeteItem {
 
 	private Pedido pedido;
 	private Proveedor proveedor;
 	private long clavePedido;
 	private int orden;
 	private boolean estado;
-	private Ruta ruta;
+	private Cadete cadete;
 	private int tiempo;
 
 	public String title() {
 		return this.getPedido().title();
 	}
 
-	public RutaItem(Pedido pedido, long clavePedido, Proveedor proveedor,
-			int orden, boolean estado, Ruta ruta, int tiempo) {
+	public CadeteItem(Pedido pedido, long clavePedido, Proveedor proveedor,
+			int orden, boolean estado, Cadete cadete, int tiempo) {
 		super();
 		this.pedido = pedido;
 		this.clavePedido = clavePedido;
 		this.proveedor = proveedor;
 		this.orden = orden;
 		this.estado = estado;
-		this.ruta = ruta;
+		this.cadete = cadete;
 		this.tiempo = tiempo;
 	}
 
-	public RutaItem() {
+	public CadeteItem() {
 		super();
 	}
 
@@ -147,12 +147,12 @@ public class RutaItem {
 	@MemberOrder(sequence = "5")
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	@Property(editing = Editing.DISABLED)
-	public Ruta getRuta() {
-		return ruta;
+	public Cadete getCadete() {
+		return cadete;
 	}
 
-	public void setRuta(Ruta ruta) {
-		this.ruta = ruta;
+	public void setCadete(Cadete cadete) {
+		this.cadete = cadete;
 	}
 
 	@javax.inject.Inject
