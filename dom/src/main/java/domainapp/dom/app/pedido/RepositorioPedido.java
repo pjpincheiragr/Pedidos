@@ -233,6 +233,20 @@ public class RepositorioPedido {
 		container.flush();
 		return listaPedidos.get(0);
 	}
+	
+	@ActionLayout(named = "Update Estado Lista ")
+	public void updatePedidoLista(@ParameterLayout(named = "Lista") String lista) {
+		StringTokenizer items = new StringTokenizer(lista,"&");
+		String clave="";
+		while (items.hasMoreTokens()){
+			  clave = items.nextToken();
+			  long c=Long.parseLong(clave);
+			  List <Pedido> result = this.container
+						.allMatches(new QueryDefault<Pedido>(
+								Pedido.class, "BuscarPorClave","clave",c));
+			  result.get(0).setEstado(E_estado.TERMINADO);
+		}
+	}
 
 	@javax.inject.Inject
 	RepositorioVendedor repositorioVendedor;

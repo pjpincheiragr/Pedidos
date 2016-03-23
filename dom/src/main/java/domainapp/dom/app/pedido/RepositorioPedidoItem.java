@@ -4,6 +4,7 @@ package domainapp.dom.app.pedido;
 import org.apache.isis.applib.value.Blob;
 
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -17,6 +18,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
 
 import domainapp.dom.app.marca.Marca;
+import domainapp.dom.app.servicios.E_estado;
 import domainapp.dom.app.servicios.E_estado_item;
 import domainapp.dom.app.servicios.E_tieneMuestra;
 import domainapp.dom.app.pedido.PedidoItem;
@@ -80,6 +82,20 @@ public class RepositorioPedidoItem {
 		container.persistIfNotAlready(listaPedidosItem.get(0));
 		container.flush();
 		return listaPedidosItem.get(0);
+	}
+	
+	@ActionLayout(named = "Update Estado Lista Items")
+	public void updatePedidoItemLista(@ParameterLayout(named = "Lista") String lista) {
+		StringTokenizer items = new StringTokenizer(lista,"&");
+		String clave="";
+		while (items.hasMoreTokens()){
+			  clave = items.nextToken();
+			  long c=Long.parseLong(clave);
+			  List <PedidoItem> result = this.container
+						.allMatches(new QueryDefault<PedidoItem>(
+								PedidoItem.class, "BuscarPorClave","clave",c));
+			  result.get(0).setEstado(E_estado_item.RESUELTO);
+		}
 	}
 
 	
