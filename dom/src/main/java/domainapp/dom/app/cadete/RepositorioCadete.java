@@ -17,7 +17,7 @@ import domainapp.dom.app.cadete.Cadete;
 public class RepositorioCadete {
 
 	@MemberOrder(sequence = "1")
-	@ActionLayout(named = "Crear nuevo cadete")
+	@ActionLayout(named = "Crear Nuevo Cadete")
 	public Cadete createcadete(
 			@ParameterLayout(named = "nombre") @Parameter() String nombre,
 			@ParameterLayout(named = "codigo") @Parameter() String codigo) {
@@ -29,7 +29,7 @@ public class RepositorioCadete {
 	}
 
 	@MemberOrder(sequence = "2")
-	@ActionLayout(named = "Listar Todos")
+	@ActionLayout(named = "Listar Todos los Cadetes")
 	public List<Cadete> listAll() {
 		final List<Cadete> listaCadetes = this.container
 				.allMatches(new QueryDefault<Cadete>(Cadete.class,
@@ -41,7 +41,7 @@ public class RepositorioCadete {
 	}
 
 
-	@ActionLayout(named = "Buscar por Nombre")
+	@ActionLayout(named = "Buscar Cadete por Nombre")
 	@MemberOrder(sequence = "4")
 	public List<Cadete> findByName(
 			@ParameterLayout(named = "Nombre") @Parameter(optionality = Optionality.OPTIONAL) String nombre) {
@@ -53,7 +53,7 @@ public class RepositorioCadete {
 	}
 	
 
-	@ActionLayout(named = "Buscar por Codigo")
+	@ActionLayout(named = "Buscar Cadete por Codigo")
 	@MemberOrder(sequence = "5")
 	public List<Cadete> findByCode(
 			@ParameterLayout(named = "Codigo") @Parameter(optionality = Optionality.OPTIONAL) String codigo) {

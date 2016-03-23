@@ -39,7 +39,7 @@ public class RepositorioVendedor {
 	}
 
 	@MemberOrder(sequence = "2")
-	@ActionLayout(named = "Listar Todos")
+	@ActionLayout(named = "Ver todos los Vendedores")
 	public List<Vendedor> listAll() {
 		final List<Vendedor> listaVendedores = this.container
 				.allMatches(new QueryDefault<Vendedor>(Vendedor.class,
@@ -50,8 +50,8 @@ public class RepositorioVendedor {
 		return listaVendedores;
 	}
 	
-	@ActionLayout(named = "Buscar por Nombre")
-	@MemberOrder(sequence = "4")
+	@ActionLayout(named = "Buscar Vendedor por Nombre")
+	@MemberOrder(sequence = "3")
 	public List<Vendedor> findByName(
 			@ParameterLayout(named = "Nombre") @Parameter(optionality = Optionality.OPTIONAL) String nombre) {
 		return container.allMatches(
@@ -62,8 +62,8 @@ public class RepositorioVendedor {
 	}
 
 	
-	@ActionLayout(named = "Buscar por Codigo")
-	@MemberOrder(sequence = "5")
+	@ActionLayout(named = "Buscar Vendedor por Codigo")
+	@MemberOrder(sequence = "4")
 	public List<Vendedor> findByCode(
 			@ParameterLayout(named = "Codigo") @Parameter(optionality = Optionality.OPTIONAL) String codigo) {
 		return container.allMatches(
@@ -73,7 +73,8 @@ public class RepositorioVendedor {
 						"nombre", (codigo == null) ? "" : codigo));
 	}
 	
-	
+	@ActionLayout(named = "Buscar Vendedor por UserCode")
+	@MemberOrder(sequence = "5")
 	public Vendedor findByUserCode(
 			@ParameterLayout(named = "userCode") @Parameter(optionality = Optionality.OPTIONAL) String userCode) {
 		return container.allMatches(
@@ -83,6 +84,8 @@ public class RepositorioVendedor {
 						"userCode", userCode)).get(0);
 	}
 	
+	@ActionLayout(named = "Buscar Vendedor por Nombre Auxiliar")
+	@MemberOrder(sequence = "6")
 	public List<Vendedor> findByNameAuxiliar(
 			 String nombre) {
 		return container.allMatches(
