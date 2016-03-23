@@ -24,6 +24,7 @@ public class RepositorioCadete {
 		final Cadete cadete = container.newTransientInstance(Cadete.class);
 		cadete.setNombre(nombre);
 		cadete.setCodigo(codigo);
+		cadete.setRecorrido("->");
 		container.persistIfNotAlready(cadete);
 		return cadete;
 	}

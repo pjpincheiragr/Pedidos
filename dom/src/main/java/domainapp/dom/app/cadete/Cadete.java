@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -48,6 +47,7 @@ import domainapp.dom.app.servicios.E_urgencia_pedido;
 public class Cadete {
 	private String nombre;
 	private String codigo;
+	private String recorrido;
 	private List<CadeteItem> listaPedidos = new ArrayList<CadeteItem>();
 	private List<Pedido> listaPedidosUrgentes = new ArrayList<Pedido>();
 	private List<Pedido> listaPedidosProgramables = new ArrayList<Pedido>();
@@ -62,6 +62,7 @@ public class Cadete {
 		this.nombre = nombre;
 		this.codigo = codigo;
 		this.activo = activo;
+		this.recorrido = "->";
 	}
 
 	public Cadete() {
@@ -90,6 +91,18 @@ public class Cadete {
 	//FALTA VALIDAR EL CODIGO! 
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
+	}
+	
+	
+	@MemberOrder(sequence = "2")
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	@Property(editing = Editing.DISABLED)
+	public String getRecorrido() {
+		return this.recorrido;
+	}
+	
+	public void setRecorrido(String recorrido) {
+		this.recorrido = recorrido;
 	}
 	
 	@javax.jdo.annotations.Column(allowsNull = "true")
@@ -152,6 +165,7 @@ public class Cadete {
 		oCadeteItem.setProveedor(pedido.getProveedor());
 		oCadeteItem.setCadete(this);
 		oCadeteItem.setTiempo(tiempo);
+		this.agregarPedido(pedido.getProveedor().getNombre());
 		container.persistIfNotAlready(oCadeteItem);
 		this.getListaPedidos().add(oCadeteItem);
 		pedido.setEstado(E_estado.ASIGNADO);
@@ -209,26 +223,25 @@ public class Cadete {
 			@ParameterLayout(named = "Orden") int orden,
 			@ParameterLayout(named = "Tiempo") int tiempo) {
 
-		final CadeteItem oRutaItem = container
+		final CadeteItem oCadeteItem = container
 				.newTransientInstance(CadeteItem.class);
 
-		oRutaItem.setEstado(false);
+		oCadeteItem.setEstado(false);
 		this.ordenarItems(orden);
-		oRutaItem.setOrden(orden);
-		oRutaItem.setPedido(pedido);
-		oRutaItem.setClavePedido(pedido.getClave());
-		oRutaItem.setProveedor(pedido.getProveedor());
-		//oRutaItem.setRuta(this);
-		oRutaItem.setTiempo(tiempo);
-		container.persistIfNotAlready(oRutaItem);
-		this.getListaPedidos().add(oRutaItem);
+		oCadeteItem.setOrden(orden);
+		oCadeteItem.setPedido(pedido);
+		oCadeteItem.setClavePedido(pedido.getClave());
+		oCadeteItem.setProveedor(pedido.getProveedor());
+		oCadeteItem.setTiempo(tiempo);
+		this.agregarPedido(pedido.getProveedor().getNombre());
+		container.persistIfNotAlready(oCadeteItem);
+		this.getListaPedidos().add(oCadeteItem);
 
 		pedido.setEstado(E_estado.ASIGNADO);
 		final PedidoHistorial oPedidoHistorial = container
 				.newTransientInstance(PedidoHistorial.class);
-		// PedidoHistorial oPedidoHistorial = new PedidoHistorial();
 		oPedidoHistorial.setPedido(pedido);
-		//oPedidoHistorial.setObservacion("Asignado a Ruta: " + this.getNumero());
+		oPedidoHistorial.setObservacion("Asignado a Cadete: " + this.getNombre());
 		oPedidoHistorial.setFechaHora(DateTime.now());
 		oPedidoHistorial.setEstado(pedido.getEstado());
 
@@ -247,6 +260,15 @@ public class Cadete {
 	 * pedido ) { pedido.setEstado(E_estado.ASIGNADO);
 	 * getListaPedidos().add(pedido); return this; }
 	 */
+	
+	public void agregarPedido (String nombreProveedor){
+		if(this.recorrido.equalsIgnoreCase("->"))
+			this.setRecorrido(nombreProveedor);
+		else
+			this.setRecorrido(this.recorrido + " / " + nombreProveedor);
+		
+	}
+	
 	@ActionLayout(named = "Eliminar Ruta")
 	public Cadete deleteRuta() {
 		this.setActivo(false);
