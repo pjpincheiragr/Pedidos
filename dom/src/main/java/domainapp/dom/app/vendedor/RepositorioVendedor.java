@@ -26,12 +26,14 @@ public class RepositorioVendedor {
 	public Vendedor createProveedor(
 			@ParameterLayout(named="nombre")@Parameter(optionality=Optionality.OPTIONAL)String nombre,
 			@ParameterLayout(named="codigo")@Parameter(optionality=Optionality.OPTIONAL)String codigo,
-			@ParameterLayout(named="userCode")@Parameter(optionality=Optionality.OPTIONAL)String userCode
+			@ParameterLayout(named="userCode")@Parameter(optionality=Optionality.OPTIONAL)String userCode,
+			@ParameterLayout(named="email")@Parameter(regexPattern = domainapp.dom.regex.validador.Validador.ValidacionEmail.ADMITIDOS)String email
 			){
 		final Vendedor vendedor = container.newTransientInstance(Vendedor.class);
 		vendedor.setNombre(nombre);
 		vendedor.setCodigo(codigo);
 		vendedor.setUserCode(userCode);
+		vendedor.setEmail(email);
 		container.persistIfNotAlready(vendedor);
 		return vendedor;
 	}

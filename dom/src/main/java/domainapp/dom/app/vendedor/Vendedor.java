@@ -43,16 +43,17 @@ public class Vendedor {
 	private String nombre;
 	private String codigo;
 	private String userCode;
+	private String email;
 	
 	public String title() {		
 		return  getNombre().toString();
 	}
-	public Vendedor(String nombre, String codigo, String userCode) {
+	public Vendedor(String nombre, String codigo, String userCode, String email) {
 		super();
 		this.nombre = nombre;
 		this.codigo = codigo;
 		this.userCode = userCode;
-
+		this.email=email;
 	}
 
 	public Vendedor() {
@@ -90,6 +91,17 @@ public class Vendedor {
 	public void setUserCode(String codigo) {
 		this.userCode = codigo;
 	}
+	
+	@MemberOrder(sequence="4")
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
 	@javax.inject.Inject
     DomainObjectContainer container;
 }
