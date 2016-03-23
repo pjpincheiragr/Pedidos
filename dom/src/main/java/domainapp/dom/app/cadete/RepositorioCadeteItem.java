@@ -54,7 +54,7 @@ public class RepositorioCadeteItem {
 		return listaRutas;
 	}
 
-	@ActionLayout(named = "Update Estado")
+	@ActionLayout(named = "Actualizar Estado")
 	public CadeteItem updatePedido(
 			@ParameterLayout(named = "Clave Pedido")long clavePedido
 			) {

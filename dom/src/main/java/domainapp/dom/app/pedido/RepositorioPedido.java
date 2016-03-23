@@ -148,8 +148,8 @@ public class RepositorioPedido {
 	  return this; }
 
 
-	@MemberOrder(sequence = "1")
-	@ActionLayout(named = "Listar Todos")
+	@MemberOrder(sequence = "3")
+	@ActionLayout(named = "Listar todos los Pedidos")
 	public List<Pedido> listAll() {
 		final List<Pedido> listaPedidos = this.container
 				.allMatches(new QueryDefault<Pedido>(Pedido.class,
@@ -163,8 +163,8 @@ public class RepositorioPedido {
 	/*
 	 * Aqui comienza el método que permite a un vendedor visualizar sus pedidos
 	 */
-	@MemberOrder(sequence = "2")
-	@ActionLayout(named = "Listar Pedidos")
+	@MemberOrder(sequence = "4")
+	@ActionLayout(named = "Listar Mis Pedidos")
 	public List<Pedido> listAllByVendor() {
 		final List<Pedido> listaPedidos = this.container
 				.allMatches(new QueryDefault<Pedido>(Pedido.class,
@@ -179,8 +179,8 @@ public class RepositorioPedido {
 
 	// termina listar pedidos de VENDEDOR
 
-	@MemberOrder(sequence = "3")
-	@ActionLayout(named = "Listar Nuevos")
+	@MemberOrder(sequence = "5")
+	@ActionLayout(named = "Listar Nuevos Pedidos")
 	public List<Pedido> listNew() {
 		final List<Pedido> listaPedidos = this.container
 				.allMatches(new QueryDefault<Pedido>(Pedido.class,
@@ -192,7 +192,7 @@ public class RepositorioPedido {
 	}
 
 	@ActionLayout(named = "Buscar por Estado")
-	@MemberOrder(sequence = "5")
+	@MemberOrder(sequence = "6")
 	public List<Pedido> findByState(
 			@ParameterLayout(named = "Estado") E_estado estado) {
 		return container.allMatches(new QueryDefault<Pedido>(Pedido.class,
@@ -200,7 +200,7 @@ public class RepositorioPedido {
 	}
 
 	@ActionLayout(named = "Buscar por Vendedor")
-	@MemberOrder(sequence = "6")
+	@MemberOrder(sequence = "7")
 	public List<Pedido> findBySeller(
 			@ParameterLayout(named = "Nombre") Vendedor vendedor) {
 		return container.allMatches(new QueryDefault<Pedido>(Pedido.class,
@@ -220,8 +220,9 @@ public class RepositorioPedido {
 						"estado", E_estado.NUEVO));
 		return listaPedidos;
 	}
-
-	@ActionLayout(named = "Update Estado")
+	
+	@MemberOrder(sequence = "9")
+	@ActionLayout(named = "Actualizar Estado de Pedido")
 	public Pedido updatePedido(@ParameterLayout(named = "Clave") long clave) {
 		final List<Pedido> listaPedidos = this.container
 				.allMatches(new QueryDefault<Pedido>(Pedido.class,
@@ -235,7 +236,7 @@ public class RepositorioPedido {
 		return listaPedidos.get(0);
 	}
 	
-	@ActionLayout(named = "Update Estado Lista ")
+	@ActionLayout(named = "Actualizar Varios Estados")
 	public void updatePedidoLista(@ParameterLayout(named = "Lista") String lista) {
 		StringTokenizer items = new StringTokenizer(lista,"&");
 		String clave="";

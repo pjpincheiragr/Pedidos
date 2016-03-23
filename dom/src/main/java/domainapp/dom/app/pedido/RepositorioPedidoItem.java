@@ -70,7 +70,7 @@ public class RepositorioPedidoItem {
 	}
 	
 	
-	@ActionLayout(named = "Update Estado")
+	@ActionLayout(named = "Actualizar Estado de un Item")
 	public PedidoItem updatePedidoItem(@ParameterLayout(named = "Clave") long clave) {
 		final List<PedidoItem> listaPedidosItem = this.container
 				.allMatches(new QueryDefault<PedidoItem>(PedidoItem.class,
@@ -84,7 +84,7 @@ public class RepositorioPedidoItem {
 		return listaPedidosItem.get(0);
 	}
 	
-	@ActionLayout(named = "Update Estado Lista Items")
+	@ActionLayout(named = "Actualizar Estado de Varios Items")
 	public void updatePedidoItemLista(@ParameterLayout(named = "Lista") String lista) {
 		StringTokenizer items = new StringTokenizer(lista,"&");
 		String clave="";

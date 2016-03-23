@@ -51,7 +51,7 @@ package domainapp.dom.app.sucursal;
 		}
 
 		@MemberOrder(sequence = "2")
-		@ActionLayout(named = "Listar todos")
+		@ActionLayout(named = "Listar Todas las Sucursales")
 		public List<Sucursal> listAll() {
 			final List<Sucursal> listaSucursal = this.container
 					.allMatches(new QueryDefault<Sucursal>(Sucursal.class, "ListarTodos"));
@@ -62,7 +62,7 @@ package domainapp.dom.app.sucursal;
 		}
 
 		//@MemberOrder(sequence = "6", name = "Elementos Inactivos")
-		@ActionLayout(named = "Sucursal")
+		@ActionLayout(named = "Listar Sucursales Inactivas")
 		public List<Sucursal> listAllInactivos() {
 			final List<Sucursal> listaInactivos = this.container
 					.allMatches(new QueryDefault<Sucursal>(Sucursal.class, "ListarInactivos"));
@@ -70,7 +70,7 @@ package domainapp.dom.app.sucursal;
 		}
 
 		@MemberOrder(sequence = "3")
-		@ActionLayout(named = "Buscar por nombre")
+		@ActionLayout(named = "Buscar Sucursal por Nombre")
 	    public List<Sucursal> buscarPorNombre(
 	            @ParameterLayout(named="Nombre") @Parameter(optionality=Optionality.OPTIONAL)   String nombre
 	    ) {

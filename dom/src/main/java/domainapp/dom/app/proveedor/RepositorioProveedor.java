@@ -53,7 +53,7 @@ public class RepositorioProveedor {
 	}
 
 	@MemberOrder(sequence = "2")
-	@ActionLayout(named = "Listar todos")
+	@ActionLayout(named = "Listar todos los Proveedores")
 	public List<Proveedor> listAll() {
 		final List<Proveedor> listaProveedor = this.container
 				.allMatches(new QueryDefault<Proveedor>(Proveedor.class, "ListarTodos"));
@@ -64,7 +64,7 @@ public class RepositorioProveedor {
 	}
 	
 	@MemberOrder(sequence = "3")
-	@ActionLayout(named = "Buscar por nombre")
+	@ActionLayout(named = "Buscar por Nombre")
     public List<Proveedor> findByName(
             @ParameterLayout(named="Nombre") @Parameter(optionality=Optionality.OPTIONAL)   String nombre
     ) {
