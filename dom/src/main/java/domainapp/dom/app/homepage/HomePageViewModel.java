@@ -24,11 +24,13 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.ViewModel;
+
 import domainapp.dom.app.servicios.E_urgencia_pedido;
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.pedido.RepositorioPedido;
@@ -36,6 +38,8 @@ import domainapp.dom.app.vendedor.RepositorioVendedor;
 import domainapp.dom.app.cadete.*;
 
 @ViewModel
+@MemberGroupLayout(
+	     columnSpans={12,0,0,12})
 public class HomePageViewModel {
 
 	//region > title
@@ -69,7 +73,7 @@ public class HomePageViewModel {
 
 
 	@HomePage
-	
+	@MemberOrder(sequence = "2")
 	@CollectionLayout(
 	            render = RenderType.EAGERLY
 	    )

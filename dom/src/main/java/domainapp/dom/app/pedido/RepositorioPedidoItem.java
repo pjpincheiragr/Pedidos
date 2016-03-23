@@ -17,7 +17,6 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
 
 import domainapp.dom.app.marca.Marca;
-import domainapp.dom.app.servicios.E_estado;
 import domainapp.dom.app.servicios.E_estado_item;
 import domainapp.dom.app.servicios.E_tieneMuestra;
 import domainapp.dom.app.pedido.PedidoItem;

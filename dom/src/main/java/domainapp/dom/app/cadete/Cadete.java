@@ -79,6 +79,7 @@ public class Cadete {
 		this.nombre = nombre;
 	}
 
+	@Programmatic
 	@MemberOrder(sequence = "2")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
@@ -86,9 +87,11 @@ public class Cadete {
 		return codigo;
 	}
 
+	//FALTA VALIDAR EL CODIGO! 
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
+	
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	@Property(editing = Editing.ENABLED)
 	@CollectionLayout(render = RenderType.EAGERLY)

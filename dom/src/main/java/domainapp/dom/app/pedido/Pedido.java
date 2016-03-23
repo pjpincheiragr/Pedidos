@@ -4,7 +4,6 @@ import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.value.Blob;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.jdo.annotations.IdGeneratorStrategy;

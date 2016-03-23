@@ -1,15 +1,11 @@
 package domainapp.dom.app.pedido;
 
-import java.io.IOException;
+
 import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
