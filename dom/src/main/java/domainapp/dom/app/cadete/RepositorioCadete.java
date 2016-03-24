@@ -9,7 +9,6 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.query.QueryDefault;
 import domainapp.dom.app.cadete.Cadete;
@@ -22,30 +21,12 @@ public class RepositorioCadete {
 	public Cadete createcadete(
 			@ParameterLayout(named = "nombre") @Parameter() String nombre,
 			@ParameterLayout(named = "codigo") @Parameter() String codigo) {
-		if(this.validateCreateCadete(nombre,codigo)==null){
 		final Cadete cadete = container.newTransientInstance(Cadete.class);
-		cadete.setCodigo(codigo);
 		cadete.setNombre(nombre);
+		cadete.setCodigo(codigo);
+		cadete.setRecorrido("->");
 		container.persistIfNotAlready(cadete);
 		return cadete;
-		}else{
-			List <Cadete> cadetes=container.allMatches(
-					new QueryDefault<Cadete>(Cadete.class, "findByCode",
-							"codigo", codigo));
-			return cadetes.get(0);
-		}
-		}
-	
-	@Programmatic
-	public String validateCreateCadete(String nombre, String codigo) {
-		if (!container.allMatches(
-				new QueryDefault<Cadete>(Cadete.class, "findByCode",
-						"codigo", codigo)).isEmpty()) {
-			container
-			.informUser( "El codigo ya se asocia a un cadete.");
-			return "error";
-		}
-		return null;
 	}
 
 	@MemberOrder(sequence = "2")
@@ -80,10 +61,9 @@ public class RepositorioCadete {
 		return container.allMatches(
 				new QueryDefault<>(
 						Cadete.class,
-						"findByCode",
-						"codigo", (codigo == null) ? "" : codigo));
+						"findByName",
+						"nombre", (codigo == null) ? "" : codigo));
 	}
-	
 
 	@javax.inject.Inject
 	DomainObjectContainer container;

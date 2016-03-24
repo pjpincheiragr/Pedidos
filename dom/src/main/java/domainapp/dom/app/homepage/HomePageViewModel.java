@@ -39,7 +39,8 @@ import domainapp.dom.app.cadete.*;
 
 @ViewModel
 @MemberGroupLayout(
-	     columnSpans={12,0,0,12})
+	     columnSpans={12,0,0,12}
+	     )
 public class HomePageViewModel {
 
 	//region > title
@@ -73,7 +74,7 @@ public class HomePageViewModel {
 
 
 	@HomePage
-	@MemberOrder(sequence = "2")
+	@MemberOrder(sequence = "3")
 	@CollectionLayout(
 	            render = RenderType.EAGERLY
 	    )
