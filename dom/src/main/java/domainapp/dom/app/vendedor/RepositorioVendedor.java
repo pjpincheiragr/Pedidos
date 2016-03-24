@@ -12,6 +12,7 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.query.QueryDefault;
 import domainapp.dom.app.vendedor.Vendedor;
@@ -29,13 +30,20 @@ public class RepositorioVendedor {
 			@ParameterLayout(named="userCode")@Parameter(optionality=Optionality.OPTIONAL)String userCode,
 			@ParameterLayout(named="email")@Parameter(regexPattern = domainapp.dom.regex.validador.Validador.ValidacionEmail.ADMITIDOS)String email
 			){
-		final Vendedor vendedor = container.newTransientInstance(Vendedor.class);
-		vendedor.setNombre(nombre);
-		vendedor.setCodigo(codigo);
-		vendedor.setUserCode(userCode);
-		vendedor.setEmail(email);
-		container.persistIfNotAlready(vendedor);
-		return vendedor;
+		if(this.validateCreateVendedor(codigo)==null){
+			final Vendedor vendedor = container.newTransientInstance(Vendedor.class);
+			vendedor.setNombre(nombre);
+			vendedor.setCodigo(codigo);
+			vendedor.setUserCode(userCode);
+			vendedor.setEmail(email);
+			container.persistIfNotAlready(vendedor);
+			return vendedor;
+		}else{
+			List <Vendedor> vendedores=container.allMatches(
+					new QueryDefault<Vendedor>(Vendedor.class, "findByCode",
+							"codigo", codigo));
+			return vendedores.get(0);
+		}
 	}
 
 	@MemberOrder(sequence = "2")
@@ -48,6 +56,18 @@ public class RepositorioVendedor {
 			this.container.warnUser("No hay vendedores cargados en el sistema");
 		}
 		return listaVendedores;
+	}
+	
+	@Programmatic
+	public String validateCreateVendedor(String codigo) {
+		if (!container.allMatches(
+				new QueryDefault<Vendedor>(Vendedor.class, "findByCode",
+						"codigo", codigo)).isEmpty()) {
+			container
+			.informUser( "El codigo ya se asocia a un Vendedor.");
+			return "error";
+		}
+		return null;
 	}
 	
 	@ActionLayout(named = "Buscar Vendedor por Nombre")

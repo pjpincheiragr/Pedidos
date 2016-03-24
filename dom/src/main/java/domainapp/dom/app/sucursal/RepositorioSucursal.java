@@ -11,6 +11,7 @@ package domainapp.dom.app.sucursal;
 	import org.apache.isis.applib.annotation.Optionality;
 	import org.apache.isis.applib.annotation.Parameter;
 	import org.apache.isis.applib.annotation.ParameterLayout;
+	import org.apache.isis.applib.annotation.Programmatic;
 	import org.apache.isis.applib.query.QueryDefault;
 	import domainapp.dom.app.servicios.Direccion;
 	import domainapp.dom.app.servicios.Localidad;
@@ -32,22 +33,40 @@ package domainapp.dom.app.sucursal;
 				final @ParameterLayout(named="Departamento") @Parameter(optionality=Optionality.OPTIONAL) String departamento,
 				final @ParameterLayout(named="Teléfono") @Parameter(optionality=Optionality.OPTIONAL) String telefono)
 		            {
+			if(this.validateCreateSucursal(codigoSucursal)==null){
+				final Sucursal sucursal = container.newTransientInstance(Sucursal.class);
+				final Direccion dire = new Direccion();
+				final Localidad loca = new Localidad();
+				loca.setNombre(localidad);
+				if (calle != null && !calle.isEmpty()) { dire.setCalle(calle.toUpperCase());}
+				dire.setNumero(numero);
+				if (piso != null && !piso.isEmpty()) { dire.setPiso(piso);}
+				if (departamento != null && !departamento.isEmpty()) { dire.setDepartamento(departamento);}
+				if (loca != null) { dire.setLocalidad(loca);}	
+				sucursal.setCodigoSucursal(codigoSucursal);
+				sucursal.setNombre(nombre);
+				sucursal.setDireccion(dire);
+				container.persistIfNotAlready(sucursal);
+				return sucursal;
+			}else{
+				List <Sucursal> sucursales=container.allMatches(
+						new QueryDefault<Sucursal>(Sucursal.class, "findByCode",
+								"codigoSucursal", codigoSucursal));
+				return sucursales.get(0);
+			}
 
-			final Sucursal sucursal = container.newTransientInstance(Sucursal.class);
-		    final Direccion dire = new Direccion();
-		    final Localidad loca = new Localidad();
-		    loca.setNombre(localidad);
-		    if (calle != null && !calle.isEmpty()) { dire.setCalle(calle.toUpperCase());}
-		    dire.setNumero(numero);
-		    if (piso != null && !piso.isEmpty()) { dire.setPiso(piso);}
-		    if (departamento != null && !departamento.isEmpty()) { dire.setDepartamento(departamento);}
-		    if (loca != null) { dire.setLocalidad(loca);}	
-			sucursal.setCodigoSucursal(codigoSucursal);
-			sucursal.setNombre(nombre);
-			sucursal.setDireccion(dire);
-			container.persistIfNotAlready(sucursal);
-			return sucursal;
-
+		}
+		
+		@Programmatic
+		public String validateCreateSucursal(String codigo) {
+			if (!container.allMatches(
+					new QueryDefault<Sucursal>(Sucursal.class, "findByCode",
+							"codigoSucursal", codigo)).isEmpty()) {
+				container
+				.informUser( "El codigo ya se asocia a una sucursal.");
+				return "error";
+			}
+			return null;
 		}
 
 		@MemberOrder(sequence = "2")

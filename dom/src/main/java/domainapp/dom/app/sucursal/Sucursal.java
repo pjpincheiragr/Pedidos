@@ -26,7 +26,11 @@ import domainapp.dom.app.servicios.Direccion;
 		@javax.jdo.annotations.Query(name = "findByName", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.sucursal.Sucursal "
 				+ "WHERE ((:nombre=='') || (nombre.toLowerCase().indexOf(:nombre) >= 0))"
-				+ " order by nombre ") })
+				+ " order by nombre "),
+		@javax.jdo.annotations.Query(name = "findByCode", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.sucursal.Sucursal "
+				+ "WHERE ((:codigoSucursal=='') || (codigoSucursal.toLowerCase().indexOf(:codigoSucursal) >= 0))"
+				+ " order by codigoSucursal ") })
 @DomainObject(objectType = "SUCURSAL", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
 public class Sucursal {
