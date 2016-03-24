@@ -12,6 +12,7 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.query.QueryDefault;
 
@@ -36,20 +37,39 @@ public class RepositorioProveedor {
 			final @ParameterLayout(named="Piso") @Parameter(optionality=Optionality.OPTIONAL) String piso,
 			final @ParameterLayout(named="Departamento") @Parameter(optionality=Optionality.OPTIONAL) String departamento
 			){
-		final Proveedor proveedor = container.newTransientInstance(Proveedor.class);
-		final Direccion dire = new Direccion();
-	    final Localidad loca = new Localidad();
-	    loca.setNombre(localidad);
-	    if (calle != null && !calle.isEmpty()) { dire.setCalle(calle.toUpperCase());}
-	    dire.setNumero(numero);
-	    if (piso != null && !piso.isEmpty()) { dire.setPiso(piso);}
-	    if (departamento != null && !departamento.isEmpty()) { dire.setDepartamento(departamento);}
-	    if (loca != null) { dire.setLocalidad(loca);}
-		proveedor.setNombre(nombre);
-		proveedor.setCodigo(codigo);
-		proveedor.setDireccion(dire);
-		container.persistIfNotAlready(proveedor);
-		return proveedor;
+		if(this.validateCreateProveedor(codigo)==null){
+			final Proveedor proveedor = container.newTransientInstance(Proveedor.class);
+			final Direccion dire = new Direccion();
+			final Localidad loca = new Localidad();
+			loca.setNombre(localidad);
+			if (calle != null && !calle.isEmpty()) { dire.setCalle(calle.toUpperCase());}
+			dire.setNumero(numero);
+			if (piso != null && !piso.isEmpty()) { dire.setPiso(piso);}
+			if (departamento != null && !departamento.isEmpty()) { dire.setDepartamento(departamento);}
+			if (loca != null) { dire.setLocalidad(loca);}
+			proveedor.setNombre(nombre);
+			proveedor.setCodigo(codigo);
+			proveedor.setDireccion(dire);
+			container.persistIfNotAlready(proveedor);
+			return proveedor;
+		}else{
+			List <Proveedor> proveedores=container.allMatches(
+					new QueryDefault<Proveedor>(Proveedor.class, "findByCode",
+							"codigo", codigo));
+			return proveedores.get(0);
+		}
+	}
+	
+	@Programmatic
+	public String validateCreateProveedor(String codigo) {
+		if (!container.allMatches(
+				new QueryDefault<Proveedor>(Proveedor.class, "findByCode",
+						"codigo", codigo)).isEmpty()) {
+			container
+			.informUser( "El codigo ya se asocia a un proveedor.");
+			return "error";
+		}
+		return null;
 	}
 
 	@MemberOrder(sequence = "2")
