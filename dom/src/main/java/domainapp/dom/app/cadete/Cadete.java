@@ -3,6 +3,7 @@ package domainapp.dom.app.cadete;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
@@ -26,6 +27,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.annotation.ActionLayout.Position;
+import org.apache.isis.applib.query.QueryDefault;
 import org.joda.time.DateTime;
 
 import domainapp.dom.app.pedido.Pedido;
@@ -54,6 +56,7 @@ public class Cadete {
 	private String nombre;
 	private String codigo;
 	private String recorrido;
+	private List<String> listRecorrido = new ArrayList<String>();
 	private List<CadeteItem> listaPedidos = new ArrayList<CadeteItem>();
 	private List<Pedido> listaPedidosUrgentes = new ArrayList<Pedido>();
 	private List<Pedido> listaPedidosProgramables = new ArrayList<Pedido>();
@@ -231,7 +234,6 @@ public class Cadete {
 		oCadeteItem.setProveedor(pedido.getProveedor());
 		oCadeteItem.setCadete(this);
 		oCadeteItem.setTiempo(tiempo);
-		// this.agregarPedido(pedido.getProveedor().getNombre());
 		container.persistIfNotAlready(oCadeteItem);
 		this.getListaPedidos().add(oCadeteItem);
 		pedido.setEstado(E_estado.ASIGNADO);
@@ -250,11 +252,18 @@ public class Cadete {
 
 	@Programmatic
 	public void agregarRecorrido(String nombreProveedor) {
-
-		if (this.recorrido.equalsIgnoreCase("->"))
+		if (this.listRecorrido == null) {
 			this.setRecorrido(this.recorrido + nombreProveedor);
-		else
-			this.setRecorrido(this.recorrido + " / " + nombreProveedor);
+		} else {
+			if (!(this.listRecorrido.contains(nombreProveedor))) {
+
+				if (this.recorrido.equalsIgnoreCase("->"))
+					this.setRecorrido(this.recorrido + nombreProveedor);
+				else
+					this.setRecorrido(this.recorrido + " / " + nombreProveedor);
+			}
+		}
+		this.listRecorrido.add(nombreProveedor);
 	}
 
 	@ActionLayout(named = "Eliminar Ruta")
