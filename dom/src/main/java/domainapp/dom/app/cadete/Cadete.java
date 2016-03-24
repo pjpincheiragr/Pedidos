@@ -1,10 +1,17 @@
 package domainapp.dom.app.cadete;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
+import javax.swing.JTextArea;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
+import javax.swing.text.Highlighter.HighlightPainter;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -41,7 +48,6 @@ import domainapp.dom.app.servicios.E_urgencia_pedido;
 				+ "FROM domainapp.dom.app.cadete.Cadete "
 				+ "WHERE ((:codigo=='') || (codigo.toLowerCase().indexOf(:codigo) >= 0))"
 				+ " order by codigo ") })
-
 @DomainObject(objectType = "cadete", bounded = true)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_CHILD)
 public class Cadete {
@@ -52,12 +58,12 @@ public class Cadete {
 	private List<Pedido> listaPedidosUrgentes = new ArrayList<Pedido>();
 	private List<Pedido> listaPedidosProgramables = new ArrayList<Pedido>();
 	private boolean activo;
-	
-	public String title() {		
-		return  getNombre();
+
+	public String title() {
+		return getNombre();
 	}
 
-	public Cadete(String nombre, String codigo,boolean activo) {
+	public Cadete(String nombre, String codigo, boolean activo) {
 		super();
 		this.nombre = nombre;
 		this.codigo = codigo;
@@ -68,7 +74,7 @@ public class Cadete {
 	public Cadete() {
 		super();
 	}
-	
+
 	@MemberOrder(sequence = "1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
@@ -88,23 +94,22 @@ public class Cadete {
 		return codigo;
 	}
 
-	//FALTA VALIDAR EL CODIGO! 
+	// FALTA VALIDAR EL CODIGO!
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
-	
-	
+
 	@MemberOrder(sequence = "2")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
 	public String getRecorrido() {
 		return this.recorrido;
 	}
-	
+
 	public void setRecorrido(String recorrido) {
 		this.recorrido = recorrido;
 	}
-	
+
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	@Property(editing = Editing.ENABLED)
 	@CollectionLayout(render = RenderType.EAGERLY)
@@ -155,28 +160,7 @@ public class Cadete {
 	public Cadete asignarPedidoUrgente(Pedido pedido,
 			@ParameterLayout(named = "Orden") int orden,
 			@ParameterLayout(named = "Tiempo") int tiempo) {
-		final CadeteItem oCadeteItem = container
-				.newTransientInstance(CadeteItem.class);
-		oCadeteItem.setEstado(false);
-		this.ordenarItems(orden);
-		oCadeteItem.setOrden(orden);
-		oCadeteItem.setPedido(pedido);
-		oCadeteItem.setClavePedido(pedido.getClave());
-		oCadeteItem.setProveedor(pedido.getProveedor());
-		oCadeteItem.setCadete(this);
-		oCadeteItem.setTiempo(tiempo);
-		this.agregarPedido(pedido.getProveedor().getNombre());
-		container.persistIfNotAlready(oCadeteItem);
-		this.getListaPedidos().add(oCadeteItem);
-		pedido.setEstado(E_estado.ASIGNADO);
-		final PedidoHistorial oPedidoHistorial = container
-				.newTransientInstance(PedidoHistorial.class);
-		
-		oPedidoHistorial.setPedido(pedido);
-		oPedidoHistorial.setObservacion("Asignado a Cadete: " + this.getNombre());
-		oPedidoHistorial.setFechaHora(DateTime.now());
-		oPedidoHistorial.setEstado(pedido.getEstado());
-		container.persistIfNotAlready(oPedidoHistorial);
+		this.agregarPedidoGenerico(pedido, orden, tiempo);
 		return this;
 	}
 
@@ -223,29 +207,8 @@ public class Cadete {
 			@ParameterLayout(named = "Orden") int orden,
 			@ParameterLayout(named = "Tiempo") int tiempo) {
 
-		final CadeteItem oCadeteItem = container
-				.newTransientInstance(CadeteItem.class);
+		this.agregarPedidoGenerico(pedido, orden, tiempo);
 
-		oCadeteItem.setEstado(false);
-		this.ordenarItems(orden);
-		oCadeteItem.setOrden(orden);
-		oCadeteItem.setPedido(pedido);
-		oCadeteItem.setClavePedido(pedido.getClave());
-		oCadeteItem.setProveedor(pedido.getProveedor());
-		oCadeteItem.setTiempo(tiempo);
-		this.agregarPedido(pedido.getProveedor().getNombre());
-		container.persistIfNotAlready(oCadeteItem);
-		this.getListaPedidos().add(oCadeteItem);
-
-		pedido.setEstado(E_estado.ASIGNADO);
-		final PedidoHistorial oPedidoHistorial = container
-				.newTransientInstance(PedidoHistorial.class);
-		oPedidoHistorial.setPedido(pedido);
-		oPedidoHistorial.setObservacion("Asignado a Cadete: " + this.getNombre());
-		oPedidoHistorial.setFechaHora(DateTime.now());
-		oPedidoHistorial.setEstado(pedido.getEstado());
-
-		container.persistIfNotAlready(oPedidoHistorial);
 		return this;
 	}
 
@@ -255,20 +218,45 @@ public class Cadete {
 				.listAllByUrgency(E_urgencia_pedido.PROGRAMABLE);
 	}
 
-	/*
-	 * @ActionLayout(named = "Agregar Pedido") public Ruta addPedido( Pedido
-	 * pedido ) { pedido.setEstado(E_estado.ASIGNADO);
-	 * getListaPedidos().add(pedido); return this; }
-	 */
-	
-	public void agregarPedido (String nombreProveedor){
-		if(this.recorrido.equalsIgnoreCase("->"))
-			this.setRecorrido(nombreProveedor);
+	@Programmatic
+	public void agregarPedidoGenerico(Pedido pedido, int orden, int tiempo) {
+
+		final CadeteItem oCadeteItem = container
+				.newTransientInstance(CadeteItem.class);
+		oCadeteItem.setEstado(false);
+		this.ordenarItems(orden);
+		oCadeteItem.setOrden(orden);
+		oCadeteItem.setPedido(pedido);
+		oCadeteItem.setClavePedido(pedido.getClave());
+		oCadeteItem.setProveedor(pedido.getProveedor());
+		oCadeteItem.setCadete(this);
+		oCadeteItem.setTiempo(tiempo);
+		// this.agregarPedido(pedido.getProveedor().getNombre());
+		container.persistIfNotAlready(oCadeteItem);
+		this.getListaPedidos().add(oCadeteItem);
+		pedido.setEstado(E_estado.ASIGNADO);
+		final PedidoHistorial oPedidoHistorial = container
+				.newTransientInstance(PedidoHistorial.class);
+
+		oPedidoHistorial.setPedido(pedido);
+		oPedidoHistorial.setObservacion("Asignado a Cadete: "
+				+ this.getNombre());
+		oPedidoHistorial.setFechaHora(DateTime.now());
+		oPedidoHistorial.setEstado(pedido.getEstado());
+		container.persistIfNotAlready(oPedidoHistorial);
+
+		this.agregarRecorrido(pedido.getProveedor().getNombre());
+	}
+
+	@Programmatic
+	public void agregarRecorrido(String nombreProveedor) {
+
+		if (this.recorrido.equalsIgnoreCase("->"))
+			this.setRecorrido(this.recorrido + nombreProveedor);
 		else
 			this.setRecorrido(this.recorrido + " / " + nombreProveedor);
-		
 	}
-	
+
 	@ActionLayout(named = "Eliminar Ruta")
 	public Cadete deleteRuta() {
 		this.setActivo(false);
@@ -278,7 +266,7 @@ public class Cadete {
 	@Programmatic
 	public boolean hideDeleteRuta() {
 		return isActivo() ? false : true;
-		}
+	}
 
 	@Property(hidden = Where.EVERYWHERE)
 	@MemberOrder(sequence = "5")
@@ -290,10 +278,9 @@ public class Cadete {
 		this.activo = activo;
 	}
 
-
 	@javax.inject.Inject
 	RepositorioPedido repositorioPedido;
-	
+
 	@javax.inject.Inject
 	RepositorioCadeteItem repositorioRutaItem;
 	@javax.inject.Inject
