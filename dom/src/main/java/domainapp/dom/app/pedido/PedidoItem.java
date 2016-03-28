@@ -59,7 +59,7 @@ public class PedidoItem {
 	private boolean activo;
 
 	public String title() {
-		return getCodigo() + " - " + getMarca().getDescripcion() + "Tiene Muestra: " + this.getMuestra();
+		return getClave() + " - " + getMarca().getDescripcion() + "Resuelto: " + this.estado;
 	}
 
 	public PedidoItem(E_tieneMuestra tieneMuestra, String codigo, Marca marca,
