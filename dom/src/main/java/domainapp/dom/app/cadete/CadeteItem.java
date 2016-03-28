@@ -58,7 +58,7 @@ public class CadeteItem {
 	private int tiempo;
 
 	public String title() {
-		return this.getPedido().title();
+		return this.pedido.getVendedor().getNombre()+ " " +this.clavePedido+" "+ this.pedido.getProveedor().getNombre() ;
 	}
 
 	public CadeteItem(Pedido pedido, long clavePedido, Proveedor proveedor,

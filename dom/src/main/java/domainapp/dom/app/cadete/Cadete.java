@@ -2,7 +2,9 @@ package domainapp.dom.app.cadete;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
@@ -26,12 +28,16 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.annotation.ActionLayout.Position;
+import org.apache.isis.applib.query.QueryDefault;
 import org.joda.time.DateTime;
 
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.pedido.PedidoHistorial;
+import domainapp.dom.app.pedido.PedidoItem;
 import domainapp.dom.app.pedido.RepositorioPedido;
+import domainapp.dom.app.servicios.CustomComparator;
 import domainapp.dom.app.servicios.E_estado;
+import domainapp.dom.app.servicios.E_estado_item;
 import domainapp.dom.app.servicios.E_urgencia_pedido;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
@@ -126,6 +132,7 @@ public class Cadete {
 	public Cadete quitarPedido(CadeteItem cadeteItem) {
 		final Pedido pedido = cadeteItem.getPedido();
 		this.getListaPedidos().remove(cadeteItem);
+		actualizarRecorrido();
 		pedido.setEstado(E_estado.NUEVO);
 		final PedidoHistorial oPedidoHistorial = container
 				.newTransientInstance(PedidoHistorial.class);
@@ -133,7 +140,6 @@ public class Cadete {
 		oPedidoHistorial.setObservacion("Quitado de la ruta: ");
 		oPedidoHistorial.setFechaHora(DateTime.now());
 		oPedidoHistorial.setEstado(pedido.getEstado());
-
 		container.persistIfNotAlready(oPedidoHistorial);
 		return this;
 	}
@@ -168,16 +174,13 @@ public class Cadete {
 	private void ordenarItems(int orden) {
 		if (!(this.getListaPedidos().isEmpty())) {
 			List<CadeteItem> items = this.getListaPedidos();
-
 			int j;
 			int ordenItem = 0;
-
 			for (j = 0; j < items.size(); j++) {
 				ordenItem = items.get(j).getOrden();
 				if (ordenItem >= orden)
 					items.get(j).setOrden(ordenItem + 1);
 			}
-
 		}
 	}
 
@@ -231,9 +234,9 @@ public class Cadete {
 		oCadeteItem.setProveedor(pedido.getProveedor());
 		oCadeteItem.setCadete(this);
 		oCadeteItem.setTiempo(tiempo);
-		// this.agregarPedido(pedido.getProveedor().getNombre());
 		container.persistIfNotAlready(oCadeteItem);
 		this.getListaPedidos().add(oCadeteItem);
+		ordenarPorOrden(this.getListaPedidos());
 		pedido.setEstado(E_estado.ASIGNADO);
 		final PedidoHistorial oPedidoHistorial = container
 				.newTransientInstance(PedidoHistorial.class);
@@ -245,17 +248,33 @@ public class Cadete {
 		oPedidoHistorial.setEstado(pedido.getEstado());
 		container.persistIfNotAlready(oPedidoHistorial);
 
-		this.agregarRecorrido(pedido.getProveedor().getNombre());
+		this.agregarRecorrido(oCadeteItem);
+	}
+
+	private void ordenarPorOrden(List<CadeteItem> listaPedidos2) {
+		Collections.sort(listaPedidos2, new CustomComparator());
+		actualizarRecorrido();
 	}
 
 	@Programmatic
-	public void agregarRecorrido(String nombreProveedor) {
-
-		if (this.recorrido.equalsIgnoreCase("->"))
-			this.setRecorrido(this.recorrido + nombreProveedor);
-		else
-			this.setRecorrido(this.recorrido + " / " + nombreProveedor);
+	public void agregarRecorrido(CadeteItem cadeteItem) {
+		actualizarRecorrido();
 	}
+
+	@Programmatic
+	public void actualizarRecorrido() {
+		this.setRecorrido("->");
+		if (!(this.listaPedidos == null) && !this.listaPedidos.isEmpty()) {
+			for (int i = 0; i < this.listaPedidos.size(); i++) {
+				if (!(this.recorrido.contains(this.listaPedidos.get(i).getProveedor().getNombre()))) {
+					this.setRecorrido(this.recorrido
+							+ this.listaPedidos.get(i).getProveedor().getNombre() + " / ");
+				}
+			}
+		}
+	}
+
+
 
 	@ActionLayout(named = "Eliminar Ruta")
 	public Cadete deleteRuta() {
