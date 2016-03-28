@@ -174,16 +174,13 @@ public class Cadete {
 	private void ordenarItems(int orden) {
 		if (!(this.getListaPedidos().isEmpty())) {
 			List<CadeteItem> items = this.getListaPedidos();
-
 			int j;
 			int ordenItem = 0;
-
 			for (j = 0; j < items.size(); j++) {
 				ordenItem = items.get(j).getOrden();
 				if (ordenItem >= orden)
 					items.get(j).setOrden(ordenItem + 1);
 			}
-
 		}
 	}
 
