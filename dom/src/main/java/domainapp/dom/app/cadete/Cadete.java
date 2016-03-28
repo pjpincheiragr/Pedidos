@@ -2,6 +2,7 @@ package domainapp.dom.app.cadete;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -32,8 +33,11 @@ import org.joda.time.DateTime;
 
 import domainapp.dom.app.pedido.Pedido;
 import domainapp.dom.app.pedido.PedidoHistorial;
+import domainapp.dom.app.pedido.PedidoItem;
 import domainapp.dom.app.pedido.RepositorioPedido;
+import domainapp.dom.app.servicios.CustomComparator;
 import domainapp.dom.app.servicios.E_estado;
+import domainapp.dom.app.servicios.E_estado_item;
 import domainapp.dom.app.servicios.E_urgencia_pedido;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
@@ -56,7 +60,6 @@ public class Cadete {
 	private String nombre;
 	private String codigo;
 	private String recorrido;
-	private List<String> listRecorrido = new ArrayList<String>();
 	private List<CadeteItem> listaPedidos = new ArrayList<CadeteItem>();
 	private List<Pedido> listaPedidosUrgentes = new ArrayList<Pedido>();
 	private List<Pedido> listaPedidosProgramables = new ArrayList<Pedido>();
@@ -129,6 +132,7 @@ public class Cadete {
 	public Cadete quitarPedido(CadeteItem cadeteItem) {
 		final Pedido pedido = cadeteItem.getPedido();
 		this.getListaPedidos().remove(cadeteItem);
+		actualizarRecorrido();
 		pedido.setEstado(E_estado.NUEVO);
 		final PedidoHistorial oPedidoHistorial = container
 				.newTransientInstance(PedidoHistorial.class);
@@ -136,7 +140,6 @@ public class Cadete {
 		oPedidoHistorial.setObservacion("Quitado de la ruta: ");
 		oPedidoHistorial.setFechaHora(DateTime.now());
 		oPedidoHistorial.setEstado(pedido.getEstado());
-
 		container.persistIfNotAlready(oPedidoHistorial);
 		return this;
 	}
@@ -236,6 +239,7 @@ public class Cadete {
 		oCadeteItem.setTiempo(tiempo);
 		container.persistIfNotAlready(oCadeteItem);
 		this.getListaPedidos().add(oCadeteItem);
+		ordenarPorOrden(this.getListaPedidos());
 		pedido.setEstado(E_estado.ASIGNADO);
 		final PedidoHistorial oPedidoHistorial = container
 				.newTransientInstance(PedidoHistorial.class);
@@ -247,24 +251,33 @@ public class Cadete {
 		oPedidoHistorial.setEstado(pedido.getEstado());
 		container.persistIfNotAlready(oPedidoHistorial);
 
-		this.agregarRecorrido(pedido.getProveedor().getNombre());
+		this.agregarRecorrido(oCadeteItem);
+	}
+
+	private void ordenarPorOrden(List<CadeteItem> listaPedidos2) {
+		Collections.sort(listaPedidos2, new CustomComparator());
+		actualizarRecorrido();
 	}
 
 	@Programmatic
-	public void agregarRecorrido(String nombreProveedor) {
-		if (this.listRecorrido == null) {
-			this.setRecorrido(this.recorrido + nombreProveedor);
-		} else {
-			if (!(this.listRecorrido.contains(nombreProveedor))) {
+	public void agregarRecorrido(CadeteItem cadeteItem) {
+		actualizarRecorrido();
+	}
 
-				if (this.recorrido.equalsIgnoreCase("->"))
-					this.setRecorrido(this.recorrido + nombreProveedor);
-				else
-					this.setRecorrido(this.recorrido + " / " + nombreProveedor);
+	@Programmatic
+	public void actualizarRecorrido() {
+		this.setRecorrido("->");
+		if (!(this.listaPedidos == null) && !this.listaPedidos.isEmpty()) {
+			for (int i = 0; i < this.listaPedidos.size(); i++) {
+				if (!(this.recorrido.contains(this.listaPedidos.get(i).getProveedor().getNombre()))) {
+					this.setRecorrido(this.recorrido
+							+ this.listaPedidos.get(i).getProveedor().getNombre() + " / ");
+				}
 			}
 		}
-		this.listRecorrido.add(nombreProveedor);
 	}
+
+
 
 	@ActionLayout(named = "Eliminar Ruta")
 	public Cadete deleteRuta() {
