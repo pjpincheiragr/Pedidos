@@ -98,7 +98,6 @@ public class Pedido {
 	private String tiempoEstimado;
 	private boolean confirmado;
 	
-	
 	public String title() {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM");
 
@@ -145,9 +144,17 @@ public class Pedido {
 	public Pedido actualizarTiempo(String tEstimado){
 		this.setTiempoEstimado(tEstimado);
 		//this.repositorioPedido.enviarSMS();
-		return this;	
+		return this;
 	}
 	
+	public boolean hideActualizarTiempo(){
+		String role = container.getUser().getRoles().get(0).getName();
+		if(role.equals("Vendedor")){
+			return false;
+		}else{
+			return true;
+		}
+	}
 	
 	@MemberOrder(name = "Estado del Pedido", sequence = "1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
@@ -382,7 +389,7 @@ public class Pedido {
 		return historial;
 	}
 
-	
+
 	
 	@javax.inject.Inject
 	DomainObjectContainer container;
