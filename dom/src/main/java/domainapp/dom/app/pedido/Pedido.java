@@ -74,6 +74,10 @@ import java.text.SimpleDateFormat;
 		@javax.jdo.annotations.Query(name = "findByState", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
 				+ "WHERE estado == :estado && activo == true"),
+		
+		@javax.jdo.annotations.Query(name = "findBySellerName", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.dom.app.pedido.Pedido "
+				+ "WHERE nombreVendedor == :nombreVendedor && activo == true"),
 
 		@javax.jdo.annotations.Query(name = "findBySeller", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.dom.app.pedido.Pedido "
@@ -87,6 +91,7 @@ public class Pedido {
 	private Proveedor proveedor;
 	private Calendar fechaHora;
 	private Vendedor vendedor;
+	private String nombreVendedor;
 	private float valor;
 	private E_estado estado;
 	private Sucursal sucursal;
@@ -107,13 +112,14 @@ public class Pedido {
 	}
 
 	public Pedido(Tipo tipo, Proveedor proveedor, Calendar fechaHora,
-			Vendedor vendedor, float valor, E_estado estado, Sucursal sucursal,
+			Vendedor vendedor,float valor, E_estado estado, Sucursal sucursal,
 			String observacion, boolean activo, E_urgencia_pedido urgencia,
 			String numeroVenta) {
 		super();
 		this.tipo = tipo;
 		this.proveedor = proveedor;
 		this.vendedor = vendedor;
+		this.nombreVendedor="";
 		this.valor = valor;
 		this.estado = estado;
 		this.sucursal = sucursal;
@@ -127,6 +133,7 @@ public class Pedido {
 	public Pedido() {
 		super();
 	}
+	
 
 	
 	@ActionLayout(named = "Confirmar", position = Position.BELOW)
@@ -138,6 +145,8 @@ public class Pedido {
 	public String disableConfirmar(){
 		return getConfirmado() ? "El pedido ya fue confirmado" : null;
 	}
+	
+	
 	
 
 	@ActionLayout(named = "Actualizar T.E.", position = Position.BELOW)
@@ -236,6 +245,8 @@ public class Pedido {
 
 	public void setVendedor(Vendedor vendedor) {
 		this.vendedor = vendedor;
+		if(vendedor!=null)
+			this.nombreVendedor=vendedor.getNombre();
 	}
 
 	@MemberOrder(sequence = "5")
@@ -301,6 +312,7 @@ public class Pedido {
 		this.tiempoEstimado = tiempoEstimado;
 
 	}
+	
 
 	// {{ Pedido Item (Property)
 	@Join

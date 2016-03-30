@@ -61,39 +61,6 @@ public class RepositorioPedido {
 		return Pedido;
 
 	}
-
-	@MemberOrder(sequence = "2")
-	@ActionLayout(named = "Crear nuevo Pedido")
-	public Pedido createPedidoVendedores(
-
-			@ParameterLayout(named = "Tipo") @Parameter(optionality = Optionality.OPTIONAL) Tipo tipo,
-			@ParameterLayout(named = "Numero de Venta") @Parameter(optionality = Optionality.OPTIONAL) String numeroVenta,
-			@ParameterLayout(named = "Urgencia") @Parameter(optionality = Optionality.OPTIONAL) E_urgencia_pedido urgencia,
-			@ParameterLayout(named = "Proveedor") @Parameter(optionality = Optionality.OPTIONAL) Proveedor proveedor,
-			@ParameterLayout(named = "Valor") @Parameter(optionality = Optionality.OPTIONAL) float valor,
-			@ParameterLayout(named = "Sucursal") @Parameter(optionality = Optionality.OPTIONAL) Sucursal sucursal,
-			@ParameterLayout(named = "Observaciones", multiLine = 15) @Parameter(optionality = Optionality.OPTIONAL) String observacion) {
-		final Pedido Pedido = container.newTransientInstance(Pedido.class);
-		Pedido.setTipo(tipo);
-		Pedido.setNumeroVenta(numeroVenta);
-		Pedido.setUrgencia(urgencia);
-		Pedido.setProveedor(proveedor);
-		Vendedor oVendedor = new Vendedor();
-		oVendedor = repositorioVendedor.findByUserCode(container.getUser()
-				.getName());
-		Pedido.setVendedor(oVendedor);
-		Pedido.setValor(valor);
-		Pedido.setEstado(E_estado.NUEVO);
-		Pedido.setSucursal(sucursal);
-		Pedido.setFechaHora(Calendar.getInstance());
-		Pedido.setObservacion(observacion);
-		Pedido.setActivo(true);
-		Pedido.setTiempoEstimado("-");
-		container.persistIfNotAlready(Pedido);
-		return Pedido;
-
-	}
-
 	/* Envio de SMS */
 /*
 	public RepositorioPedido enviarSMS() {
@@ -207,6 +174,15 @@ public class RepositorioPedido {
 		return container.allMatches(new QueryDefault<Pedido>(Pedido.class,
 				"findBySeller", "vendedor", vendedor));
 	}
+	
+	@ActionLayout(named = "Buscar por Nombre Vendedor")
+	@MemberOrder(sequence = "10")
+	public List<Pedido> findBySellerName(
+			@ParameterLayout(named = "Nombre") String nombreVendedor) {
+		return container.allMatches(new QueryDefault<Pedido>(Pedido.class,
+				"findBySellerName", "nombreVendedor", nombreVendedor));
+	}
+	
 
 	// Obtener listado por Urgencia
 
@@ -236,6 +212,7 @@ public class RepositorioPedido {
 		container.flush();
 		return listaPedidos.get(0);
 	}
+	
 	
 	@ActionLayout(named = "Actualizar Varios Estados")
 	public void updatePedidoLista(@ParameterLayout(named = "Lista") String lista) {
