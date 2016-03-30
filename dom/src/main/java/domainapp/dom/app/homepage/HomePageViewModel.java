@@ -49,12 +49,12 @@ public class HomePageViewModel {
 	}
 	// endregion
 	
-	 
+	public String cssClass() {return "my-special-auto-updating-entity"; }
+	
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	@MemberOrder(sequence = "1")
 	@Property(editing = Editing.ENABLED)
 	@CollectionLayout(render = RenderType.EAGERLY)
-	@PropertyLayout(cssClass="my-special-auto-updating-entity")
 	public List<Pedido> getListaPedidosUrgentes() {
 	
 		return repositorioPedido
@@ -70,6 +70,7 @@ public class HomePageViewModel {
 				.listAllByUrgency(E_urgencia_pedido.PROGRAMABLE);
 
 	}
+	
 	
 
 
