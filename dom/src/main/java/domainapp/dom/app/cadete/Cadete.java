@@ -22,6 +22,8 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
@@ -164,8 +166,8 @@ public class Cadete {
 	@MemberOrder(sequence = "1", name = "ListaPedidosUrgentes")
 	@ActionLayout(named = "Agregar", position = Position.PANEL)
 	public Cadete asignarPedidoUrgente(Pedido pedido,
-			@ParameterLayout(named = "Orden") int orden,
-			@ParameterLayout(named = "Tiempo") int tiempo) {
+			@ParameterLayout(named = "Orden") @Parameter(optionality = Optionality.OPTIONAL) int orden ,
+			@ParameterLayout(named = "Tiempo") @Parameter(optionality = Optionality.OPTIONAL) int tiempo) {
 		this.agregarPedidoGenerico(pedido, orden, tiempo);
 		return this;
 	}
@@ -235,8 +237,8 @@ public class Cadete {
 		oCadeteItem.setCadete(this);
 		oCadeteItem.setTiempo(tiempo);
 		container.persistIfNotAlready(oCadeteItem);
-		this.getListaPedidos().add(oCadeteItem);
-		ordenarPorOrden(this.getListaPedidos());
+		agregarCadeteItem(oCadeteItem);
+		actualizarRecorrido();
 		pedido.setEstado(E_estado.ASIGNADO);
 		final PedidoHistorial oPedidoHistorial = container
 				.newTransientInstance(PedidoHistorial.class);
@@ -248,16 +250,17 @@ public class Cadete {
 		oPedidoHistorial.setEstado(pedido.getEstado());
 		container.persistIfNotAlready(oPedidoHistorial);
 
-		this.agregarRecorrido(oCadeteItem);
 	}
 
-	private void ordenarPorOrden(List<CadeteItem> listaPedidos2) {
-		Collections.sort(listaPedidos2, new CustomComparator());
-		actualizarRecorrido();
-	}
-
-	@Programmatic
-	public void agregarRecorrido(CadeteItem cadeteItem) {
+	private void agregarCadeteItem(CadeteItem oCadeteItem) {
+	
+		for (int i = 0; i < this.listaPedidos.size(); i++) {
+			if(this.listaPedidos.get(i).getProveedor().getNombre().equalsIgnoreCase(oCadeteItem.getProveedor().getNombre())){
+				oCadeteItem.setOrden(this.listaPedidos.get(i).getOrden());
+			}
+		}
+		this.listaPedidos.add(oCadeteItem);
+		Collections.sort(this.listaPedidos, new CustomComparator());
 		actualizarRecorrido();
 	}
 
@@ -265,12 +268,16 @@ public class Cadete {
 	public void actualizarRecorrido() {
 		this.setRecorrido("->");
 		if (!(this.listaPedidos == null) && !this.listaPedidos.isEmpty()) {
+			
 			for (int i = 0; i < this.listaPedidos.size(); i++) {
-				if (!(this.recorrido.contains(this.listaPedidos.get(i).getProveedor().getNombre()))) {
+				
+				if (!(this.recorrido.contains( this.listaPedidos.get(i).getProveedor().getNombre())) ) {
 					this.setRecorrido(this.recorrido
 							+ this.listaPedidos.get(i).getProveedor().getNombre() + " / ");
 				}
+				
 			}
+			
 		}
 	}
 

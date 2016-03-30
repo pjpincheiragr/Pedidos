@@ -9,6 +9,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 
 import domainapp.dom.app.pedido.Pedido;
@@ -88,9 +89,10 @@ public class CadeteItem {
 		this.pedido = pedido;
 	}
 
-	@MemberOrder(sequence = "1")
+	//@MemberOrder(sequence = "1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
+	@Programmatic
 	public long getClavePedido() {
 		return this.clavePedido;
 	}
