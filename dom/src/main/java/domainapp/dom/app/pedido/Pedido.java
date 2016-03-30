@@ -102,7 +102,7 @@ public class Pedido {
 	public String title() {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM");
 
-		return getVendedor().getNombre() + " - "
+		return getVendedor().getNombre()+": "+this.getClave() + " - "
 				+ "Sucursal: " + getSucursal().getCodigoSucursal() + " - "
 				+ dateFormat.format(this.fechaHora.getTime());
 	}
@@ -177,7 +177,8 @@ public class Pedido {
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@javax.jdo.annotations.PrimaryKey(column = "clave")
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY, sequence = "clave")
-	@MemberOrder(sequence = "1")
+	//@MemberOrder(sequence = "1")
+	@Programmatic
 	public long getClave() {
 		return clave;
 	}
@@ -198,9 +199,11 @@ public class Pedido {
 
 	}
 
-	@MemberOrder(sequence = "2")
+	
+	//@MemberOrder(sequence = "2")
 	@Property(editing = Editing.ENABLED)
 	@javax.jdo.annotations.Column(allowsNull = "true")
+	@Programmatic
 	public String getNumeroVenta() {
 		return this.numeroVenta;
 	}
