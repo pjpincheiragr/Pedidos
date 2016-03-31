@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.ActionLayout.Position;
 
 import domainapp.dom.app.marca.Marca;
 import domainapp.dom.app.proveedor.Proveedor;
+import domainapp.dom.app.servicios.E_confirmado;
 import domainapp.dom.app.servicios.E_estado;
 import domainapp.dom.app.servicios.E_estado_item;
 import domainapp.dom.app.servicios.E_tieneMuestra;
@@ -101,7 +102,7 @@ public class Pedido {
 	private List<PedidoItem> ListaPedidos = new ArrayList<PedidoItem>();
 	private String numeroVenta;
 	private String tiempoEstimado;
-	private boolean confirmado;
+	private E_confirmado confirmado;
 	
 	public String title() {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM");
@@ -138,16 +139,9 @@ public class Pedido {
 	
 	@ActionLayout(named = "Confirmar", position = Position.BELOW)
 	public Pedido confirmar(){
-		this.setConfirmado(true);
+		this.setConfirmado(E_confirmado.SI);
 		return this;	
 	}
-	
-	public String disableConfirmar(){
-		return getConfirmado() ? "El pedido ya fue confirmado" : null;
-	}
-	
-	
-	
 
 	@ActionLayout(named = "Actualizar T.E.", position = Position.BELOW)
 	public Pedido actualizarTiempo(String tEstimado){
@@ -167,13 +161,12 @@ public class Pedido {
 	
 	@MemberOrder(name = "Estado del Pedido", sequence = "1")
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	public boolean getConfirmado() {
+	public E_confirmado getConfirmado() {
 		return this.confirmado;
 	}
 
-	public void setConfirmado(boolean confirmado) {
-		this.confirmado = confirmado;;
-
+	public void setConfirmado(E_confirmado confirmado) {
+		this.confirmado = confirmado;
 	}
 	
 	@MemberOrder(name = "Estado del Pedido", sequence = "2")
