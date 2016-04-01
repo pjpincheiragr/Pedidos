@@ -41,6 +41,7 @@ import domainapp.dom.app.tipo.Tipo;
 import domainapp.dom.app.vendedor.Vendedor;
 
 import javax.jdo.annotations.Join;
+import javax.swing.JOptionPane;
 
 import java.util.Calendar;
 import java.text.DateFormat;
@@ -141,6 +142,14 @@ public class Pedido {
 		return this;	
 	}
 
+	public boolean hideConfirmar(){
+		return container.getUser().getRoles().get(0).getName().endsWith("logistica");
+	}
+	
+	public String disableConfirmar(){
+		return (this.getConfirmado()==E_confirmado.SI) ? "Este pedido ya fue confirmado" : null;
+	}
+	
 	@ActionLayout(named = "Actualizar T.E.", position = Position.BELOW)
 	public Pedido actualizarTiempo(String tEstimado){
 		this.setTiempoEstimado(tEstimado);
@@ -149,12 +158,7 @@ public class Pedido {
 	}
 	
 	public boolean hideActualizarTiempo(){
-		String role = container.getUser().getRoles().get(0).getName();
-		if(role.equals("Vendedor")){
-			return false;
-		}else{
-			return true;
-		}
+		return container.getUser().getRoles().get(0).getName().endsWith("Vendedor");
 	}
 	
 	@MemberOrder(name = "Estado del Pedido", sequence = "1")
