@@ -184,8 +184,7 @@ public class Pedido {
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@javax.jdo.annotations.PrimaryKey(column = "clave")
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY, sequence = "clave")
-	//@MemberOrder(sequence = "1")
-	@Programmatic
+	@MemberOrder(sequence = "1")
 	public long getClave() {
 		return clave;
 	}
