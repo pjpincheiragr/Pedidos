@@ -144,7 +144,10 @@ public class Pedido {
 
 	public boolean hideConfirmar(){
 		return container.getUser().getRoles().get(0).getName().endsWith("logistica");
-				
+	}
+	
+	public String disableConfirmar(){
+		return (this.getConfirmado()==E_confirmado.SI) ? "Este pedido ya fue confirmado" : null;
 	}
 	
 	@ActionLayout(named = "Actualizar T.E.", position = Position.BELOW)
