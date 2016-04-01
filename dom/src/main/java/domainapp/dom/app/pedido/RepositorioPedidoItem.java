@@ -97,6 +97,20 @@ public class RepositorioPedidoItem {
 			  result.get(0).setEstado(E_estado_item.RESUELTO);
 		}
 	}
+	
+	@ActionLayout(named = "Actualizar Estado de Varios Items - No resuelto")
+	public void updatePedidoItemListaNoResuelto(@ParameterLayout(named = "Lista") String lista) {
+		StringTokenizer items = new StringTokenizer(lista,"&");
+		String clave="";
+		while (items.hasMoreTokens()){
+			  clave = items.nextToken();
+			  long c=Long.parseLong(clave);
+			  List <PedidoItem> result = this.container
+						.allMatches(new QueryDefault<PedidoItem>(
+								PedidoItem.class, "BuscarPorClave","clave",c));
+			  result.get(0).setEstado(E_estado_item.NO_RESUELTO);
+		}
+	}
 
 	
 	@javax.inject.Inject

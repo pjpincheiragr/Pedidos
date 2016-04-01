@@ -63,9 +63,11 @@ public class Cadete {
 	private String nombre;
 	private String codigo;
 	private String recorrido;
+
 	private List<CadeteItem> listaPedidos = new ArrayList<CadeteItem>();
 	private List<Pedido> listaPedidosUrgentes = new ArrayList<Pedido>();
 	private List<Pedido> listaPedidosProgramables = new ArrayList<Pedido>();
+
 	private boolean activo;
 
 	public String title() {
@@ -244,7 +246,6 @@ public class Cadete {
 		pedido.setEstado(E_estado.ASIGNADO);
 		final PedidoHistorial oPedidoHistorial = container
 				.newTransientInstance(PedidoHistorial.class);
-
 		oPedidoHistorial.setPedido(pedido);
 		oPedidoHistorial.setObservacion("Asignado a Cadete: "
 				+ this.getNombre());
@@ -280,7 +281,6 @@ public class Cadete {
 									.getNombre() + " / ");
 				}
 			}
-
 		}
 	}
 
@@ -310,7 +310,7 @@ public class Cadete {
 
 	@javax.inject.Inject
 	RepositorioCadeteItem repositorioCadeteItem;
-	
+
 	@javax.inject.Inject
 	DomainObjectContainer container;
 }
