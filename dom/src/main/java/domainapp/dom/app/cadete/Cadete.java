@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
@@ -131,9 +132,9 @@ public class Cadete {
 
 	@MemberOrder(sequence = "1", name = "ListaPedidos")
 	@ActionLayout(named = "Quitar", position = Position.PANEL)
-	public Cadete quitarPedido(CadeteItem cadeteItem) {
-		final Pedido pedido = cadeteItem.getPedido();
-		this.getListaPedidos().remove(cadeteItem);
+	public Cadete quitarPedido(CadeteItem oCadeteItem) {
+		final Pedido pedido = oCadeteItem.getPedido();
+		this.getListaPedidos().remove(oCadeteItem);
 		actualizarRecorrido();
 		pedido.setEstado(E_estado.NUEVO);
 		final PedidoHistorial oPedidoHistorial = container
@@ -147,7 +148,7 @@ public class Cadete {
 	}
 
 	@Programmatic
-	public List<CadeteItem> choices0QuitarPedido(final CadeteItem rutaItem) {
+	public List<CadeteItem> choices0QuitarPedido(final CadeteItem oCadeteItem) {
 		return this.getListaPedidos();
 	}
 
@@ -165,8 +166,9 @@ public class Cadete {
 
 	@MemberOrder(sequence = "1", name = "ListaPedidosUrgentes")
 	@ActionLayout(named = "Agregar", position = Position.PANEL)
-	public Cadete asignarPedidoUrgente(Pedido pedido,
-			@ParameterLayout(named = "Orden") @Parameter(optionality = Optionality.OPTIONAL) int orden ,
+	public Cadete asignarPedidoUrgente(
+			Pedido pedido,
+			@ParameterLayout(named = "Orden") @Parameter(optionality = Optionality.OPTIONAL) int orden,
 			@ParameterLayout(named = "Tiempo") @Parameter(optionality = Optionality.OPTIONAL) int tiempo) {
 		this.agregarPedidoGenerico(pedido, orden, tiempo);
 		return this;
@@ -253,9 +255,10 @@ public class Cadete {
 	}
 
 	private void agregarCadeteItem(CadeteItem oCadeteItem) {
-	
+
 		for (int i = 0; i < this.listaPedidos.size(); i++) {
-			if(this.listaPedidos.get(i).getProveedor().getNombre().equalsIgnoreCase(oCadeteItem.getProveedor().getNombre())){
+			if (this.listaPedidos.get(i).getProveedor().getNombre()
+					.equalsIgnoreCase(oCadeteItem.getProveedor().getNombre())) {
 				oCadeteItem.setOrden(this.listaPedidos.get(i).getOrden());
 			}
 		}
@@ -268,20 +271,18 @@ public class Cadete {
 	public void actualizarRecorrido() {
 		this.setRecorrido("->");
 		if (!(this.listaPedidos == null) && !this.listaPedidos.isEmpty()) {
-			
 			for (int i = 0; i < this.listaPedidos.size(); i++) {
-				
-				if (!(this.recorrido.contains( this.listaPedidos.get(i).getProveedor().getNombre())) ) {
+
+				if (!(this.recorrido.contains(this.listaPedidos.get(i)
+						.getProveedor().getNombre()))) {
 					this.setRecorrido(this.recorrido
-							+ this.listaPedidos.get(i).getProveedor().getNombre() + " / ");
+							+ this.listaPedidos.get(i).getProveedor()
+									.getNombre() + " / ");
 				}
-				
 			}
-			
+
 		}
 	}
-
-
 
 	@ActionLayout(named = "Eliminar Ruta")
 	public Cadete deleteRuta() {
@@ -308,7 +309,8 @@ public class Cadete {
 	RepositorioPedido repositorioPedido;
 
 	@javax.inject.Inject
-	RepositorioCadeteItem repositorioRutaItem;
+	RepositorioCadeteItem repositorioCadeteItem;
+	
 	@javax.inject.Inject
 	DomainObjectContainer container;
 }

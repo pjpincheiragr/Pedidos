@@ -135,8 +135,6 @@ public class Pedido {
 		super();
 	}
 	
-
-	
 	@ActionLayout(named = "Confirmar", position = Position.BELOW)
 	public Pedido confirmar(){
 		this.setConfirmado(E_confirmado.SI);

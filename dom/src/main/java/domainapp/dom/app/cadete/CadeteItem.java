@@ -58,10 +58,6 @@ public class CadeteItem {
 	private Cadete cadete;
 	private int tiempo;
 
-	public String title() {
-		return this.pedido.getVendedor().getNombre()+ " " +this.clavePedido+" "+ this.pedido.getProveedor().getNombre() ;
-	}
-
 	public CadeteItem(Pedido pedido, long clavePedido, Proveedor proveedor,
 			int orden, boolean estado, Cadete cadete, int tiempo) {
 		super();
@@ -74,6 +70,11 @@ public class CadeteItem {
 		this.tiempo = tiempo;
 	}
 
+	public String title() {
+		return getPedido().getProveedor().getNombre()+" - "+getPedido().getVendedor().getNombre()+": "+this.getClavePedido();
+			//return this.pedido.getVendedor().getNombre()+": "+this.pedido.getClave() + " - "+"Sucursal: " + this.pedido.getSucursal().getCodigoSucursal();
+	}
+	
 	public CadeteItem() {
 		super();
 	}
